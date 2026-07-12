@@ -165,7 +165,7 @@ function ContentStudioPage() {
                 </div>
               </article>
 
-              <aside className="rounded-lg border border-border/60 bg-card/50 p-5">
+              <aside className="rounded-xl border border-border/60 bg-card/50 p-5 backdrop-blur-sm">
                 <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   Metadata
                 </div>

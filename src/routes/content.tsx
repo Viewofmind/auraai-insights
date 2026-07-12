@@ -33,14 +33,14 @@ function ContentStudioPage() {
   const selected: Draft | undefined = drafts.find((d) => d.id === selectedId);
 
   return (
-    <div className="mx-auto max-w-[1400px] p-6 lg:p-8">
+    <div className="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8">
       <PageHeader
         eyebrow="Content Studio"
         title="Drafts & approval workflow"
         description="Every piece of content the agents ship, in one review queue."
       />
 
-      <div className="mt-6 flex items-center gap-1 rounded-md border border-border/60 bg-card/40 p-1">
+      <div className="mt-6 flex items-center gap-1 overflow-x-auto rounded-lg border border-border/60 bg-card/40 p-1 backdrop-blur-sm">
         {[
           { id: "all", label: "All channels" },
           { id: "blog", label: "Blog" },
@@ -52,9 +52,9 @@ function ContentStudioPage() {
             key={c.id}
             onClick={() => setChannel(c.id)}
             className={cn(
-              "rounded px-2.5 py-1 text-xs font-medium transition-colors",
+              "shrink-0 rounded-md px-3 py-1.5 text-xs font-medium transition-all",
               channel === c.id
-                ? "bg-primary/15 text-primary"
+                ? "bg-primary/15 text-primary shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_25%,transparent)]"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >

@@ -155,10 +155,19 @@ export function AgentCard({ agent }: { agent: Agent }) {
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}) {
   return (
-    <div className="flex flex-col items-start rounded-md border border-border/40 bg-background/40 px-2.5 py-2">
-      <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+    <div className="flex flex-col items-start rounded-md border border-border/40 bg-background/40 px-2.5 py-2 transition-colors group-hover:border-border/70">
+      <span className="flex items-center gap-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+        <Icon className="h-3 w-3 opacity-70" strokeWidth={2} />
         {label}
       </span>
       <span className="mt-0.5 font-mono text-sm font-semibold tabular-nums text-foreground">
@@ -167,3 +176,4 @@ function Metric({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+

@@ -1,10 +1,31 @@
 import { cn } from "@/lib/utils";
 import type { AgentStatus } from "@/lib/mock/agents";
 
-const statusStyles: Record<AgentStatus, { dot: string; text: string; label: string }> = {
-  live: { dot: "bg-emerald shadow-[0_0_10px_-2px_var(--emerald)]", text: "text-emerald", label: "Live" },
-  paused: { dot: "bg-amber", text: "text-amber", label: "Paused" },
-  error: { dot: "bg-rose", text: "text-rose", label: "Error" },
+const statusStyles: Record<
+  AgentStatus,
+  { dot: string; text: string; label: string; ring: string; bg: string }
+> = {
+  live: {
+    dot: "bg-emerald shadow-[0_0_10px_-1px_var(--emerald)]",
+    text: "text-emerald",
+    label: "Live",
+    ring: "border-emerald/40",
+    bg: "bg-emerald/10",
+  },
+  paused: {
+    dot: "bg-amber",
+    text: "text-amber",
+    label: "Paused",
+    ring: "border-amber/40",
+    bg: "bg-amber/10",
+  },
+  error: {
+    dot: "bg-rose shadow-[0_0_10px_-1px_var(--rose)]",
+    text: "text-rose",
+    label: "Error",
+    ring: "border-rose/40",
+    bg: "bg-rose/10",
+  },
 };
 
 export function StatusPill({
@@ -18,8 +39,10 @@ export function StatusPill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em]",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.16em]",
         s.text,
+        s.ring,
+        s.bg,
         className,
       )}
     >

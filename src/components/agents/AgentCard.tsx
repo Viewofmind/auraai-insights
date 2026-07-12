@@ -1,7 +1,7 @@
 import type { Agent } from "@/lib/mock/agents";
 import { StatusPill } from "@/components/common/StatusPill";
 import { Sparkline } from "@/components/common/Sparkline";
-import { Play, Settings2, ScrollText, TrendingUp, Zap, Activity } from "lucide-react";
+import { Play, Settings2, ScrollText, TrendingUp, Zap, Activity, type LucideIcon } from "lucide-react";
 
 const accentToColor: Record<Agent["accent"], string> = {
   emerald: "var(--emerald)",

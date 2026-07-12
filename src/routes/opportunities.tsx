@@ -45,7 +45,7 @@ function OpportunitiesPage() {
   );
 
   return (
-    <div className="mx-auto max-w-[1400px] p-6 lg:p-8">
+    <div className="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8">
       <PageHeader
         eyebrow="Opportunities"
         title="Signal feed"
@@ -53,7 +53,7 @@ function OpportunitiesPage() {
       />
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_260px]">
-        <div className="space-y-3">
+        <div className="space-y-3 lg:order-1 order-2">
           {filtered.length === 0 ? (
             <EmptyState
               icon={Sparkles}
@@ -67,61 +67,94 @@ function OpportunitiesPage() {
                 <div
                   key={op.id}
                   style={{ animationDelay: `${i * 30}ms` }}
-                  className="animate-in-up group flex gap-4 rounded-lg border border-border/60 bg-card/50 p-4 transition-colors hover:border-border hover:bg-card"
+                  className="animate-in-up group relative overflow-hidden rounded-xl border border-border/60 bg-card/50 p-4 transition-all duration-300 hover:border-primary/30 hover:bg-card/80 hover:shadow-[0_14px_36px_-24px_color-mix(in_oklab,var(--primary)_45%,transparent)] sm:p-5"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/60 bg-background/60">
-                    <Src className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                        {op.source} · {op.detectedAt}
-                      </span>
+                  {/* left accent stripe based on score */}
+                  <span
+                    className={cn(
+                      "pointer-events-none absolute inset-y-0 left-0 w-[3px]",
+                      op.score >= 85
+                        ? "bg-emerald"
+                        : op.score >= 70
+                        ? "bg-cyan"
+                        : "bg-amber",
+                    )}
+                  />
+                  <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/60 bg-background/60">
+                      <Src className="h-4 w-4 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-1 text-sm font-medium leading-snug">{op.title}</h3>
-                    <p className="mt-1 line-clamp-2 text-[12.5px] text-muted-foreground">
-                      {op.snippet}
-                    </p>
-                    <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-                      {op.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-sm border border-border/60 bg-background/40 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
-                        >
-                          {t}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                          {op.source}
                         </span>
-                      ))}
+                        <span className="h-1 w-1 rounded-full bg-border" />
+                        <span className="font-mono text-[10px] tabular-nums text-muted-foreground">
+                          {op.detectedAt}
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-sm font-medium leading-snug text-foreground">
+                        {op.title}
+                      </h3>
+                      <p className="mt-1 line-clamp-2 text-[12.5px] leading-snug text-muted-foreground">
+                        {op.snippet}
+                      </p>
+                      <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                        {op.tags.map((t) => (
+                          <span
+                            key={t}
+                            className="rounded-sm border border-border/60 bg-background/40 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex w-32 shrink-0 flex-col items-end gap-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-lg font-semibold tabular-nums text-foreground">
-                        {op.score}
-                      </span>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                        score
-                      </span>
-                    </div>
-                    <div className="h-1 w-full rounded-full bg-muted">
-                      <div
-                        className={cn(
-                          "h-1 rounded-full",
-                          op.score >= 85
-                            ? "bg-emerald"
-                            : op.score >= 70
-                            ? "bg-cyan"
-                            : "bg-amber",
-                        )}
-                        style={{ width: `${op.score}%` }}
-                      />
-                    </div>
-                    <div className="mt-1 flex items-center gap-1">
-                      <button className="flex h-7 w-7 items-center justify-center rounded-md border border-border/60 bg-background/60 text-muted-foreground transition-colors hover:text-foreground">
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                      <button className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-primary/10 px-2 py-1 text-[11px] font-medium text-primary transition-colors hover:bg-primary/20">
-                        Assign <ArrowRight className="h-3 w-3" />
-                      </button>
+                    <div className="col-span-2 flex items-center justify-between gap-3 border-t border-border/40 pt-3 sm:col-span-1 sm:w-36 sm:flex-col sm:items-end sm:justify-start sm:border-t-0 sm:pt-0">
+                      <div className="flex flex-col items-start sm:items-end">
+                        <div className="flex items-baseline gap-1">
+                          <span
+                            className={cn(
+                              "font-mono text-2xl font-semibold tabular-nums leading-none",
+                              op.score >= 85
+                                ? "text-emerald"
+                                : op.score >= 70
+                                ? "text-cyan"
+                                : "text-amber",
+                            )}
+                          >
+                            {op.score}
+                          </span>
+                          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                            score
+                          </span>
+                        </div>
+                        <div className="mt-1.5 h-1 w-24 rounded-full bg-muted sm:w-full">
+                          <div
+                            className={cn(
+                              "h-1 rounded-full",
+                              op.score >= 85
+                                ? "bg-emerald"
+                                : op.score >= 70
+                                ? "bg-cyan"
+                                : "bg-amber",
+                            )}
+                            style={{ width: `${op.score}%` }}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button
+                          title="Dismiss"
+                          className="flex h-7 w-7 items-center justify-center rounded-md border border-border/60 bg-background/60 text-muted-foreground transition-colors hover:border-rose/40 hover:text-rose"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                        <button className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_18px_-4px_color-mix(in_oklab,var(--primary)_60%,transparent)]">
+                          Assign <ArrowRight className="h-3 w-3" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -130,7 +163,7 @@ function OpportunitiesPage() {
           )}
         </div>
 
-        <aside className="h-fit space-y-4 rounded-lg border border-border/60 bg-card/50 p-5">
+        <aside className="order-1 h-fit space-y-4 rounded-xl border border-border/60 bg-card/50 p-5 lg:order-2">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               Source

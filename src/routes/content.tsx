@@ -33,14 +33,14 @@ function ContentStudioPage() {
   const selected: Draft | undefined = drafts.find((d) => d.id === selectedId);
 
   return (
-    <div className="mx-auto max-w-[1400px] p-6 lg:p-8">
+    <div className="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8">
       <PageHeader
         eyebrow="Content Studio"
         title="Drafts & approval workflow"
         description="Every piece of content the agents ship, in one review queue."
       />
 
-      <div className="mt-6 flex items-center gap-1 rounded-md border border-border/60 bg-card/40 p-1">
+      <div className="mt-6 flex items-center gap-1 overflow-x-auto rounded-lg border border-border/60 bg-card/40 p-1 backdrop-blur-sm">
         {[
           { id: "all", label: "All channels" },
           { id: "blog", label: "Blog" },
@@ -52,9 +52,9 @@ function ContentStudioPage() {
             key={c.id}
             onClick={() => setChannel(c.id)}
             className={cn(
-              "rounded px-2.5 py-1 text-xs font-medium transition-colors",
+              "shrink-0 rounded-md px-3 py-1.5 text-xs font-medium transition-all",
               channel === c.id
-                ? "bg-primary/15 text-primary"
+                ? "bg-primary/15 text-primary shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_25%,transparent)]"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
@@ -79,7 +79,7 @@ function ContentStudioPage() {
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,360px)_1fr]">
           {/* List */}
-          <div className="rounded-lg border border-border/60 bg-card/50">
+          <div className="rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm">
             <div className="border-b border-border/40 px-4 py-2.5">
               <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                 {filtered.length} drafts
@@ -131,7 +131,8 @@ function ContentStudioPage() {
           {/* Preview */}
           {selected && (
             <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_240px]">
-              <article className="rounded-lg border border-border/60 bg-card/50 p-6">
+              <article className="relative overflow-hidden rounded-xl border border-border/60 bg-card/50 p-5 backdrop-blur-sm sm:p-6">
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
                 <div className="flex items-center gap-2">
                   <span
                     className={cn(
@@ -164,7 +165,7 @@ function ContentStudioPage() {
                 </div>
               </article>
 
-              <aside className="rounded-lg border border-border/60 bg-card/50 p-5">
+              <aside className="rounded-xl border border-border/60 bg-card/50 p-5 backdrop-blur-sm">
                 <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   Metadata
                 </div>

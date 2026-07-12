@@ -100,8 +100,9 @@ export function AgentCard({ agent }: { agent: Agent }) {
 
       {/* Secondary metrics */}
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <Metric label="Runs · 24h" value={agent.runsToday.toString()} />
+        <Metric icon={Activity} label="Runs · 24h" value={agent.runsToday.toString()} />
         <Metric
+          icon={Zap}
           label="Latency"
           value={
             agent.avgLatencyMs >= 1000
@@ -110,6 +111,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
           }
         />
       </div>
+
 
       {/* Last activity */}
       <div className="mt-4 rounded-lg border border-border/50 bg-background/50 p-2.5">

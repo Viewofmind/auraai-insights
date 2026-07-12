@@ -45,7 +45,7 @@ function OpportunitiesPage() {
   );
 
   return (
-    <div className="mx-auto max-w-[1400px] p-6 lg:p-8">
+    <div className="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8">
       <PageHeader
         eyebrow="Opportunities"
         title="Signal feed"
@@ -53,7 +53,7 @@ function OpportunitiesPage() {
       />
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_260px]">
-        <div className="space-y-3">
+        <div className="space-y-3 lg:order-1 order-2">
           {filtered.length === 0 ? (
             <EmptyState
               icon={Sparkles}

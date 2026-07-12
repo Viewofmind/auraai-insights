@@ -131,7 +131,8 @@ function ContentStudioPage() {
           {/* Preview */}
           {selected && (
             <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_240px]">
-              <article className="rounded-lg border border-border/60 bg-card/50 p-6">
+              <article className="relative overflow-hidden rounded-xl border border-border/60 bg-card/50 p-5 backdrop-blur-sm sm:p-6">
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
                 <div className="flex items-center gap-2">
                   <span
                     className={cn(

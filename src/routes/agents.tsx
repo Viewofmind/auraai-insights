@@ -49,7 +49,7 @@ function AgentsHubPage() {
   };
 
   return (
-    <div className="mx-auto max-w-[1400px] p-6 lg:p-8">
+    <div className="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8">
       <PageHeader
         eyebrow="Agents Hub"
         title="Autonomous marketing agents"

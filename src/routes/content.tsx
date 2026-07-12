@@ -79,7 +79,7 @@ function ContentStudioPage() {
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,360px)_1fr]">
           {/* List */}
-          <div className="rounded-lg border border-border/60 bg-card/50">
+          <div className="rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm">
             <div className="border-b border-border/40 px-4 py-2.5">
               <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                 {filtered.length} drafts

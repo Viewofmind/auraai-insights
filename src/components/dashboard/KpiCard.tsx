@@ -16,22 +16,33 @@ export function KpiCard({
   icon?: ReactNode;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-lg border border-border/60 bg-card/50 p-5">
-      <div className="flex items-start justify-between">
-        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+    <div className="group relative overflow-hidden rounded-xl border border-border/60 bg-card/50 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-24px_color-mix(in_oklab,var(--primary)_50%,transparent)]">
+      {/* accent glow */}
+      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/[0.08] blur-3xl transition-opacity duration-500 group-hover:bg-primary/[0.16]" />
+      {/* top accent bar */}
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-60" />
+
+      <div className="relative flex items-start justify-between">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
           {label}
         </span>
-        {icon && <div className="text-muted-foreground">{icon}</div>}
+        {icon && (
+          <div className="flex h-7 w-7 items-center justify-center rounded-md border border-border/60 bg-background/60 text-muted-foreground transition-colors group-hover:text-primary">
+            {icon}
+          </div>
+        )}
       </div>
-      <div className="mt-3 flex items-baseline gap-2">
-        <span className="font-mono text-3xl font-semibold tabular-nums tracking-tight text-foreground">
+      <div className="relative mt-4 flex items-baseline gap-2">
+        <span className="font-mono text-[32px] font-semibold leading-none tabular-nums tracking-tight text-foreground">
           {value}
         </span>
         {delta && (
           <span
             className={cn(
-              "inline-flex items-center gap-0.5 rounded-sm px-1 py-0.5 font-mono text-[10px] font-medium tabular-nums",
-              delta.positive ? "bg-emerald/10 text-emerald" : "bg-rose/10 text-rose",
+              "inline-flex items-center gap-0.5 rounded-sm px-1.5 py-0.5 font-mono text-[10px] font-medium tabular-nums",
+              delta.positive
+                ? "bg-emerald/10 text-emerald ring-1 ring-inset ring-emerald/20"
+                : "bg-rose/10 text-rose ring-1 ring-inset ring-rose/20",
             )}
           >
             {delta.positive ? (
@@ -44,7 +55,7 @@ export function KpiCard({
         )}
       </div>
       {hint && (
-        <div className="mt-1 text-[11px] text-muted-foreground">{hint}</div>
+        <div className="relative mt-2 text-[11.5px] text-muted-foreground/90">{hint}</div>
       )}
     </div>
   );

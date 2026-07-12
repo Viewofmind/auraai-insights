@@ -1,7 +1,7 @@
 import type { Agent } from "@/lib/mock/agents";
 import { StatusPill } from "@/components/common/StatusPill";
 import { Sparkline } from "@/components/common/Sparkline";
-import { Play, Settings2, ScrollText, TrendingUp } from "lucide-react";
+import { Play, Settings2, ScrollText, TrendingUp, Zap, Activity, type LucideIcon } from "lucide-react";
 
 const accentToColor: Record<Agent["accent"], string> = {
   emerald: "var(--emerald)",
@@ -19,7 +19,12 @@ export function AgentCard({ agent }: { agent: Agent }) {
   const trendUp = trend >= 0;
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card/40 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:bg-card/70 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-20px_color-mix(in_oklab,var(--primary)_35%,transparent)] sm:p-5">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:bg-card/80 hover:-translate-y-1 hover:shadow-[0_24px_60px_-20px_color-mix(in_oklab,var(--primary)_45%,transparent)] sm:p-5">
+      {/* top gradient accent */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-60"
+        style={{ background: `linear-gradient(90deg, transparent, ${color}, transparent)` }}
+      />
       {/* corner ticks — terminal ornament */}
       <span className="pointer-events-none absolute left-2 top-2 h-2 w-2 border-l border-t border-border/70" />
       <span className="pointer-events-none absolute right-2 top-2 h-2 w-2 border-r border-t border-border/70" />
@@ -36,9 +41,9 @@ export function AgentCard({ agent }: { agent: Agent }) {
       <div className="relative flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <div
-            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/70"
+            className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-background/70"
             style={{
-              boxShadow: `inset 0 0 24px -8px ${color}, 0 0 0 1px color-mix(in oklab, ${color} 18%, transparent)`,
+              boxShadow: `inset 0 0 28px -6px ${color}, 0 0 0 1px color-mix(in oklab, ${color} 22%, transparent), 0 8px 24px -12px ${color}`,
             }}
           >
             <Icon className="h-5 w-5" style={{ color }} strokeWidth={1.75} />
@@ -95,8 +100,9 @@ export function AgentCard({ agent }: { agent: Agent }) {
 
       {/* Secondary metrics */}
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <Metric label="Runs · 24h" value={agent.runsToday.toString()} />
+        <Metric icon={Activity} label="Runs · 24h" value={agent.runsToday.toString()} />
         <Metric
+          icon={Zap}
           label="Latency"
           value={
             agent.avgLatencyMs >= 1000
@@ -105,6 +111,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
           }
         />
       </div>
+
 
       {/* Last activity */}
       <div className="mt-4 rounded-lg border border-border/50 bg-background/50 p-2.5">
@@ -148,10 +155,19 @@ export function AgentCard({ agent }: { agent: Agent }) {
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}) {
   return (
-    <div className="flex flex-col items-start rounded-md border border-border/40 bg-background/40 px-2.5 py-2">
-      <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+    <div className="flex flex-col items-start rounded-md border border-border/40 bg-background/40 px-2.5 py-2 transition-colors group-hover:border-border/70">
+      <span className="flex items-center gap-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+        <Icon className="h-3 w-3 opacity-70" strokeWidth={2} />
         {label}
       </span>
       <span className="mt-0.5 font-mono text-sm font-semibold tabular-nums text-foreground">
@@ -160,3 +176,4 @@ function Metric({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+

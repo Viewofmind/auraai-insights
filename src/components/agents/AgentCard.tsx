@@ -46,7 +46,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
               boxShadow: `inset 0 0 28px -6px ${color}, 0 0 0 1px color-mix(in oklab, ${color} 22%, transparent), 0 8px 24px -12px ${color}`,
             }}
           >
-            <Icon className="h-5.5 w-5.5" style={{ color }} strokeWidth={1.75} />
+            <Icon className="h-5 w-5" style={{ color }} strokeWidth={1.75} />
             {agent.status === "live" && (
               <span
                 className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full ring-2 ring-card"

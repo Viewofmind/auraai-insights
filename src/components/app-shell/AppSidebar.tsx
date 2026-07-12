@@ -84,14 +84,15 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">
-        <div className="flex items-center gap-2 px-2 py-1.5">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium">
+        <div className="flex items-center gap-2.5 px-2 py-2">
+          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan/30 to-emerald/30 text-[11px] font-semibold ring-1 ring-border/60">
             RS
+            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald ring-2 ring-sidebar shadow-[0_0_6px_var(--emerald)]" />
           </div>
           {!collapsed && (
             <div className="flex min-w-0 flex-col leading-tight">
               <span className="truncate text-xs font-medium">Rohit Sharma</span>
-              <span className="truncate text-[10px] text-muted-foreground">
+              <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
                 Head of Growth
               </span>
             </div>

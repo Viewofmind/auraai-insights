@@ -37,14 +37,17 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
       <SidebarHeader className="border-b border-sidebar-border">
-        <div className="flex items-center gap-2.5 px-2 py-2">
-          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-emerald to-cyan shadow-[0_0_20px_-4px_var(--emerald)]">
-            <Activity className="h-4 w-4 text-background" strokeWidth={2.5} />
+        <div className="flex items-center gap-2.5 px-2 py-2.5">
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald via-emerald to-cyan shadow-[0_0_24px_-4px_var(--emerald)] ring-1 ring-emerald/30">
+            <Activity className="h-4 w-4 text-background" strokeWidth={2.75} />
+            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-cyan ring-2 ring-sidebar shadow-[0_0_8px_var(--cyan)]" />
           </div>
           {!collapsed && (
             <div className="flex min-w-0 flex-col leading-tight">
-              <span className="truncate text-sm font-semibold tracking-tight">AuraAI</span>
-              <span className="truncate text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <span className="truncate bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-sm font-semibold tracking-tight text-transparent">
+                AuraAI
+              </span>
+              <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.18em] text-muted-foreground">
                 CMO · InvestSights
               </span>
             </div>

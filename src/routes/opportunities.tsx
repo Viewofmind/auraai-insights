@@ -163,7 +163,7 @@ function OpportunitiesPage() {
           )}
         </div>
 
-        <aside className="h-fit space-y-4 rounded-lg border border-border/60 bg-card/50 p-5">
+        <aside className="order-1 h-fit space-y-4 rounded-xl border border-border/60 bg-card/50 p-5 lg:order-2">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               Source

@@ -19,7 +19,12 @@ export function AgentCard({ agent }: { agent: Agent }) {
   const trendUp = trend >= 0;
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card/40 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:bg-card/70 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-20px_color-mix(in_oklab,var(--primary)_35%,transparent)] sm:p-5">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-border/60 bg-card/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:bg-card/80 hover:-translate-y-1 hover:shadow-[0_24px_60px_-20px_color-mix(in_oklab,var(--primary)_45%,transparent)] sm:p-5">
+      {/* top gradient accent */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-60"
+        style={{ background: `linear-gradient(90deg, transparent, ${color}, transparent)` }}
+      />
       {/* corner ticks — terminal ornament */}
       <span className="pointer-events-none absolute left-2 top-2 h-2 w-2 border-l border-t border-border/70" />
       <span className="pointer-events-none absolute right-2 top-2 h-2 w-2 border-r border-t border-border/70" />

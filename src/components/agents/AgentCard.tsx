@@ -41,12 +41,12 @@ export function AgentCard({ agent }: { agent: Agent }) {
       <div className="relative flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <div
-            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/70"
+            className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-background/70"
             style={{
-              boxShadow: `inset 0 0 24px -8px ${color}, 0 0 0 1px color-mix(in oklab, ${color} 18%, transparent)`,
+              boxShadow: `inset 0 0 28px -6px ${color}, 0 0 0 1px color-mix(in oklab, ${color} 22%, transparent), 0 8px 24px -12px ${color}`,
             }}
           >
-            <Icon className="h-5 w-5" style={{ color }} strokeWidth={1.75} />
+            <Icon className="h-5.5 w-5.5" style={{ color }} strokeWidth={1.75} />
             {agent.status === "live" && (
               <span
                 className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full ring-2 ring-card"

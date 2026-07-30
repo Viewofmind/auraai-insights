@@ -3,8 +3,8 @@ import { useState } from "react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { AgentCard } from "@/components/agents/AgentCard";
 import { EmptyState } from "@/components/common/EmptyState";
-import { agents, type AgentStatus } from "@/lib/mock/agents";
-import { Search, Bot, Plus } from "lucide-react";
+import { agents, phase2Agents, type AgentStatus } from "@/lib/mock/agents";
+import { Search, Bot, Plus, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/agents")({
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/agents")({
       {
         name: "description",
         content:
-          "Every autonomous marketing agent for InvestSights.in in one grid — SEO, GEO, Content, Reddit, X, LinkedIn, Technical SEO.",
+          "Configured marketing agents for InvestSights.in — connection status, and what is coming in Phase 2.",
       },
     ],
   }),
@@ -28,6 +28,7 @@ const filters: { id: Filter; label: string }[] = [
   { id: "live", label: "Live" },
   { id: "paused", label: "Paused" },
   { id: "error", label: "Error" },
+  { id: "disconnected", label: "Not connected" },
 ];
 
 function AgentsHubPage() {
@@ -41,11 +42,12 @@ function AgentsHubPage() {
     return true;
   });
 
-  const counts = {
+  const counts: Record<Filter, number> = {
     all: agents.length,
     live: agents.filter((a) => a.status === "live").length,
     paused: agents.filter((a) => a.status === "paused").length,
     error: agents.filter((a) => a.status === "error").length,
+    disconnected: agents.filter((a) => a.status === "disconnected").length,
   };
 
   return (
@@ -53,7 +55,7 @@ function AgentsHubPage() {
       <PageHeader
         eyebrow="Agents Hub"
         title="Autonomous marketing agents"
-        description="Seven agents working the InvestSights.in growth surface. Watch signals, ship drafts, own the answer engines."
+        description="Configured agents for the InvestSights.in growth surface. No data source is connected yet, so no metrics are reported."
         actions={
           <button className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90">
             <Plus className="h-3.5 w-3.5" />
@@ -127,6 +129,39 @@ function AgentsHubPage() {
           />
         </div>
       )}
+
+      {/* Phase 2 — locked */}
+      <section className="mt-8 rounded-xl border border-dashed border-border/70 bg-card/30 p-4 sm:p-5">
+        <div className="flex items-center gap-2">
+          <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+          <h2 className="text-sm font-semibold tracking-tight">Coming in Phase 2</h2>
+          <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            Not built yet
+          </span>
+        </div>
+        <p className="mt-1 text-[12px] text-muted-foreground">
+          These agents are planned. They report no status, metrics, or activity.
+        </p>
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {phase2Agents.map((a) => (
+            <div
+              key={a.id}
+              className="flex items-start gap-3 rounded-lg border border-border/50 bg-background/40 p-3 opacity-70"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-card/50">
+                <a.icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
+              </div>
+              <div className="min-w-0">
+                <div className="truncate text-[13.5px] font-medium">{a.name}</div>
+                <div className="mt-0.5 line-clamp-2 text-[11.5px] leading-snug text-muted-foreground">
+                  {a.role}
+                </div>
+              </div>
+              <Lock className="ml-auto h-3 w-3 shrink-0 text-muted-foreground/70" />
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

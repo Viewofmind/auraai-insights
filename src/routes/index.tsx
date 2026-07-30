@@ -6,6 +6,7 @@ import { Sparkline } from "@/components/common/Sparkline";
 import { agents } from "@/lib/mock/agents";
 import { opportunities } from "@/lib/mock/opportunities";
 import { activity } from "@/lib/mock/activity";
+import { EmptyState } from "@/components/common/EmptyState";
 import {
   Bot,
   Sparkles,
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Live agent status, opportunities, and marketing activity across InvestSights.in.",
+          "Agent connection status and empty-state metrics for InvestSights.in until a data source is connected.",
       },
     ],
   }),
@@ -48,13 +49,13 @@ function DashboardPage() {
       <PageHeader
         eyebrow="Overview"
         title="Command Center"
-        description="Real-time view of every agent, opportunity, and draft moving through InvestSights.in."
+        description="Agent, opportunity, and draft status for InvestSights.in. No data source is connected yet — all metrics are empty."
         actions={
           <>
             <div className="hidden items-center gap-1.5 rounded-md border border-border/60 bg-card/60 px-2.5 py-1.5 sm:flex">
-              <span className="live-dot" />
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60" />
               <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                {liveAgents}/{agents.length} agents live
+                0/{agents.length} agents connected
               </span>
             </div>
             <Link
@@ -70,31 +71,27 @@ function DashboardPage() {
       {/* KPI Grid */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
-          label="Active Agents"
+          label="Connected Agents"
           value={`${liveAgents}`}
           hint={`of ${agents.length} configured`}
-          delta={{ value: "+1", positive: true }}
           icon={<Bot className="h-3.5 w-3.5" />}
         />
         <KpiCard
           label="Opportunities · 24h"
-          value="47"
-          delta={{ value: "+18%", positive: true }}
-          hint="7 high-priority"
+          value="0"
+          hint="No data source connected"
           icon={<Sparkles className="h-3.5 w-3.5" />}
         />
         <KpiCard
           label="Drafts pending review"
-          value="12"
-          delta={{ value: "-3", positive: false }}
-          hint="4 approved this week"
+          value="0"
+          hint="No drafts generated yet"
           icon={<FileText className="h-3.5 w-3.5" />}
         />
         <KpiCard
           label="Est. reach · 7d"
-          value="284K"
-          delta={{ value: "+22%", positive: true }}
-          hint="Blog + LinkedIn + X"
+          value="—"
+          hint="Awaiting analytics connection"
           icon={<Radio className="h-3.5 w-3.5" />}
         />
       </div>
@@ -104,8 +101,8 @@ function DashboardPage() {
         <section className="rounded-lg border border-border/60 bg-card/50 lg:col-span-2">
           <header className="flex items-center justify-between border-b border-border/40 px-5 py-3">
             <div>
-              <h2 className="text-sm font-semibold tracking-tight">Live agent status</h2>
-              <p className="text-[11px] text-muted-foreground">Refreshed 4s ago</p>
+              <h2 className="text-sm font-semibold tracking-tight">Agent status</h2>
+              <p className="text-[11px] text-muted-foreground">No live connection</p>
             </div>
             <Link
               to="/agents"
@@ -128,12 +125,12 @@ function DashboardPage() {
                       <StatusPill status={a.status} />
                     </div>
                     <div className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">
-                      {a.lastActivity}
+                      {a.lastActivity ?? "No data yet"}
                     </div>
                   </div>
                   <div className="hidden w-32 shrink-0 md:block">
-                    <Sparkline
-                      data={a.spark}
+                    {a.metrics && <Sparkline
+                      data={a.metrics.spark}
                       color={
                         a.status === "error"
                           ? "var(--rose)"
@@ -142,10 +139,10 @@ function DashboardPage() {
                           : "var(--emerald)"
                       }
                       height={24}
-                    />
+                    />}
                   </div>
                   <div className="w-16 shrink-0 text-right font-mono text-[11px] tabular-nums text-muted-foreground">
-                    {a.lastActivityAt}
+                    {a.lastActivityAt ?? "—"}
                   </div>
                 </div>
               );
@@ -157,10 +154,19 @@ function DashboardPage() {
           <header className="flex items-center justify-between border-b border-border/40 px-5 py-3">
             <div>
               <h2 className="text-sm font-semibold tracking-tight">Activity feed</h2>
-              <p className="text-[11px] text-muted-foreground">Last 6 hours</p>
+              <p className="text-[11px] text-muted-foreground">No events</p>
             </div>
           </header>
           <div className="max-h-[520px] overflow-y-auto">
+            {activity.length === 0 && (
+              <div className="px-5 py-10">
+                <EmptyState
+                  icon={Radio}
+                  title="No activity yet"
+                  description="Agent events will appear here once a data source is connected."
+                />
+              </div>
+            )}
             <ul className="relative divide-y divide-border/40">
               {activity.map((ev) => (
                 <li key={ev.id} className="flex gap-3 px-5 py-3">
@@ -201,7 +207,7 @@ function DashboardPage() {
           <div>
             <h2 className="text-sm font-semibold tracking-tight">Recent opportunities</h2>
             <p className="text-[11px] text-muted-foreground">
-              Signals detected across sources
+              No signals — awaiting data source
             </p>
           </div>
           <Link
@@ -223,6 +229,13 @@ function DashboardPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/40">
+              {opportunities.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="px-5 py-10 text-center text-[12px] text-muted-foreground">
+                    No opportunities — connect a data source to start detecting signals.
+                  </td>
+                </tr>
+              )}
               {opportunities.slice(0, 5).map((op) => {
                 const Icon = sourceIcon[op.source];
                 return (

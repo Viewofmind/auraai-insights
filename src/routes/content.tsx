@@ -1,199 +1,191 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
-import { EmptyState } from "@/components/common/EmptyState";
-import { drafts, type Draft, type DraftStatus } from "@/lib/mock/drafts";
-import { FileText, Check, MessageSquareWarning, Send } from "lucide-react";
+import { QueryState } from "@/components/common/QueryState";
+import {
+  ContentStatusBadge,
+  contentStatusMeta,
+  contentStatusOrder,
+} from "@/components/content/ContentStatusBadge";
+import { useContentQueue } from "@/lib/api/hooks";
+import type { ContentStatus } from "@/lib/api/types";
+import { FileText, Search, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/content")({
   head: () => ({
     meta: [
-      { title: "Content Studio — AuraAI · CMO" },
+      { title: "Content Queue — AuraAI · CMO" },
       {
         name: "description",
-        content: "Generated drafts, review workflow, and multi-channel publishing.",
+        content:
+          "Content pipeline for InvestSights.in tracked against the backend state machine — idea through publish_ready and exported.",
+      },
+      { property: "og:title", content: "Content Queue — AuraAI · CMO" },
+      {
+        property: "og:description",
+        content:
+          "Every content item and its exact backend state: outline, draft, compliance, review, publish_ready, exported.",
       },
     ],
   }),
-  component: ContentStudioPage,
+  component: ContentQueuePage,
 });
 
-const statusStyles: Record<DraftStatus, { label: string; className: string }> = {
-  draft: { label: "Draft", className: "text-muted-foreground bg-muted" },
-  in_review: { label: "In review", className: "text-amber bg-amber/10" },
-  approved: { label: "Approved", className: "text-emerald bg-emerald/10" },
-  published: { label: "Published", className: "text-cyan bg-cyan/10" },
-};
+function ContentQueuePage() {
+  const [status, setStatus] = useState<ContentStatus | "all">("all");
+  const [query, setQuery] = useState("");
+  const contentQuery = useContentQueue(status);
 
-function ContentStudioPage() {
-  const [selectedId, setSelectedId] = useState<string>(drafts[0]?.id ?? "");
-  const [channel, setChannel] = useState<string>("all");
-  const filtered = drafts.filter((d) => channel === "all" || d.channel === channel);
-  const selected: Draft | undefined = drafts.find((d) => d.id === selectedId);
+  const filteredQuery = useMemo(() => {
+    if (!query) return contentQuery;
+    const q = query.toLowerCase();
+    return {
+      ...contentQuery,
+      data: contentQuery.data?.filter((c) =>
+        `${c.title} ${c.target_keyword ?? ""} ${c.owner ?? ""}`.toLowerCase().includes(q),
+      ),
+    } as typeof contentQuery;
+  }, [contentQuery, query]);
 
   return (
     <div className="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8">
       <PageHeader
-        eyebrow="Content Studio"
-        title="Drafts & approval workflow"
-        description="Every piece of content the agents ship, in one review queue."
+        eyebrow="Content Queue"
+        title="Pipeline by state"
+        description="Items are tracked against the backend content state machine. Nothing here is distributed automatically — publish_ready and exported are hand-off states only."
       />
 
-      <div className="mt-6 flex items-center gap-1 overflow-x-auto rounded-lg border border-border/60 bg-card/40 p-1 backdrop-blur-sm">
-        {[
-          { id: "all", label: "All channels" },
-          { id: "blog", label: "Blog" },
-          { id: "linkedin", label: "LinkedIn" },
-          { id: "x", label: "X" },
-          { id: "reddit", label: "Reddit" },
-        ].map((c) => (
+      {/* Toolbar */}
+      <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-wrap items-center gap-1 rounded-lg border border-border/60 bg-card/40 p-1">
           <button
-            key={c.id}
-            onClick={() => setChannel(c.id)}
+            onClick={() => setStatus("all")}
             className={cn(
-              "shrink-0 rounded-md px-3 py-1.5 text-xs font-medium transition-all",
-              channel === c.id
-                ? "bg-primary/15 text-primary shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_25%,transparent)]"
+              "rounded px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors",
+              status === "all"
+                ? "bg-primary/15 text-primary"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
-            {c.label}
+            All states
           </button>
-        ))}
-      </div>
-
-      {filtered.length === 0 ? (
-        <div className="mt-6">
-          <EmptyState
-            icon={FileText}
-            title="No drafts yet"
-            description="Spin up the Content Writer Agent to generate your first drafts across channels."
-            action={
-              <button className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90">
-                Run Content Writer
+          {contentStatusOrder.map((s) => {
+            const meta = contentStatusMeta[s];
+            const Icon = meta.icon;
+            return (
+              <button
+                key={s}
+                onClick={() => setStatus(s)}
+                title={meta.note}
+                className={cn(
+                  "flex items-center gap-1.5 rounded px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors",
+                  status === s
+                    ? "bg-primary/15 text-primary"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                <Icon className="h-3 w-3" />
+                <span className="hidden sm:inline">{meta.label}</span>
               </button>
-            }
+            );
+          })}
+        </div>
+
+        <div className="relative w-full lg:w-72">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Filter by title, keyword, owner"
+            className="h-9 w-full rounded-md border border-border/70 bg-card/60 pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </div>
-      ) : (
-        <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,360px)_1fr]">
-          {/* List */}
-          <div className="rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm">
-            <div className="border-b border-border/40 px-4 py-2.5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                {filtered.length} drafts
-              </span>
-            </div>
-            <ul className="max-h-[70vh] overflow-y-auto divide-y divide-border/40">
-              {filtered.map((d) => {
-                const s = statusStyles[d.status];
-                return (
-                  <li key={d.id}>
-                    <button
-                      onClick={() => setSelectedId(d.id)}
-                      className={cn(
-                        "block w-full px-4 py-3 text-left transition-colors",
-                        selectedId === d.id ? "bg-muted/40" : "hover:bg-muted/20",
-                      )}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0 flex-1">
-                          <div className="line-clamp-2 text-sm font-medium">
-                            {d.title}
-                          </div>
-                          <div className="mt-1 flex items-center gap-2 text-[11px] text-muted-foreground">
-                            <span className="font-mono uppercase tracking-[0.1em]">
-                              {d.channel}
-                            </span>
-                            <span>·</span>
-                            <span>{d.agent}</span>
-                            <span>·</span>
-                            <span>{d.updatedAt}</span>
-                          </div>
-                        </div>
-                        <span
-                          className={cn(
-                            "shrink-0 rounded-sm px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em]",
-                            s.className,
-                          )}
-                        >
-                          {s.label}
+      </div>
+
+      {/* End-state clarification */}
+      <div className="mt-4 flex items-start gap-2 rounded-lg border border-border/50 bg-card/30 px-3 py-2 text-[11.5px] text-muted-foreground">
+        <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+        <p>
+          <span className="font-mono uppercase tracking-[0.12em] text-foreground/80">
+            publish_ready
+          </span>{" "}
+          and{" "}
+          <span className="font-mono uppercase tracking-[0.12em] text-foreground/80">
+            exported
+          </span>{" "}
+          are the only end states. Neither means the piece went out anywhere — no channel
+          is connected for automatic distribution.
+        </p>
+      </div>
+
+      {/* Queue */}
+      <section className="mt-6 rounded-xl border border-border/60 bg-card/50">
+        <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-4 py-3 sm:px-5">
+          <h2 className="text-sm font-semibold tracking-tight">Queue</h2>
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            GET /api/v1/content
+          </span>
+        </header>
+
+        <div className="p-4 sm:p-5">
+          <QueryState
+            query={filteredQuery}
+            emptyIcon={FileText}
+            emptyTitle="No content items"
+            emptyDescription="Nothing matches this state yet. Items appear here once the backend content pipeline reports them."
+          >
+            {(items) => (
+              <ul className="space-y-2">
+                {items.map((item) => (
+                  <li
+                    key={item.id}
+                    className="flex flex-col gap-2 rounded-lg border border-border/50 bg-background/40 p-3 transition-colors hover:border-primary/30 sm:flex-row sm:items-center sm:gap-4"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-medium">{item.title}</div>
+                      <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-muted-foreground">
+                        <span>{item.target_keyword ?? "no keyword"}</span>
+                        <span>·</span>
+                        <span>{item.owner ?? "unassigned"}</span>
+                        <span>·</span>
+                        <span className="tabular-nums">
+                          {item.word_count != null ? `${item.word_count} words` : "—"}
                         </span>
                       </div>
-                    </button>
+                    </div>
+                    <ContentStatusBadge status={item.status} className="shrink-0" />
+                    <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-muted-foreground">
+                      {new Date(item.updated_at).toISOString().slice(0, 16).replace("T", " ")}
+                    </span>
                   </li>
-                );
-              })}
-            </ul>
-          </div>
-
-          {/* Preview */}
-          {selected && (
-            <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_240px]">
-              <article className="relative overflow-hidden rounded-xl border border-border/60 bg-card/50 p-5 backdrop-blur-sm sm:p-6">
-                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-                <div className="flex items-center gap-2">
-                  <span
-                    className={cn(
-                      "rounded-sm px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em]",
-                      statusStyles[selected.status].className,
-                    )}
-                  >
-                    {statusStyles[selected.status].label}
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                    {selected.channel} · {selected.wordCount} words
-                  </span>
-                </div>
-                <h2 className="mt-3 text-xl font-semibold tracking-tight">
-                  {selected.title}
-                </h2>
-                <div className="mt-5 space-y-4 whitespace-pre-line text-[13.5px] leading-relaxed text-foreground/90">
-                  {selected.body}
-                </div>
-                <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-border/40 pt-4">
-                  <button className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
-                    <MessageSquareWarning className="h-3.5 w-3.5" /> Request changes
-                  </button>
-                  <button className="inline-flex items-center gap-1.5 rounded-md border border-emerald/40 bg-emerald/10 px-3 py-1.5 text-xs font-medium text-emerald transition-colors hover:bg-emerald/20">
-                    <Check className="h-3.5 w-3.5" /> Approve
-                  </button>
-                  <button className="ml-auto inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-                    <Send className="h-3.5 w-3.5" /> Publish
-                  </button>
-                </div>
-              </article>
-
-              <aside className="rounded-xl border border-border/60 bg-card/50 p-5 backdrop-blur-sm">
-                <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                  Metadata
-                </div>
-                <dl className="mt-3 space-y-3 text-xs">
-                  <MetaRow label="Channel" value={selected.channel} />
-                  <MetaRow label="Source agent" value={selected.agent} />
-                  <MetaRow label="Target keyword" value={selected.targetKeyword} />
-                  <MetaRow label="Word count" value={selected.wordCount.toLocaleString()} mono />
-                  <MetaRow label="Updated" value={selected.updatedAt} mono />
-                </dl>
-              </aside>
-            </div>
-          )}
+                ))}
+              </ul>
+            )}
+          </QueryState>
         </div>
-      )}
-    </div>
-  );
-}
+      </section>
 
-function MetaRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
-  return (
-    <div>
-      <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-        {label}
-      </dt>
-      <dd className={cn("mt-0.5 text-foreground", mono && "font-mono tabular-nums")}>
-        {value}
-      </dd>
+      {/* State legend */}
+      <section className="mt-6 rounded-xl border border-border/60 bg-card/40 p-4 sm:p-5">
+        <h2 className="text-sm font-semibold tracking-tight">State machine</h2>
+        <p className="mt-1 text-[11.5px] text-muted-foreground">
+          Backend values, verbatim — the UI never renames or invents a state.
+        </p>
+        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {contentStatusOrder.map((s) => (
+            <div
+              key={s}
+              className="flex items-center gap-2.5 rounded-lg border border-border/40 bg-background/40 px-3 py-2"
+            >
+              <ContentStatusBadge status={s} />
+              <span className="truncate font-mono text-[10px] text-muted-foreground">
+                {contentStatusMeta[s].note}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

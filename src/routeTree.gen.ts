@@ -9,20 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContentRouteImport } from './routes/content'
+import { Route as ComplianceRouteImport } from './routes/compliance'
+import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OpportunitiesRoute = OpportunitiesRouteImport.update({
   id: '/opportunities',
   path: '/opportunities',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContentRoute = ContentRouteImport.update({
   id: '/content',
   path: '/content',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComplianceRoute = ComplianceRouteImport.update({
+  id: '/compliance',
+  path: '/compliance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditRoute = AuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyticsRoute = AnalyticsRouteImport.update({
@@ -45,48 +69,93 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
   '/analytics': typeof AnalyticsRoute
+  '/audit': typeof AuditRoute
+  '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRoute
+  '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/settings': typeof SettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
   '/analytics': typeof AnalyticsRoute
+  '/audit': typeof AuditRoute
+  '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRoute
+  '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/settings': typeof SettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
   '/analytics': typeof AnalyticsRoute
+  '/audit': typeof AuditRoute
+  '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRoute
+  '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/settings': typeof SettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/agents' | '/analytics' | '/content' | '/opportunities'
+  fullPaths:
+    | '/'
+    | '/agents'
+    | '/analytics'
+    | '/audit'
+    | '/compliance'
+    | '/content'
+    | '/login'
+    | '/opportunities'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/agents' | '/analytics' | '/content' | '/opportunities'
+  to:
+    | '/'
+    | '/agents'
+    | '/analytics'
+    | '/audit'
+    | '/compliance'
+    | '/content'
+    | '/login'
+    | '/opportunities'
+    | '/settings'
   id:
     | '__root__'
     | '/'
     | '/agents'
     | '/analytics'
+    | '/audit'
+    | '/compliance'
     | '/content'
+    | '/login'
     | '/opportunities'
+    | '/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgentsRoute: typeof AgentsRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  AuditRoute: typeof AuditRoute
+  ComplianceRoute: typeof ComplianceRoute
   ContentRoute: typeof ContentRoute
+  LoginRoute: typeof LoginRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
+  SettingsRoute: typeof SettingsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/opportunities': {
       id: '/opportunities'
       path: '/opportunities'
@@ -94,11 +163,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpportunitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/content': {
       id: '/content'
       path: '/content'
       fullPath: '/content'
       preLoaderRoute: typeof ContentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compliance': {
+      id: '/compliance'
+      path: '/compliance'
+      fullPath: '/compliance'
+      preLoaderRoute: typeof ComplianceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit': {
+      id: '/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analytics': {
@@ -129,8 +219,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgentsRoute: AgentsRoute,
   AnalyticsRoute: AnalyticsRoute,
+  AuditRoute: AuditRoute,
+  ComplianceRoute: ComplianceRoute,
   ContentRoute: ContentRoute,
+  LoginRoute: LoginRoute,
   OpportunitiesRoute: OpportunitiesRoute,
+  SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

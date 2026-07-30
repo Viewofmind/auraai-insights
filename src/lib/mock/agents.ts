@@ -6,6 +6,9 @@ import {
   Twitter,
   Linkedin,
   Wrench,
+  Newspaper,
+  Users,
+
   type LucideIcon,
 } from "lucide-react";
 
@@ -94,9 +97,22 @@ export const phase2Agents: UpcomingAgent[] = [
     icon: Linkedin,
   },
   {
+    id: "hacker-news",
+    name: "Hacker News Agent",
+    role: "Launch & fintech discussion monitoring",
+    icon: Newspaper,
+  },
+  {
+    id: "ugc",
+    name: "UGC Agent",
+    role: "Community-sourced content sourcing & vetting",
+    icon: Users,
+  },
+  {
     id: "tech-seo",
     name: "Technical SEO Agent",
     role: "Crawl, schema & Core Web Vitals",
     icon: Wrench,
   },
 ];
+

@@ -6,6 +6,9 @@ import {
   Twitter,
   Linkedin,
   Wrench,
+  Newspaper,
+  Users,
+
   type LucideIcon,
 } from "lucide-react";
 

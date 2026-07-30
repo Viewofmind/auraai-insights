@@ -44,6 +44,7 @@ const governanceNav = [
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+  const { user } = useAuth();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   return (

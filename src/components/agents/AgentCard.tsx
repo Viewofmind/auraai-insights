@@ -15,7 +15,8 @@ export function AgentCard({ agent }: { agent: Agent }) {
   const Icon = agent.icon;
   const color = accentToColor[agent.accent];
   const disabled = agent.status !== "live";
-  const trend = agent.spark[agent.spark.length - 1] - agent.spark[0];
+  const m = agent.metrics;
+  const trend = m ? m.spark[m.spark.length - 1] - m.spark[0] : 0;
   const trendUp = trend >= 0;
 
   return (
@@ -72,46 +73,60 @@ export function AgentCard({ agent }: { agent: Agent }) {
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
             Success rate
           </div>
-          <div className="mt-1 flex items-baseline gap-1.5">
-            <span
-              className="font-mono text-3xl font-semibold tabular-nums tracking-tight"
-              style={{ color }}
-            >
-              {agent.successRate.toFixed(1)}
-            </span>
-            <span className="font-mono text-sm text-muted-foreground">%</span>
-            <span
-              className={`ml-1 inline-flex items-center gap-0.5 font-mono text-[10px] ${
-                trendUp ? "text-emerald" : "text-rose"
-              }`}
-            >
-              <TrendingUp
-                className={`h-3 w-3 ${trendUp ? "" : "rotate-180"}`}
-                strokeWidth={2.5}
-              />
-              7d
-            </span>
-          </div>
+          {m ? (
+            <div className="mt-1 flex items-baseline gap-1.5">
+              <span
+                className="font-mono text-3xl font-semibold tabular-nums tracking-tight"
+                style={{ color }}
+              >
+                {m.successRate.toFixed(1)}
+              </span>
+              <span className="font-mono text-sm text-muted-foreground">%</span>
+              <span
+                className={`ml-1 inline-flex items-center gap-0.5 font-mono text-[10px] ${
+                  trendUp ? "text-emerald" : "text-rose"
+                }`}
+              >
+                <TrendingUp
+                  className={`h-3 w-3 ${trendUp ? "" : "rotate-180"}`}
+                  strokeWidth={2.5}
+                />
+                7d
+              </span>
+            </div>
+          ) : (
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="font-mono text-3xl font-semibold tabular-nums tracking-tight text-muted-foreground/50">
+                —
+              </span>
+              <span className="text-[11px] text-muted-foreground">No data yet</span>
+            </div>
+          )}
         </div>
         <div className="min-w-0 flex-1 pl-2">
-          <Sparkline data={agent.spark} color={color} height={36} />
+          {m ? (
+            <Sparkline data={m.spark} color={color} height={36} />
+          ) : (
+            <div className="h-[36px] rounded-md border border-dashed border-border/60" />
+          )}
         </div>
       </div>
 
       {/* Secondary metrics */}
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <Metric icon={Activity} label="Runs · 24h" value={agent.runsToday.toString()} />
+        <Metric icon={Activity} label="Runs · 24h" value={m ? m.runsToday.toString() : "—"} />
         <Metric
           icon={Zap}
           label="Latency"
           value={
-            agent.avgLatencyMs >= 1000
-              ? `${(agent.avgLatencyMs / 1000).toFixed(1)}s`
-              : `${agent.avgLatencyMs}ms`
+            m
+              ? m.avgLatencyMs >= 1000
+                ? `${(m.avgLatencyMs / 1000).toFixed(1)}s`
+                : `${m.avgLatencyMs}ms`
+              : "—"
           }
         />
       </div>
-
 
       {/* Last activity */}
       <div className="mt-4 rounded-lg border border-border/50 bg-background/50 p-2.5">
@@ -120,12 +135,18 @@ export function AgentCard({ agent }: { agent: Agent }) {
             <span className="mr-1 opacity-60">›</span>
             Last activity
           </span>
-          <span className="shrink-0 font-mono text-[10px] text-muted-foreground/80">
-            {agent.lastActivityAt}
-          </span>
+          {agent.lastActivityAt && (
+            <span className="shrink-0 font-mono text-[10px] text-muted-foreground/80">
+              {agent.lastActivityAt}
+            </span>
+          )}
         </div>
         <p className="line-clamp-2 text-[12.5px] leading-snug text-foreground/90">
-          {agent.lastActivity}
+          {agent.lastActivity ?? (
+            <span className="text-muted-foreground">
+              Not connected — connect a data source to stream activity.
+            </span>
+          )}
         </p>
       </div>
 

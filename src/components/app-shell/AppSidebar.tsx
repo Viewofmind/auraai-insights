@@ -7,6 +7,9 @@ import {
   BarChart3,
   Activity,
   User,
+  ShieldCheck,
+  ScrollText,
+  Settings,
 } from "lucide-react";
 import {
   Sidebar,
@@ -21,14 +24,22 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth, roleLabels } from "@/lib/auth/AuthContext";
 
 const nav = [
   { label: "Dashboard", to: "/", icon: LayoutDashboard },
   { label: "Agents Hub", to: "/agents", icon: Bot },
-  { label: "Content Studio", to: "/content", icon: FileText },
+  { label: "Content Queue", to: "/content", icon: FileText },
   { label: "Opportunities", to: "/opportunities", icon: Sparkles },
   { label: "Analytics", to: "/analytics", icon: BarChart3 },
 ] as const;
+
+const governanceNav = [
+  { label: "Compliance", to: "/compliance", icon: ShieldCheck },
+  { label: "Audit Log", to: "/audit", icon: ScrollText },
+  { label: "Integrations", to: "/settings", icon: Settings },
+] as const;
+
 
 export function AppSidebar() {
   const { state } = useSidebar();

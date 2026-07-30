@@ -26,6 +26,13 @@ const statusStyles: Record<
     ring: "border-rose/40",
     bg: "bg-rose/10",
   },
+  disconnected: {
+    dot: "bg-muted-foreground/60",
+    text: "text-muted-foreground",
+    label: "Not connected",
+    ring: "border-border/70",
+    bg: "bg-muted/40",
+  },
 };
 
 export function StatusPill({

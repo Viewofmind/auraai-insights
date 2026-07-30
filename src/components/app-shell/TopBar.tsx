@@ -1,4 +1,4 @@
-import { Bell, Search, Command } from "lucide-react";
+import { Bell, Search, Command, User } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 
@@ -24,19 +24,18 @@ export function TopBar() {
 
       <div className="flex items-center gap-2.5">
         <div className="hidden items-center gap-1.5 rounded-full border border-border/70 bg-card/60 px-2.5 py-1 sm:flex">
-          <span className="live-dot" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-            PROD · investsights.in
+          <span className="h-1.5 w-1.5 rounded-full bg-amber" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-amber">
+            Disconnected · demo data
           </span>
         </div>
 
         <button className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-card/60 text-muted-foreground transition-colors hover:text-foreground">
           <Bell className="h-4 w-4" />
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-rose" />
         </button>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-emerald/80 to-cyan/80 text-xs font-semibold text-background">
-          RS
+        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground">
+          <User className="h-4 w-4" />
         </div>
       </div>
     </header>

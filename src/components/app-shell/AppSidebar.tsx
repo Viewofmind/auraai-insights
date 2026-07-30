@@ -6,6 +6,7 @@ import {
   Sparkles,
   BarChart3,
   Activity,
+  User,
 } from "lucide-react";
 import {
   Sidebar,
@@ -40,7 +41,6 @@ export function AppSidebar() {
         <div className="flex items-center gap-2.5 px-2 py-2.5">
           <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald via-emerald to-cyan shadow-[0_0_24px_-4px_var(--emerald)] ring-1 ring-emerald/30">
             <Activity className="h-4 w-4 text-background" strokeWidth={2.75} />
-            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-cyan ring-2 ring-sidebar shadow-[0_0_8px_var(--cyan)]" />
           </div>
           {!collapsed && (
             <div className="flex min-w-0 flex-col leading-tight">
@@ -86,14 +86,13 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border">
         <div className="flex items-center gap-2.5 px-2 py-2">
           <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan/30 to-emerald/30 text-[11px] font-semibold ring-1 ring-border/60">
-            RS
-            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald ring-2 ring-sidebar shadow-[0_0_6px_var(--emerald)]" />
+            <User className="h-3.5 w-3.5" />
           </div>
           {!collapsed && (
             <div className="flex min-w-0 flex-col leading-tight">
-              <span className="truncate text-xs font-medium">Rohit Sharma</span>
+              <span className="truncate text-xs font-medium">User</span>
               <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
-                Head of Growth
+                Not signed in
               </span>
             </div>
           )}

@@ -34,6 +34,7 @@
   --color-cyan: var(--cyan);
   --color-amber: var(--amber);
   --color-rose: var(--rose);
+  --color-violet: var(--violet);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -77,6 +78,7 @@
   --cyan: oklch(0.82 0.15 220);
   --amber: oklch(0.80 0.16 80);
   --rose: oklch(0.70 0.23 15);
+  --violet: oklch(0.74 0.17 300);
 
   --chart-1: oklch(0.88 0.20 160);
   --chart-2: oklch(0.82 0.15 220);

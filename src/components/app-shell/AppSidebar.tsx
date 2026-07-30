@@ -92,23 +92,51 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.14em]">
+            Governance
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {governanceNav.map((item) => (
+                <SidebarMenuItem key={item.to}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith(item.to)}
+                    tooltip={item.label}
+                  >
+                    <Link to={item.to} className="flex items-center gap-2.5">
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">
-        <div className="flex items-center gap-2.5 px-2 py-2">
+        <Link
+          to="/login"
+          className="flex items-center gap-2.5 rounded-md px-2 py-2 transition-colors hover:bg-sidebar-accent"
+        >
           <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan/30 to-emerald/30 text-[11px] font-semibold ring-1 ring-border/60">
             <User className="h-3.5 w-3.5" />
           </div>
           {!collapsed && (
             <div className="flex min-w-0 flex-col leading-tight">
-              <span className="truncate text-xs font-medium">User</span>
+              <span className="truncate text-xs font-medium">{user ? user.email : "User"}</span>
               <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
-                Not signed in
+                {user ? roleLabels[user.role] : "Not signed in"}
               </span>
             </div>
           )}
-        </div>
+        </Link>
       </SidebarFooter>
+
     </Sidebar>
   );
 }

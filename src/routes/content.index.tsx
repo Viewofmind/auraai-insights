@@ -40,6 +40,7 @@ export const Route = createFileRoute("/content/")({
 });
 
 function ContentQueuePage() {
+  const prefillSearch = Route.useSearch();
   const [status, setStatus] = useState<ContentStatus | "all">("all");
   const [query, setQuery] = useState("");
   const contentQuery = useContentQueue(status);
@@ -63,7 +64,7 @@ function ContentQueuePage() {
         description="Items are tracked against the backend content state machine. Nothing here is distributed automatically — publish_ready and exported are hand-off states only."
       />
 
-      <TopicForm />
+      <TopicForm key={`${prefillSearch.title ?? ""}|${prefillSearch.keyword ?? ""}`} />
 
 
 

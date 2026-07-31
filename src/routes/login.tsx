@@ -69,6 +69,7 @@ function LoginPage() {
               <div className="mt-1 flex items-center gap-2">
                 <input
                   type="password"
+                  aria-label="Backend access token"
                   autoComplete="off"
                   value={accessToken}
                   onChange={(e) => setAccessToken(e.target.value)}

@@ -197,6 +197,7 @@ function CredentialRow({
       <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
         <input
           type="password"
+          aria-label={`New value for ${meta.label} credential`}
           autoComplete="off"
           spellCheck={false}
           value={value}

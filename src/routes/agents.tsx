@@ -91,6 +91,8 @@ function AgentsHubPage() {
         <div className="relative w-full sm:w-72">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <input
+            type="search"
+            aria-label="Filter agents by name"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Filter agents"

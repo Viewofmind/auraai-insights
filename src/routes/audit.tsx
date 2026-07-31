@@ -58,6 +58,8 @@ function AuditLogPage() {
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <input
+            type="search"
+            aria-label="Search audit log by actor, action, status or content id"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search actor, action, status, content id"
@@ -65,6 +67,7 @@ function AuditLogPage() {
           />
         </div>
         <select
+          aria-label="Filter audit log by actor"
           value={actor}
           onChange={(e) => setActor(e.target.value)}
           className="h-9 rounded-md border border-border/70 bg-card/60 px-2 font-mono text-[12px] text-foreground focus:border-primary/60 focus:outline-none"

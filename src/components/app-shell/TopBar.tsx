@@ -14,7 +14,8 @@ export function TopBar() {
         <div className="relative w-full max-w-md">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <input
-            type="text"
+            type="search"
+            aria-label="Search agents, drafts and opportunities"
             placeholder="Search agents, drafts, opportunities…"
             className="h-9 w-full rounded-md border border-border/70 bg-card/60 pl-9 pr-14 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
@@ -28,12 +29,19 @@ export function TopBar() {
         <ConnectionBadge />
 
 
-        <button className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-card/60 text-muted-foreground transition-colors hover:text-foreground">
-          <Bell className="h-4 w-4" />
+        <button
+          type="button"
+          aria-label="Notifications"
+          className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-card/60 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        >
+          <Bell className="h-4 w-4" aria-hidden="true" />
         </button>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground">
-          <User className="h-4 w-4" />
+        <div
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground"
+          title="Signed-in user"
+        >
+          <User className="h-4 w-4" aria-hidden="true" />
         </div>
       </div>
     </header>

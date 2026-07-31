@@ -1,13 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { NotConnected } from "@/components/common/QueryState";
-import { useIntegrations, useStartGoogleOAuth } from "@/lib/api/hooks";
+import {
+  useIntegrations,
+  useStartGoogleOAuth,
+  useChannelConnections,
+  useStartChannelOAuth,
+} from "@/lib/api/hooks";
 import { API_BASE_URL, isApiConfigured } from "@/lib/api/config";
 import { isNotConnectedError } from "@/lib/api/client";
-import type { IntegrationProvider } from "@/lib/api/types";
+import type { IntegrationProvider, PublishChannel } from "@/lib/api/types";
+import { channelMeta } from "@/components/channels/ChannelBadge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth, roleLabels, type AppRole } from "@/lib/auth/AuthContext";
-import { BarChart3, Search, Plug, Info, AlertTriangle } from "lucide-react";
+import { BarChart3, Search, Plug, Info, AlertTriangle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({

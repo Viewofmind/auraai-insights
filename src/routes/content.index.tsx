@@ -207,6 +207,7 @@ function TopicForm() {
   const { user, token } = useAuth();
   const create = useCreateContent();
   const [title, setTitle] = useState("");
+  const [channel, setChannel] = useState<ContentChannel>("blog");
   const [targetKeyword, setTargetKeyword] = useState("");
   const [wordCount, setWordCount] = useState("");
   const [owner, setOwner] = useState("");
@@ -217,6 +218,7 @@ function TopicForm() {
     create.mutate(
       {
         title: title.trim(),
+        channel,
         target_keyword: targetKeyword.trim() || null,
         word_count: wordCount.trim() ? Number(wordCount) : null,
         owner: owner.trim() || user?.email || null,

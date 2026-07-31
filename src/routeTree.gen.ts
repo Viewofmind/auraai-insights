@@ -18,6 +18,7 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContentIndexRouteImport } from './routes/content.index'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
 
 const SettingsRoute = SettingsRouteImport.update({
@@ -65,6 +66,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContentIndexRoute = ContentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ContentRoute,
+} as any)
 const ContentIdRoute = ContentIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/content/': typeof ContentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,11 +96,11 @@ export interface FileRoutesByTo {
   '/analytics': typeof AnalyticsRoute
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
-  '/content': typeof ContentRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/content': typeof ContentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +114,7 @@ export interface FileRoutesById {
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/content/': typeof ContentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +129,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/content/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,11 +137,11 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/audit'
     | '/compliance'
-    | '/content'
     | '/login'
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/content'
   id:
     | '__root__'
     | '/'
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/content/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,6 +234,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/content/': {
+      id: '/content/'
+      path: '/'
+      fullPath: '/content/'
+      preLoaderRoute: typeof ContentIndexRouteImport
+      parentRoute: typeof ContentRoute
+    }
     '/content/$id': {
       id: '/content/$id'
       path: '/$id'
@@ -236,10 +253,12 @@ declare module '@tanstack/react-router' {
 
 interface ContentRouteChildren {
   ContentIdRoute: typeof ContentIdRoute
+  ContentIndexRoute: typeof ContentIndexRoute
 }
 
 const ContentRouteChildren: ContentRouteChildren = {
   ContentIdRoute: ContentIdRoute,
+  ContentIndexRoute: ContentIndexRoute,
 }
 
 const ContentRouteWithChildren =

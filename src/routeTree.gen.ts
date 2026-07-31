@@ -26,6 +26,7 @@ import { Route as ContentIndexRouteImport } from './routes/content.index'
 import { Route as AnalyticsIndexRouteImport } from './routes/analytics.index'
 import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
+import { Route as AnalyticsTechnicalRouteImport } from './routes/analytics.technical'
 import { Route as AnalyticsSeoRouteImport } from './routes/analytics.seo'
 
 const SettingsRoute = SettingsRouteImport.update({
@@ -113,6 +114,11 @@ const ContentIdRoute = ContentIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ContentRoute,
 } as any)
+const AnalyticsTechnicalRoute = AnalyticsTechnicalRouteImport.update({
+  id: '/technical',
+  path: '/technical',
+  getParentRoute: () => AnalyticsRoute,
+} as any)
 const AnalyticsSeoRoute = AnalyticsSeoRouteImport.update({
   id: '/seo',
   path: '/seo',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
   '/analytics/seo': typeof AnalyticsSeoRoute
+  '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
   '/analytics/seo': typeof AnalyticsSeoRoute
+  '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics': typeof AnalyticsIndexRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
   '/analytics/seo': typeof AnalyticsSeoRoute
+  '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/outreach'
     | '/settings'
     | '/analytics/seo'
+    | '/analytics/technical'
     | '/content/$id'
     | '/geo/citations'
     | '/analytics/'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/outreach'
     | '/settings'
     | '/analytics/seo'
+    | '/analytics/technical'
     | '/content/$id'
     | '/geo/citations'
     | '/analytics'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/outreach'
     | '/settings'
     | '/analytics/seo'
+    | '/analytics/technical'
     | '/content/$id'
     | '/geo/citations'
     | '/analytics/'
@@ -373,6 +385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContentIdRouteImport
       parentRoute: typeof ContentRoute
     }
+    '/analytics/technical': {
+      id: '/analytics/technical'
+      path: '/technical'
+      fullPath: '/analytics/technical'
+      preLoaderRoute: typeof AnalyticsTechnicalRouteImport
+      parentRoute: typeof AnalyticsRoute
+    }
     '/analytics/seo': {
       id: '/analytics/seo'
       path: '/seo'
@@ -385,11 +404,13 @@ declare module '@tanstack/react-router' {
 
 interface AnalyticsRouteChildren {
   AnalyticsSeoRoute: typeof AnalyticsSeoRoute
+  AnalyticsTechnicalRoute: typeof AnalyticsTechnicalRoute
   AnalyticsIndexRoute: typeof AnalyticsIndexRoute
 }
 
 const AnalyticsRouteChildren: AnalyticsRouteChildren = {
   AnalyticsSeoRoute: AnalyticsSeoRoute,
+  AnalyticsTechnicalRoute: AnalyticsTechnicalRoute,
   AnalyticsIndexRoute: AnalyticsIndexRoute,
 }
 

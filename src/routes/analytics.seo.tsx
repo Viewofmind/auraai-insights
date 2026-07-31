@@ -264,7 +264,7 @@ function SeoTab() {
                 <Link2 className="h-4 w-4 text-amber" />
                 <h2 className="text-sm font-semibold tracking-tight">Competitor gaps</h2>
               </header>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Competitor gap table, scrollable">
                 {research.data.competitor_gaps.length === 0 ? (
                   <p className="p-4 text-[12.5px] text-muted-foreground sm:p-5">
                     No competitor-gap keywords returned for this run.

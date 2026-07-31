@@ -184,6 +184,7 @@ function ContactRow({ contact }: { contact: InfluencerContact }) {
             </span>
           </div>
           <textarea
+            aria-label="Draft outreach message"
             value={body}
             onChange={(e) => setMessage(e.target.value)}
             rows={6}

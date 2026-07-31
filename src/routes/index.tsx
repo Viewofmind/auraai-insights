@@ -6,6 +6,7 @@ import { Sparkline } from "@/components/common/Sparkline";
 import { agents } from "@/lib/mock/agents";
 import { opportunities } from "@/lib/mock/opportunities";
 import { activity } from "@/lib/mock/activity";
+import { ConnectionsSummary } from "@/components/settings/ConnectionsSummary";
 import { EmptyState } from "@/components/common/EmptyState";
 import {
   Bot,
@@ -67,6 +68,8 @@ function DashboardPage() {
           </>
         }
       />
+
+      <ConnectionsSummary className="mt-6" />
 
       {/* KPI Grid */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -217,7 +220,7 @@ function DashboardPage() {
             View all →
           </Link>
         </header>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Top-performing pieces table, scrollable">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">

@@ -220,7 +220,7 @@ function DashboardPage() {
             View all →
           </Link>
         </header>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Top-performing pieces table, scrollable">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">

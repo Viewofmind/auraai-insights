@@ -151,7 +151,7 @@ function AgentsHubPage() {
           {phase2Agents.map((a) => (
             <div
               key={a.id}
-              className="flex items-start gap-3 rounded-lg border border-border/50 bg-background/40 p-3 opacity-70"
+              className="flex items-start gap-3 rounded-lg border border-border/50 bg-background/40 p-3"
             >
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-card/50">
                 <a.icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
@@ -162,7 +162,7 @@ function AgentsHubPage() {
                   {a.role}
                 </div>
               </div>
-              <Lock className="ml-auto h-3 w-3 shrink-0 text-muted-foreground/70" />
+              <Lock className="ml-auto h-3 w-3 shrink-0 text-muted-foreground" aria-hidden="true" />
             </div>
           ))}
         </div>

@@ -135,7 +135,7 @@ function AnalyticsPage() {
           <h2 className="text-sm font-semibold tracking-tight">Top-performing pieces</h2>
           <p className="text-[11px] text-muted-foreground">No data yet</p>
         </header>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Top-performing pieces table, scrollable">
         <table className="w-full min-w-[520px] text-sm">
           <thead>
             <tr className="text-left font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">

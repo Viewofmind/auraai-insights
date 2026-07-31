@@ -100,7 +100,7 @@ function AuditLogPage() {
             emptyDescription="Entries are written by the backend on every state transition. Nothing recorded yet."
           >
             {(entries) => (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Audit log table, scrollable">
                 <table className="w-full border-collapse font-mono text-[12px]">
                   <thead>
                     <tr className="text-left uppercase tracking-[0.12em] text-muted-foreground">

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { AgentCard } from "@/components/agents/AgentCard";
@@ -57,10 +57,13 @@ function AgentsHubPage() {
         title="Autonomous marketing agents"
         description="Configured agents for the InvestSights.in growth surface. No data source is connected yet, so no metrics are reported."
         actions={
-          <button className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+          <Link
+            to="/content"
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
             <Plus className="h-3.5 w-3.5" />
-            New agent
-          </button>
+            New topic
+          </Link>
         }
       />
 

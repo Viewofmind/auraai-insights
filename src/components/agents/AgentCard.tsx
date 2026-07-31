@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import type { Agent } from "@/lib/mock/agents";
 import { StatusPill } from "@/components/common/StatusPill";
 import { Sparkline } from "@/components/common/Sparkline";
@@ -14,7 +15,6 @@ const accentToColor: Record<Agent["accent"], string> = {
 export function AgentCard({ agent }: { agent: Agent }) {
   const Icon = agent.icon;
   const color = accentToColor[agent.accent];
-  const disabled = agent.status !== "live";
   const m = agent.metrics;
   const trend = m ? m.spark[m.spark.length - 1] - m.spark[0] : 0;
   const trendUp = trend >= 0;
@@ -152,25 +152,27 @@ export function AgentCard({ agent }: { agent: Agent }) {
 
       {/* Actions */}
       <div className="mt-4 flex items-center gap-1.5">
-        <button
-          disabled={disabled}
+        <Link
+          to="/content"
+          title="Start a new topic in the content queue"
           className="group/btn flex flex-1 items-center justify-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition-all hover:bg-primary/20 hover:shadow-[0_0_20px_-4px_color-mix(in_oklab,var(--primary)_60%,transparent)] disabled:cursor-not-allowed disabled:border-border/60 disabled:bg-muted/30 disabled:text-muted-foreground disabled:shadow-none"
         >
           <Play className="h-3 w-3 transition-transform group-hover/btn:scale-110" fill="currentColor" />
-          Run now
-        </button>
+          New topic
+        </Link>
         <button
           title="Configure"
           className="flex h-8 w-8 items-center justify-center rounded-md border border-border/60 bg-background/60 text-muted-foreground transition-colors hover:border-border hover:text-foreground"
         >
           <Settings2 className="h-3.5 w-3.5" />
         </button>
-        <button
+        <Link
+          to="/audit"
           title="View logs"
           className="flex h-8 w-8 items-center justify-center rounded-md border border-border/60 bg-background/60 text-muted-foreground transition-colors hover:border-border hover:text-foreground"
         >
           <ScrollText className="h-3.5 w-3.5" />
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import type {
   AuditLogEntry,
   ComplianceFlag,
   ContentItem,
+  ContentItemDetail,
   ContentStatus,
   HealthResponse,
   IntegrationConnection,
@@ -27,6 +28,7 @@ const base = { retry: false, staleTime: 30_000 } as const;
 export const queryKeys = {
   health: ["api", "health"] as const,
   content: (status?: ContentStatus | "all") => ["api", "content", status ?? "all"] as const,
+  contentItem: (id: string) => ["api", "content", "item", id] as const,
   compliance: ["api", "compliance", "queue"] as const,
   auditLog: ["api", "audit-log"] as const,
   integrations: ["api", "google", "connections"] as const,
@@ -52,6 +54,15 @@ export function useContentQueue(
         status === "all" ? endpoints.content : `${endpoints.content}?status=${status}`,
         { signal },
       ),
+  });
+}
+
+export function useContentItem(id: string): UseQueryResult<ContentItemDetail> {
+  return useQuery({
+    ...base,
+    queryKey: queryKeys.contentItem(id),
+    queryFn: ({ signal }) =>
+      apiFetch<ContentItemDetail>(endpoints.contentItem(id), { signal }),
   });
 }
 
@@ -118,6 +129,33 @@ export function useCreateContent() {
   });
 }
 
+
+/**
+ * Generation actions on a single item:
+ *   POST /content/{id}/outline
+ *   POST /content/{id}/outline/approve
+ *   POST /content/{id}/draft
+ */
+export type ContentAction = "outline" | "outline_approve" | "outline_reject" | "draft";
+
+const actionPath: Record<ContentAction, (id: string) => string> = {
+  outline: endpoints.contentOutline,
+  outline_approve: endpoints.contentOutlineApprove,
+  outline_reject: endpoints.contentOutlineReject,
+  draft: endpoints.contentDraft,
+};
+
+export function useContentAction(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (action: ContentAction) =>
+      apiFetch<ContentItemDetail>(actionPath[action](id), { method: "POST" }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["api", "content"] });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
 
 export function useContentTransition() {
   const qc = useQueryClient();

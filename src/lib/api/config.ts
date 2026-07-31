@@ -33,6 +33,15 @@ export const endpoints = {
 
   seoKeywords: "/seo/keywords",
   seoOpportunities: "/seo/opportunities",
+  /** POST — keyword_research output: intent, variations/clusters, competitor gaps. */
+  seoKeywordResearch: "/seo/keyword-research",
+  /** GET — technical_audit findings, severity-ordered. */
+  seoTechnicalAudit: "/seo/technical-audit",
+
+  /** Listening signals. Hacker News is read-only; Reddit is manual input only. */
+  listeningHackernews: "/listening/hackernews",
+  listeningRedditDraft: "/listening/reddit/draft",
+
 
   googleConnections: "/google/connections",
   googleOAuthStart: (provider: "gsc" | "ga4") => `/google/${provider}/oauth/start`,

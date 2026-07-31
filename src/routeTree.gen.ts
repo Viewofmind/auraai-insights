@@ -23,8 +23,11 @@ import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GeoIndexRouteImport } from './routes/geo.index'
 import { Route as ContentIndexRouteImport } from './routes/content.index'
+import { Route as AnalyticsIndexRouteImport } from './routes/analytics.index'
 import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
+import { Route as AnalyticsTechnicalRouteImport } from './routes/analytics.technical'
+import { Route as AnalyticsSeoRouteImport } from './routes/analytics.seo'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -96,6 +99,11 @@ const ContentIndexRoute = ContentIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ContentRoute,
 } as any)
+const AnalyticsIndexRoute = AnalyticsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AnalyticsRoute,
+} as any)
 const GeoCitationsRoute = GeoCitationsRouteImport.update({
   id: '/citations',
   path: '/citations',
@@ -106,11 +114,21 @@ const ContentIdRoute = ContentIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ContentRoute,
 } as any)
+const AnalyticsTechnicalRoute = AnalyticsTechnicalRouteImport.update({
+  id: '/technical',
+  path: '/technical',
+  getParentRoute: () => AnalyticsRoute,
+} as any)
+const AnalyticsSeoRoute = AnalyticsSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AnalyticsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRoute
+  '/analytics': typeof AnalyticsRouteWithChildren
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
@@ -120,15 +138,17 @@ export interface FileRoutesByFullPath {
   '/opportunities': typeof OpportunitiesRoute
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
+  '/analytics/seo': typeof AnalyticsSeoRoute
+  '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
+  '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRoute
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/credentials': typeof CredentialsRoute
@@ -136,8 +156,11 @@ export interface FileRoutesByTo {
   '/opportunities': typeof OpportunitiesRoute
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
+  '/analytics/seo': typeof AnalyticsSeoRoute
+  '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
+  '/analytics': typeof AnalyticsIndexRoute
   '/content': typeof ContentIndexRoute
   '/geo': typeof GeoIndexRoute
 }
@@ -145,7 +168,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRoute
+  '/analytics': typeof AnalyticsRouteWithChildren
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
@@ -155,8 +178,11 @@ export interface FileRoutesById {
   '/opportunities': typeof OpportunitiesRoute
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
+  '/analytics/seo': typeof AnalyticsSeoRoute
+  '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
+  '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
@@ -175,15 +201,17 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/analytics/seo'
+    | '/analytics/technical'
     | '/content/$id'
     | '/geo/citations'
+    | '/analytics/'
     | '/content/'
     | '/geo/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/agents'
-    | '/analytics'
     | '/audit'
     | '/compliance'
     | '/credentials'
@@ -191,8 +219,11 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/analytics/seo'
+    | '/analytics/technical'
     | '/content/$id'
     | '/geo/citations'
+    | '/analytics'
     | '/content'
     | '/geo'
   id:
@@ -209,8 +240,11 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/analytics/seo'
+    | '/analytics/technical'
     | '/content/$id'
     | '/geo/citations'
+    | '/analytics/'
     | '/content/'
     | '/geo/'
   fileRoutesById: FileRoutesById
@@ -218,7 +252,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgentsRoute: typeof AgentsRoute
-  AnalyticsRoute: typeof AnalyticsRoute
+  AnalyticsRoute: typeof AnalyticsRouteWithChildren
   AuditRoute: typeof AuditRoute
   ComplianceRoute: typeof ComplianceRoute
   ContentRoute: typeof ContentRouteWithChildren
@@ -330,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContentIndexRouteImport
       parentRoute: typeof ContentRoute
     }
+    '/analytics/': {
+      id: '/analytics/'
+      path: '/'
+      fullPath: '/analytics/'
+      preLoaderRoute: typeof AnalyticsIndexRouteImport
+      parentRoute: typeof AnalyticsRoute
+    }
     '/geo/citations': {
       id: '/geo/citations'
       path: '/citations'
@@ -344,8 +385,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContentIdRouteImport
       parentRoute: typeof ContentRoute
     }
+    '/analytics/technical': {
+      id: '/analytics/technical'
+      path: '/technical'
+      fullPath: '/analytics/technical'
+      preLoaderRoute: typeof AnalyticsTechnicalRouteImport
+      parentRoute: typeof AnalyticsRoute
+    }
+    '/analytics/seo': {
+      id: '/analytics/seo'
+      path: '/seo'
+      fullPath: '/analytics/seo'
+      preLoaderRoute: typeof AnalyticsSeoRouteImport
+      parentRoute: typeof AnalyticsRoute
+    }
   }
 }
+
+interface AnalyticsRouteChildren {
+  AnalyticsSeoRoute: typeof AnalyticsSeoRoute
+  AnalyticsTechnicalRoute: typeof AnalyticsTechnicalRoute
+  AnalyticsIndexRoute: typeof AnalyticsIndexRoute
+}
+
+const AnalyticsRouteChildren: AnalyticsRouteChildren = {
+  AnalyticsSeoRoute: AnalyticsSeoRoute,
+  AnalyticsTechnicalRoute: AnalyticsTechnicalRoute,
+  AnalyticsIndexRoute: AnalyticsIndexRoute,
+}
+
+const AnalyticsRouteWithChildren = AnalyticsRoute._addFileChildren(
+  AnalyticsRouteChildren,
+)
 
 interface ContentRouteChildren {
   ContentIdRoute: typeof ContentIdRoute
@@ -375,7 +446,7 @@ const GeoRouteWithChildren = GeoRoute._addFileChildren(GeoRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgentsRoute: AgentsRoute,
-  AnalyticsRoute: AnalyticsRoute,
+  AnalyticsRoute: AnalyticsRouteWithChildren,
   AuditRoute: AuditRoute,
   ComplianceRoute: ComplianceRoute,
   ContentRoute: ContentRouteWithChildren,

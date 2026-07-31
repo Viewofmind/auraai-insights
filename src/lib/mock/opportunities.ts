@@ -11,4 +11,5 @@ export interface Opportunity {
   url?: string;
 }
 
+/** No fabricated signals: the real feed comes from the backend listening endpoints. */
 export const opportunities: Opportunity[] = [];

@@ -5,6 +5,8 @@ import {
   FileText,
   Sparkles,
   BarChart3,
+  Radar,
+
   Activity,
   User,
   ShieldCheck,

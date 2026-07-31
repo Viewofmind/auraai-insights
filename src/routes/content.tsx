@@ -7,10 +7,12 @@ import {
   contentStatusMeta,
   contentStatusOrder,
 } from "@/components/content/ContentStatusBadge";
-import { useContentQueue } from "@/lib/api/hooks";
+import { useContentQueue, useCreateContent } from "@/lib/api/hooks";
+import { useAuth } from "@/lib/auth/AuthContext";
 import type { ContentStatus } from "@/lib/api/types";
-import { FileText, Search, Info } from "lucide-react";
+import { FileText, Search, Info, Plus, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/content")({
   head: () => ({
@@ -55,6 +57,10 @@ function ContentQueuePage() {
         title="Pipeline by state"
         description="Items are tracked against the backend content state machine. Nothing here is distributed automatically — publish_ready and exported are hand-off states only."
       />
+
+      <TopicForm />
+
+
 
       {/* Toolbar */}
       <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -187,5 +193,138 @@ function ContentQueuePage() {
         </div>
       </section>
     </div>
+  );
+}
+
+/** Topic intake — POST /api/v1/content with target_keyword / word_count / owner. */
+function TopicForm() {
+  const { user, token } = useAuth();
+  const create = useCreateContent();
+  const [title, setTitle] = useState("");
+  const [targetKeyword, setTargetKeyword] = useState("");
+  const [wordCount, setWordCount] = useState("");
+  const [owner, setOwner] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+    create.mutate(
+      {
+        title: title.trim(),
+        target_keyword: targetKeyword.trim() || null,
+        word_count: wordCount.trim() ? Number(wordCount) : null,
+        owner: owner.trim() || user?.email || null,
+      },
+      {
+        onSuccess: () => {
+          setTitle("");
+          setTargetKeyword("");
+          setWordCount("");
+          setOwner("");
+        },
+      },
+    );
+  };
+
+  const field =
+    "h-9 w-full rounded-md border border-border/70 bg-background/60 px-3 text-sm placeholder:text-muted-foreground focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const label =
+    "font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground";
+
+  return (
+    <section className="mt-6 rounded-xl border border-border/60 bg-card/50">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-4 py-3 sm:px-5">
+        <h2 className="text-sm font-semibold tracking-tight">New topic</h2>
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+          POST /api/v1/content
+        </span>
+      </header>
+
+      <form onSubmit={submit} className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-4">
+        <div className="sm:col-span-2">
+          <label htmlFor="topic-title" className={label}>
+            Title / topic
+          </label>
+          <input
+            id="topic-title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g. How index funds are taxed in India"
+            className={cn(field, "mt-1")}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="topic-keyword" className={label}>
+            target_keyword
+          </label>
+          <input
+            id="topic-keyword"
+            value={targetKeyword}
+            onChange={(e) => setTargetKeyword(e.target.value)}
+            placeholder="index fund taxation"
+            className={cn(field, "mt-1 font-mono text-[12.5px]")}
+          />
+        </div>
+        <div>
+          <label htmlFor="topic-words" className={label}>
+            word_count
+          </label>
+          <input
+            id="topic-words"
+            type="number"
+            min={0}
+            value={wordCount}
+            onChange={(e) => setWordCount(e.target.value)}
+            placeholder="1200"
+            className={cn(field, "mt-1 font-mono tabular-nums")}
+          />
+        </div>
+        <div className="sm:col-span-2">
+          <label htmlFor="topic-owner" className={label}>
+            owner
+          </label>
+          <input
+            id="topic-owner"
+            value={owner}
+            onChange={(e) => setOwner(e.target.value)}
+            placeholder={user?.email ?? "owner@investsights.in"}
+            className={cn(field, "mt-1 font-mono text-[12.5px]")}
+          />
+        </div>
+        <div className="flex items-end sm:col-span-2 xl:col-span-2">
+          <button
+            type="submit"
+            disabled={create.isPending || !title.trim()}
+            className="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+          >
+            {create.isPending ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Plus className="h-3.5 w-3.5" />
+            )}
+            Create content item
+          </button>
+        </div>
+
+        <p className="col-span-full flex items-start gap-2 text-[11.5px] text-muted-foreground">
+          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          {token
+            ? "Requests are sent with your Authorization: Bearer token."
+            : "No access token set — add one on the sign-in screen so requests carry Authorization: Bearer."}
+        </p>
+
+        {create.isError && (
+          <p className="col-span-full text-[12px] text-rose-400">
+            {create.error instanceof Error ? create.error.message : "Request failed."}
+          </p>
+        )}
+        {create.isSuccess && (
+          <p className="col-span-full text-[12px] text-emerald-400">
+            Created “{create.data.title}” in state {create.data.status}.
+          </p>
+        )}
+      </form>
+    </section>
   );
 }

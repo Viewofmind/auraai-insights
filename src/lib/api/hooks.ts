@@ -90,6 +90,35 @@ export function useSeoKeywords(): UseQueryResult<SeoKeyword[]> {
 
 /* ---------------------------------- mutations --------------------------------- */
 
+/** Topic intake: POST /api/v1/content — creates a new content item from a topic. */
+export interface CreateContentInput {
+  title: string;
+  target_keyword?: string | null;
+  word_count?: number | null;
+  owner?: string | null;
+}
+
+export function useCreateContent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateContentInput) =>
+      apiFetch<ContentItem>(endpoints.content, {
+        method: "POST",
+        body: {
+          title: input.title,
+          target_keyword: input.target_keyword ?? null,
+          word_count: input.word_count ?? null,
+          owner: input.owner ?? null,
+        },
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["api", "content"] });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
+
+
 export function useContentTransition() {
   const qc = useQueryClient();
   return useMutation({

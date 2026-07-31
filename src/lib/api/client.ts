@@ -1,4 +1,6 @@
 import { API_BASE_URL, apiUrl, isApiConfigured } from "./config";
+import { getAuthToken } from "./token";
+
 
 /** Thrown when VITE_API_BASE_URL is not set — i.e. no backend is wired up. */
 export class ApiNotConfiguredError extends Error {
@@ -30,8 +32,10 @@ export interface ApiRequestOptions {
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   body?: unknown;
   signal?: AbortSignal;
+  /** Overrides the stored session token for this call only. */
   token?: string | null;
 }
+
 
 /**
  * Single typed entry point for every backend call. No mock fallbacks:
@@ -41,7 +45,9 @@ export interface ApiRequestOptions {
 export async function apiFetch<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
   if (!isApiConfigured()) throw new ApiNotConfiguredError();
 
-  const { method = "GET", body, signal, token } = options;
+  const { method = "GET", body, signal } = options;
+  // Real session token unless this call explicitly overrides it.
+  const token = options.token !== undefined ? options.token : getAuthToken();
 
   let response: Response;
   try {
@@ -53,6 +59,7 @@ export async function apiFetch<T>(path: string, options: ApiRequestOptions = {})
         ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
+
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   } catch {

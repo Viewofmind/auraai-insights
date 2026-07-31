@@ -24,10 +24,11 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const { signIn, user, signOut } = useAuth();
+  const { signIn, user, signOut, token, setToken } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<AppRole>("editor");
+  const [accessToken, setAccessToken] = useState("");
 
   return (
     <div className="mx-auto flex min-h-[70vh] w-full max-w-md flex-col justify-center p-4 sm:p-6">
@@ -47,9 +48,10 @@ function LoginPage() {
         <h1 className="mt-6 text-lg font-semibold tracking-tight">Sign in</h1>
         <p className="mt-1 flex items-start gap-2 text-[11.5px] text-muted-foreground">
           <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-          Stub only. Nothing is sent anywhere and no credential is checked — this screen
-          exists so the shell and role-scoped views can be reviewed before backend auth
-          lands.
+          Email and role are a local shell stub — no credential is verified here. The
+          access token, however, is real: it is stored and sent as
+          <span className="font-mono"> Authorization: Bearer &lt;token&gt;</span> on every
+          backend request.
         </p>
 
         {user ? (
@@ -59,6 +61,34 @@ function LoginPage() {
               <div className="mt-0.5 uppercase tracking-[0.12em] text-muted-foreground">
                 {roleLabels[user.role]}
               </div>
+            </div>
+            <div className="rounded-lg border border-border/50 bg-background/40 p-3">
+              <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                Access token
+              </div>
+              <div className="mt-1 flex items-center gap-2">
+                <input
+                  type="password"
+                  autoComplete="off"
+                  value={accessToken}
+                  onChange={(e) => setAccessToken(e.target.value)}
+                  placeholder={token ? "token set — paste to replace" : "paste backend access token"}
+                  className="h-8 flex-1 rounded-md border border-border/70 bg-background/60 px-2 font-mono text-[12px] placeholder:text-muted-foreground focus:border-primary/60 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setToken(accessToken.trim() || null);
+                    setAccessToken("");
+                  }}
+                  className="rounded-md border border-border/60 bg-background/60 px-2.5 py-1.5 text-xs font-medium hover:bg-muted/40"
+                >
+                  Save
+                </button>
+              </div>
+              <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                {token ? "Sent on every API request" : "Not set — requests go unauthenticated"}
+              </p>
             </div>
             <div className="flex gap-2">
               <button
@@ -80,7 +110,7 @@ function LoginPage() {
             className="mt-6 space-y-4"
             onSubmit={(e) => {
               e.preventDefault();
-              signIn(email.trim() || "user@investsights.in", role);
+              signIn(email.trim() || "user@investsights.in", role, accessToken.trim() || null);
               navigate({ to: "/" });
             }}
           >
@@ -122,6 +152,24 @@ function LoginPage() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="token"
+                className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+              >
+                Access token (Bearer)
+              </label>
+              <input
+                id="token"
+                type="password"
+                autoComplete="off"
+                value={accessToken}
+                onChange={(e) => setAccessToken(e.target.value)}
+                placeholder="paste backend access token"
+                className="mt-1 h-9 w-full rounded-md border border-border/70 bg-background/60 px-3 font-mono text-[12.5px] placeholder:text-muted-foreground focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
             </div>
 
             <button

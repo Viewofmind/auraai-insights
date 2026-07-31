@@ -135,7 +135,8 @@ function AnalyticsPage() {
           <h2 className="text-sm font-semibold tracking-tight">Top-performing pieces</h2>
           <p className="text-[11px] text-muted-foreground">No data yet</p>
         </header>
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[520px] text-sm">
           <thead>
             <tr className="text-left font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               <th className="px-5 py-2 font-normal">Title</th>
@@ -168,6 +169,7 @@ function AnalyticsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </section>
     </div>
   );

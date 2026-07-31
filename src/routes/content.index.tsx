@@ -32,6 +32,10 @@ export const Route = createFileRoute("/content/")({
       },
     ],
   }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    title: typeof search.title === "string" ? search.title : undefined,
+    keyword: typeof search.keyword === "string" ? search.keyword : undefined,
+  }),
   component: ContentQueuePage,
 });
 
@@ -206,9 +210,10 @@ function ContentQueuePage() {
 function TopicForm() {
   const { user, token } = useAuth();
   const create = useCreateContent();
-  const [title, setTitle] = useState("");
+  const prefill = Route.useSearch();
+  const [title, setTitle] = useState(prefill.title ?? "");
   const [channel, setChannel] = useState<ContentChannel>("blog");
-  const [targetKeyword, setTargetKeyword] = useState("");
+  const [targetKeyword, setTargetKeyword] = useState(prefill.keyword ?? "");
   const [wordCount, setWordCount] = useState("");
   const [owner, setOwner] = useState("");
 

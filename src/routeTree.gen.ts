@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as OutreachRouteImport } from './routes/outreach'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GeoRouteImport } from './routes/geo'
@@ -27,6 +28,11 @@ import { Route as ContentIdRouteImport } from './routes/content.$id'
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OutreachRoute = OutreachRouteImport.update({
+  id: '/outreach',
+  path: '/outreach',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OpportunitiesRoute = OpportunitiesRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/geo': typeof GeoRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/compliance': typeof ComplianceRoute
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/geo': typeof GeoRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/geo'
     | '/login'
     | '/opportunities'
+    | '/outreach'
     | '/settings'
     | '/content/$id'
     | '/geo/citations'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/login'
     | '/opportunities'
+    | '/outreach'
     | '/settings'
     | '/content/$id'
     | '/geo/citations'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/geo'
     | '/login'
     | '/opportunities'
+    | '/outreach'
     | '/settings'
     | '/content/$id'
     | '/geo/citations'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   GeoRoute: typeof GeoRouteWithChildren
   LoginRoute: typeof LoginRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
+  OutreachRoute: typeof OutreachRoute
   SettingsRoute: typeof SettingsRoute
 }
 
@@ -211,6 +224,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/outreach': {
+      id: '/outreach'
+      path: '/outreach'
+      fullPath: '/outreach'
+      preLoaderRoute: typeof OutreachRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/opportunities': {
@@ -342,6 +362,7 @@ const rootRouteChildren: RootRouteChildren = {
   GeoRoute: GeoRouteWithChildren,
   LoginRoute: LoginRoute,
   OpportunitiesRoute: OpportunitiesRoute,
+  OutreachRoute: OutreachRoute,
   SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport

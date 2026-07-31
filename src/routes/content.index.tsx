@@ -162,6 +162,7 @@ function ContentQueuePage() {
                           </span>
                         </div>
                       </div>
+                      <ChannelBadge channel={item.channel} className="shrink-0" />
                       <ContentStatusBadge status={item.status} className="shrink-0" />
                       <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-muted-foreground">
                         {new Date(item.updated_at).toISOString().slice(0, 16).replace("T", " ")}

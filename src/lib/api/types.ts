@@ -43,6 +43,11 @@ export interface ContentItem {
 export interface ContentItemDetail extends ContentItem {
   outline_json?: unknown | null;
   draft_markdown?: string | null;
+  /** Exact text of a short-form external post (X / LinkedIn), when applicable. */
+  post_text?: string | null;
+  /** Set once the backend records an external publish. */
+  published_at?: string | null;
+  published_url?: string | null;
 }
 
 /** Compliance flag categories — backend values, verbatim. */

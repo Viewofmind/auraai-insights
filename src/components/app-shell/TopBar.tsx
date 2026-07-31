@@ -1,6 +1,8 @@
 import { Bell, Search, Command, User } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
+import { ConnectionBadge } from "@/components/app-shell/ConnectionBadge";
+
 
 export function TopBar() {
   return (

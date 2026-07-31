@@ -15,7 +15,6 @@ const accentToColor: Record<Agent["accent"], string> = {
 export function AgentCard({ agent }: { agent: Agent }) {
   const Icon = agent.icon;
   const color = accentToColor[agent.accent];
-  const disabled = agent.status !== "live";
   const m = agent.metrics;
   const trend = m ? m.spark[m.spark.length - 1] - m.spark[0] : 0;
   const trendUp = trend >= 0;

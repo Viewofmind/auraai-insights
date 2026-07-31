@@ -12,6 +12,8 @@ import type {
   ContentItem,
   ContentItemDetail,
   ContentStatus,
+  GeoCitationCheck,
+  GeoReadiness,
   HealthResponse,
   IntegrationConnection,
   IntegrationProvider,
@@ -195,5 +197,75 @@ export function useStartGoogleOAuth() {
       apiFetch<{ authorize_url: string }>(endpoints.googleOAuthStart(provider), {
         method: "POST",
       }),
+  });
+}
+
+/* ----------------------------------- GEO ---------------------------------- */
+
+export const geoQueryKeys = {
+  readiness: (url: string) => ["api", "geo", "readiness", url] as const,
+  citationCheck: (id: string) => ["api", "geo", "citations", id] as const,
+};
+
+/** GET /geo/readiness?url=... — only runs once a URL is submitted. */
+export function useGeoReadiness(url: string): UseQueryResult<GeoReadiness> {
+  return useQuery({
+    ...base,
+    enabled: url.trim().length > 0,
+    queryKey: geoQueryKeys.readiness(url),
+    queryFn: ({ signal }) => apiFetch<GeoReadiness>(endpoints.geoReadiness(url), { signal }),
+  });
+}
+
+/** GET /geo/citations/{check_id} — past result. Manual only: no auto-refetch. */
+export function useGeoCitationCheck(checkId: string): UseQueryResult<GeoCitationCheck> {
+  return useQuery({
+    ...base,
+    enabled: checkId.trim().length > 0,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    queryKey: geoQueryKeys.citationCheck(checkId),
+    queryFn: ({ signal }) =>
+      apiFetch<GeoCitationCheck>(endpoints.geoCitationCheck(checkId), { signal }),
+  });
+}
+
+export interface RunGeoCitationInput {
+  url: string;
+  brand?: string | null;
+  queries?: string[] | null;
+}
+
+/**
+ * POST /geo/citations — paid API calls per engine.
+ * Must only ever be called from an explicit user confirmation.
+ */
+export function useRunGeoCitationCheck() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: RunGeoCitationInput) =>
+      apiFetch<GeoCitationCheck>(endpoints.geoCitations, {
+        method: "POST",
+        body: {
+          url: input.url,
+          brand: input.brand ?? null,
+          queries: input.queries ?? null,
+        },
+      }),
+    onSuccess: (data) => {
+      qc.setQueryData(geoQueryKeys.citationCheck(data.check_id), data);
+    },
+  });
+}
+
+/** POST /geo/check/{content_id} — paid; confirmation required before calling. */
+export function useGeoCheckContent(contentId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () =>
+      apiFetch<GeoCitationCheck>(endpoints.geoCheckContent(contentId), { method: "POST" }),
+    onSuccess: (data) => {
+      qc.setQueryData(geoQueryKeys.citationCheck(data.check_id), data);
+    },
   });
 }

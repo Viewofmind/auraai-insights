@@ -87,3 +87,56 @@ export interface SeoKeyword {
   difficulty: number | null;
   position: number | null;
 }
+
+/* --------------------------------- GEO ---------------------------------- */
+/** Generative Engine Optimization — readiness audit + AI-answer citation checks. */
+
+export type GeoSeverity = "critical" | "high" | "medium" | "low" | "ok";
+
+export interface GeoReadinessCheck {
+  id: string;
+  label: string;
+  severity: GeoSeverity;
+  /** e.g. "llms_txt" | "robots" | "schema" | "entity" — backend-owned. */
+  category?: string | null;
+  detail?: string | null;
+  recommendation?: string | null;
+}
+
+export interface GeoReadiness {
+  url: string;
+  geo_readiness_score: number;
+  checked_at: string;
+  checks: GeoReadinessCheck[];
+}
+
+export type GeoEngine = "openai" | "perplexity" | "gemini" | "claude";
+
+export interface GeoEngineResult {
+  engine: GeoEngine;
+  query?: string | null;
+  brand_mentioned: boolean;
+  domain_cited: boolean;
+  competitor_domains_cited: string[];
+  answer_excerpt?: string | null;
+}
+
+export type GeoVerdict = "strong" | "cited" | "mentioned_only" | "invisible";
+
+export interface GeoCompetitorDomain {
+  domain: string;
+  citations: number;
+}
+
+export interface GeoCitationCheck {
+  check_id: string;
+  url?: string | null;
+  brand?: string | null;
+  content_id?: string | null;
+  created_at: string;
+  brand_mention_rate: number;
+  domain_citation_rate: number;
+  verdict: GeoVerdict;
+  engines: GeoEngineResult[];
+  top_competitor_domains: GeoCompetitorDomain[];
+}

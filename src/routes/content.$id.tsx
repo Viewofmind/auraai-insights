@@ -8,7 +8,10 @@ import {
   useContentAction,
   useContentItem,
   useContentTransition,
+  useGeoCheckContent,
 } from "@/lib/api/hooks";
+import { ConfirmRunDialog } from "@/components/geo/ConfirmRunDialog";
+import { VerdictBadge, engineLabel } from "@/components/geo/GeoBadges";
 import type { ContentStatus } from "@/lib/api/types";
 import {
   AlertTriangle,
@@ -19,6 +22,7 @@ import {
   Loader2,
   PenLine,
   PlugZap,
+  Radar,
   Send,
   XCircle,
 } from "lucide-react";
@@ -48,6 +52,7 @@ function ContentDetailPage() {
   const item = useContentItem(id);
   const action = useContentAction(id);
   const transition = useContentTransition();
+  const geo = useGeoCheckContent(id);
 
   const busy = action.isPending || transition.isPending;
   const error = action.error ?? transition.error;
@@ -195,6 +200,90 @@ function ContentDetailPage() {
               </p>
             )}
           </section>
+
+          {/* GEO citations — only once the piece is publish_ready or exported */}
+          {(item.data.status === "publish_ready" || item.data.status === "exported") && (
+            <section className="mt-4 rounded-xl border border-border/60 bg-card/50 p-4 sm:p-5">
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="text-sm font-semibold tracking-tight">GEO citations</h2>
+                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-amber">
+                  Paid · ~cents per run
+                </span>
+              </div>
+              <p className="mt-1 text-[11.5px] text-muted-foreground">
+                POST /api/v1/geo/check/{id} · asks ChatGPT, Perplexity, Gemini and Claude whether
+                they mention the brand and cite the domain. Manual trigger only — never scheduled,
+                never automatic.
+              </p>
+              <div className="mt-4">
+                <ConfirmRunDialog
+                  disabled={geo.isPending}
+                  onConfirm={() => geo.mutate()}
+                  description="Run citation check across 4 engines (ChatGPT, Perplexity, Gemini, Claude) for this piece? This uses paid API calls — a few cents per run."
+                  trigger={
+                    <button
+                      type="button"
+                      disabled={geo.isPending}
+                      className="inline-flex h-9 items-center gap-2 rounded-md border border-cyan/40 bg-cyan/10 px-3 text-xs font-medium text-cyan transition-colors hover:bg-cyan/20 disabled:opacity-50"
+                    >
+                      {geo.isPending ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <Radar className="h-3.5 w-3.5" />
+                      )}
+                      Check GEO Citations
+                    </button>
+                  }
+                />
+              </div>
+
+              {geo.isError && (
+                <p className="mt-3 text-[12px] text-rose">
+                  {isNotConnectedError(geo.error)
+                    ? "Not connected — no check was run."
+                    : geo.error instanceof Error
+                      ? geo.error.message
+                      : "Request failed."}
+                </p>
+              )}
+
+              {geo.data && (
+                <div className="mt-4 rounded-lg border border-border/40 bg-background/50 p-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <VerdictBadge verdict={geo.data.verdict} />
+                    <span className="font-mono text-[11px] tabular-nums text-muted-foreground">
+                      brand {Math.round(geo.data.brand_mention_rate * 100)}% · domain{" "}
+                      {Math.round(geo.data.domain_citation_rate * 100)}%
+                    </span>
+                    <Link
+                      to="/geo/citations"
+                      className="ml-auto font-mono text-[10.5px] uppercase tracking-[0.14em] text-primary hover:underline"
+                    >
+                      check_id {geo.data.check_id}
+                    </Link>
+                  </div>
+                  <ul className="mt-2 space-y-1">
+                    {geo.data.engines.map((e, i) => (
+                      <li
+                        key={`${e.engine}-${i}`}
+                        className="flex items-center gap-3 font-mono text-[11.5px] text-muted-foreground"
+                      >
+                        <span className="w-40 shrink-0 text-foreground">
+                          {engineLabel(e.engine)}
+                        </span>
+                        <span className={e.brand_mentioned ? "text-emerald" : ""}>
+                          brand {e.brand_mentioned ? "yes" : "no"}
+                        </span>
+                        <span className={e.domain_cited ? "text-emerald" : ""}>
+                          cited {e.domain_cited ? "yes" : "no"}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
+          )}
 
           {/* Outline */}
           <section className="mt-4 rounded-xl border border-border/60 bg-card/50">

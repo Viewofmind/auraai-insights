@@ -12,13 +12,16 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GeoRouteImport } from './routes/geo'
 import { Route as ContentRouteImport } from './routes/content'
 import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GeoIndexRouteImport } from './routes/geo.index'
 import { Route as ContentIndexRouteImport } from './routes/content.index'
+import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
 
 const SettingsRoute = SettingsRouteImport.update({
@@ -34,6 +37,11 @@ const OpportunitiesRoute = OpportunitiesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GeoRoute = GeoRouteImport.update({
+  id: '/geo',
+  path: '/geo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContentRoute = ContentRouteImport.update({
@@ -66,10 +74,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GeoIndexRoute = GeoIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GeoRoute,
+} as any)
 const ContentIndexRoute = ContentIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ContentRoute,
+} as any)
+const GeoCitationsRoute = GeoCitationsRouteImport.update({
+  id: '/citations',
+  path: '/citations',
+  getParentRoute: () => GeoRoute,
 } as any)
 const ContentIdRoute = ContentIdRouteImport.update({
   id: '/$id',
@@ -84,11 +102,14 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
+  '/geo': typeof GeoRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/geo/citations': typeof GeoCitationsRoute
   '/content/': typeof ContentIndexRoute
+  '/geo/': typeof GeoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,7 +121,9 @@ export interface FileRoutesByTo {
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/geo/citations': typeof GeoCitationsRoute
   '/content': typeof ContentIndexRoute
+  '/geo': typeof GeoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -110,11 +133,14 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
+  '/geo': typeof GeoRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/geo/citations': typeof GeoCitationsRoute
   '/content/': typeof ContentIndexRoute
+  '/geo/': typeof GeoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -125,11 +151,14 @@ export interface FileRouteTypes {
     | '/audit'
     | '/compliance'
     | '/content'
+    | '/geo'
     | '/login'
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/geo/citations'
     | '/content/'
+    | '/geo/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -141,7 +170,9 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/geo/citations'
     | '/content'
+    | '/geo'
   id:
     | '__root__'
     | '/'
@@ -150,11 +181,14 @@ export interface FileRouteTypes {
     | '/audit'
     | '/compliance'
     | '/content'
+    | '/geo'
     | '/login'
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/geo/citations'
     | '/content/'
+    | '/geo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -164,6 +198,7 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   ComplianceRoute: typeof ComplianceRoute
   ContentRoute: typeof ContentRouteWithChildren
+  GeoRoute: typeof GeoRouteWithChildren
   LoginRoute: typeof LoginRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
   SettingsRoute: typeof SettingsRoute
@@ -190,6 +225,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/geo': {
+      id: '/geo'
+      path: '/geo'
+      fullPath: '/geo'
+      preLoaderRoute: typeof GeoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/content': {
@@ -234,12 +276,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/geo/': {
+      id: '/geo/'
+      path: '/'
+      fullPath: '/geo/'
+      preLoaderRoute: typeof GeoIndexRouteImport
+      parentRoute: typeof GeoRoute
+    }
     '/content/': {
       id: '/content/'
       path: '/'
       fullPath: '/content/'
       preLoaderRoute: typeof ContentIndexRouteImport
       parentRoute: typeof ContentRoute
+    }
+    '/geo/citations': {
+      id: '/geo/citations'
+      path: '/citations'
+      fullPath: '/geo/citations'
+      preLoaderRoute: typeof GeoCitationsRouteImport
+      parentRoute: typeof GeoRoute
     }
     '/content/$id': {
       id: '/content/$id'
@@ -264,6 +320,18 @@ const ContentRouteChildren: ContentRouteChildren = {
 const ContentRouteWithChildren =
   ContentRoute._addFileChildren(ContentRouteChildren)
 
+interface GeoRouteChildren {
+  GeoCitationsRoute: typeof GeoCitationsRoute
+  GeoIndexRoute: typeof GeoIndexRoute
+}
+
+const GeoRouteChildren: GeoRouteChildren = {
+  GeoCitationsRoute: GeoCitationsRoute,
+  GeoIndexRoute: GeoIndexRoute,
+}
+
+const GeoRouteWithChildren = GeoRoute._addFileChildren(GeoRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgentsRoute: AgentsRoute,
@@ -271,6 +339,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuditRoute: AuditRoute,
   ComplianceRoute: ComplianceRoute,
   ContentRoute: ContentRouteWithChildren,
+  GeoRoute: GeoRouteWithChildren,
   LoginRoute: LoginRoute,
   OpportunitiesRoute: OpportunitiesRoute,
   SettingsRoute: SettingsRoute,
@@ -278,13 +347,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -5,6 +5,8 @@ import {
   FileText,
   Sparkles,
   BarChart3,
+  Radar,
+
   Activity,
   User,
   ShieldCheck,
@@ -31,8 +33,10 @@ const nav = [
   { label: "Agents Hub", to: "/agents", icon: Bot },
   { label: "Content Queue", to: "/content", icon: FileText },
   { label: "Opportunities", to: "/opportunities", icon: Sparkles },
+  { label: "GEO", to: "/geo", icon: Radar },
   { label: "Analytics", to: "/analytics", icon: BarChart3 },
 ] as const;
+
 
 const governanceNav = [
   { label: "Compliance", to: "/compliance", icon: ShieldCheck },

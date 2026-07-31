@@ -38,4 +38,11 @@ export const endpoints = {
   googleOAuthStart: (provider: "gsc" | "ga4") => `/google/${provider}/oauth/start`,
 
   auditLog: "/audit-log",
+
+  /** GEO — Generative Engine Optimization. */
+  geoReadiness: (url: string) => `/geo/readiness?url=${encodeURIComponent(url)}`,
+  geoCitations: "/geo/citations",
+  geoCitationCheck: (checkId: string) => `/geo/citations/${checkId}`,
+  geoCheckContent: (contentId: string) => `/geo/check/${contentId}`,
 } as const;
+

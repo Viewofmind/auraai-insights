@@ -16,7 +16,7 @@ import { getAuthToken, setAuthToken } from "@/lib/api/token";
  * open item), but the access token here is REAL: it is stored and sent as
  * `Authorization: Bearer <token>` on every API call by apiFetch.
  */
-export type AppRole = "kruti" | "editor" | "viewer";
+export type AppRole = "admin" | "kruti" | "editor" | "viewer";
 
 export interface StubUser {
   email: string;

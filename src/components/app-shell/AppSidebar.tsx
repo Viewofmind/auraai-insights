@@ -9,6 +9,7 @@ import {
 
   Activity,
   User,
+  Users,
   ShieldCheck,
   ScrollText,
   Settings,

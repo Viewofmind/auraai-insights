@@ -285,6 +285,17 @@ function ContentDetailPage() {
             </section>
           )}
 
+          {/* External publishing — publish_ready only, never earlier */}
+          {item.data.status === "publish_ready" && (
+            <ExternalPublishSection
+              id={id}
+              channel={item.data.channel ?? null}
+              postText={item.data.post_text ?? item.data.draft_markdown ?? ""}
+            />
+          )}
+
+
+
           {/* Outline */}
           <section className="mt-4 rounded-xl border border-border/60 bg-card/50">
             <header className="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">

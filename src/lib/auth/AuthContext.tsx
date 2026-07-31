@@ -99,6 +99,7 @@ export function useAuth(): AuthContextValue {
 }
 
 export const roleLabels: Record<AppRole, string> = {
+  admin: "Admin",
   kruti: "Kruti · Compliance",
   editor: "Editor",
   viewer: "Viewer",

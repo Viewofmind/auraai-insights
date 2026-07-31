@@ -7,6 +7,7 @@ import {
 import { apiFetch } from "./client";
 import { endpoints } from "./config";
 import type {
+  AdminCredential,
   AuditLogEntry,
   ChannelConnection,
   ComplianceFlag,
@@ -14,6 +15,7 @@ import type {
   ContentItem,
   ContentItemDetail,
   ContentStatus,
+  CredentialProvider,
   GeoCitationCheck,
   GeoReadiness,
   HealthResponse,
@@ -387,6 +389,52 @@ export function useMarkOutreachSent() {
       }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: channelQueryKeys.influencers });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
+
+/* ------------------------- Admin API credentials -------------------------- */
+
+export const adminQueryKeys = {
+  credentials: ["api", "admin", "credentials"] as const,
+};
+
+/** GET /admin/credentials — masked previews and metadata only, never secrets. */
+export function useAdminCredentials(): UseQueryResult<AdminCredential[]> {
+  return useQuery({
+    ...base,
+    queryKey: adminQueryKeys.credentials,
+    queryFn: ({ signal }) => apiFetch<AdminCredential[]>(endpoints.adminCredentials, { signal }),
+  });
+}
+
+/** PUT /admin/credentials/{provider} — write-only; the value is never read back. */
+export function useSaveCredential() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars: { provider: CredentialProvider; value: string }) =>
+      apiFetch<AdminCredential>(endpoints.adminCredential(vars.provider), {
+        method: "PUT",
+        body: { value: vars.value },
+      }),
+    retry: false,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminQueryKeys.credentials });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
+
+/** DELETE /admin/credentials/{provider} — clears a stored credential. */
+export function useClearCredential() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (provider: CredentialProvider) =>
+      apiFetch<AdminCredential>(endpoints.adminCredential(provider), { method: "DELETE" }),
+    retry: false,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminQueryKeys.credentials });
       qc.invalidateQueries({ queryKey: queryKeys.auditLog });
     },
   });

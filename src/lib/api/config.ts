@@ -54,5 +54,9 @@ export const endpoints = {
   influencers: "/influencers",
   influencerOutreachDraft: (id: string) => `/influencers/${id}/outreach/draft`,
   influencerOutreachSent: (id: string) => `/influencers/${id}/outreach/sent`,
+
+  /** Admin-only API credential vault. Values are write-only. */
+  adminCredentials: "/admin/credentials",
+  adminCredential: (provider: string) => `/admin/credentials/${provider}`,
 } as const;
 

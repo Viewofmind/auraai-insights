@@ -5,14 +5,18 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isNotConnectedError } from "@/lib/api/client";
 import {
+  useChannelConnections,
   useContentAction,
   useContentItem,
   useContentTransition,
   useGeoCheckContent,
+  usePublishToChannel,
 } from "@/lib/api/hooks";
 import { ConfirmRunDialog } from "@/components/geo/ConfirmRunDialog";
 import { VerdictBadge, engineLabel } from "@/components/geo/GeoBadges";
-import type { ContentStatus } from "@/lib/api/types";
+import { ChannelBadge } from "@/components/channels/ChannelBadge";
+import { PublishConfirmDialog } from "@/components/channels/PublishConfirmDialog";
+import type { ContentChannel, ContentStatus, PublishChannel } from "@/lib/api/types";
 import {
   AlertTriangle,
   ArrowLeft,

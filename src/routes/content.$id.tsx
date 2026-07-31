@@ -8,7 +8,6 @@ import {
   useContentAction,
   useContentItem,
   useContentTransition,
-  type ContentAction,
 } from "@/lib/api/hooks";
 import type { ContentStatus } from "@/lib/api/types";
 import {
@@ -304,6 +303,3 @@ function TransitionButton({
     </button>
   );
 }
-
-const _actions: ContentAction[] = ["outline", "outline_approve", "outline_reject", "draft"];
-void _actions;

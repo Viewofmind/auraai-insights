@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { QueryState } from "@/components/common/QueryState";
@@ -10,7 +10,7 @@ import {
 import { useContentQueue, useCreateContent } from "@/lib/api/hooks";
 import { useAuth } from "@/lib/auth/AuthContext";
 import type { ContentStatus } from "@/lib/api/types";
-import { FileText, Search, Info, Plus, Loader2 } from "lucide-react";
+import { FileText, Search, Info, Plus, Loader2, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 
@@ -144,26 +144,30 @@ function ContentQueuePage() {
             {(items) => (
               <ul className="space-y-2">
                 {items.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex flex-col gap-2 rounded-lg border border-border/50 bg-background/40 p-3 transition-colors hover:border-primary/30 sm:flex-row sm:items-center sm:gap-4"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-medium">{item.title}</div>
-                      <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-muted-foreground">
-                        <span>{item.target_keyword ?? "no keyword"}</span>
-                        <span>·</span>
-                        <span>{item.owner ?? "unassigned"}</span>
-                        <span>·</span>
-                        <span className="tabular-nums">
-                          {item.word_count != null ? `${item.word_count} words` : "—"}
-                        </span>
+                  <li key={item.id}>
+                    <Link
+                      to="/content/$id"
+                      params={{ id: item.id }}
+                      className="flex flex-col gap-2 rounded-lg border border-border/50 bg-background/40 p-3 transition-colors hover:border-primary/40 hover:bg-background/70 sm:flex-row sm:items-center sm:gap-4"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-sm font-medium">{item.title}</div>
+                        <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-muted-foreground">
+                          <span>{item.target_keyword ?? "no keyword"}</span>
+                          <span>·</span>
+                          <span>{item.owner ?? "unassigned"}</span>
+                          <span>·</span>
+                          <span className="tabular-nums">
+                            {item.word_count != null ? `${item.word_count} words` : "—"}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <ContentStatusBadge status={item.status} className="shrink-0" />
-                    <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-muted-foreground">
-                      {new Date(item.updated_at).toISOString().slice(0, 16).replace("T", " ")}
-                    </span>
+                      <ContentStatusBadge status={item.status} className="shrink-0" />
+                      <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-muted-foreground">
+                        {new Date(item.updated_at).toISOString().slice(0, 16).replace("T", " ")}
+                      </span>
+                      <ChevronRight className="hidden h-4 w-4 shrink-0 text-muted-foreground sm:block" />
+                    </Link>
                   </li>
                 ))}
               </ul>

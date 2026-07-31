@@ -26,6 +26,16 @@ export interface ContentItem {
   updated_at: string;
 }
 
+/**
+ * Single-item read: GET /api/v1/content/{id}.
+ * outline_json shape is backend-owned, so it stays unknown here and is
+ * rendered generically rather than guessed at.
+ */
+export interface ContentItemDetail extends ContentItem {
+  outline_json?: unknown | null;
+  draft_markdown?: string | null;
+}
+
 /** Compliance flag categories — backend values, verbatim. */
 export type ComplianceCategory =
   | "DIRECTIONAL_CALL"

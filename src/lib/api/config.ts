@@ -23,6 +23,10 @@ export const endpoints = {
   content: "/content",
   contentItem: (id: string) => `/content/${id}`,
   contentTransition: (id: string) => `/content/${id}/transition`,
+  contentOutline: (id: string) => `/content/${id}/outline`,
+  contentOutlineApprove: (id: string) => `/content/${id}/outline/approve`,
+  contentOutlineReject: (id: string) => `/content/${id}/outline/reject`,
+  contentDraft: (id: string) => `/content/${id}/draft`,
 
   complianceQueue: "/compliance/queue",
   complianceDecision: (id: string) => `/compliance/${id}/decision`,

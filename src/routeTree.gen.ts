@@ -26,6 +26,7 @@ import { Route as ContentIndexRouteImport } from './routes/content.index'
 import { Route as AnalyticsIndexRouteImport } from './routes/analytics.index'
 import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
+import { Route as AnalyticsSeoRouteImport } from './routes/analytics.seo'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -112,6 +113,11 @@ const ContentIdRoute = ContentIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ContentRoute,
 } as any)
+const AnalyticsSeoRoute = AnalyticsSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AnalyticsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/opportunities': typeof OpportunitiesRoute
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
+  '/analytics/seo': typeof AnalyticsSeoRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/opportunities': typeof OpportunitiesRoute
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
+  '/analytics/seo': typeof AnalyticsSeoRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics': typeof AnalyticsIndexRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/opportunities': typeof OpportunitiesRoute
   '/outreach': typeof OutreachRoute
   '/settings': typeof SettingsRoute
+  '/analytics/seo': typeof AnalyticsSeoRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/analytics/seo'
     | '/content/$id'
     | '/geo/citations'
     | '/analytics/'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/analytics/seo'
     | '/content/$id'
     | '/geo/citations'
     | '/analytics'
@@ -218,6 +229,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/analytics/seo'
     | '/content/$id'
     | '/geo/citations'
     | '/analytics/'
@@ -361,14 +373,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContentIdRouteImport
       parentRoute: typeof ContentRoute
     }
+    '/analytics/seo': {
+      id: '/analytics/seo'
+      path: '/seo'
+      fullPath: '/analytics/seo'
+      preLoaderRoute: typeof AnalyticsSeoRouteImport
+      parentRoute: typeof AnalyticsRoute
+    }
   }
 }
 
 interface AnalyticsRouteChildren {
+  AnalyticsSeoRoute: typeof AnalyticsSeoRoute
   AnalyticsIndexRoute: typeof AnalyticsIndexRoute
 }
 
 const AnalyticsRouteChildren: AnalyticsRouteChildren = {
+  AnalyticsSeoRoute: AnalyticsSeoRoute,
   AnalyticsIndexRoute: AnalyticsIndexRoute,
 }
 

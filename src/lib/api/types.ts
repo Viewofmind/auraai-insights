@@ -15,10 +15,19 @@ export type ContentStatus =
   | "rejected"
   | "exported";
 
+/**
+ * Distribution channel for a content item.
+ * "blog" is a long-form article; "x" and "linkedin" are short-form external posts.
+ * Backend values, verbatim. A missing/unknown value renders as "unspecified".
+ */
+export type ContentChannel = "blog" | "x" | "linkedin";
+
 export interface ContentItem {
   id: string;
   title: string;
   status: ContentStatus;
+  /** Optional until the backend adds it — never defaulted to a guess. */
+  channel?: ContentChannel | null;
   target_keyword: string | null;
   word_count: number | null;
   owner: string | null;

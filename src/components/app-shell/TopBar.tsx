@@ -23,12 +23,8 @@ export function TopBar() {
       </div>
 
       <div className="flex items-center gap-2.5">
-        <div className="hidden items-center gap-1.5 rounded-full border border-border/70 bg-card/60 px-2.5 py-1 sm:flex">
-          <span className="h-1.5 w-1.5 rounded-full bg-amber" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-amber">
-            Disconnected · demo data
-          </span>
-        </div>
+        <ConnectionBadge />
+
 
         <button className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-card/60 text-muted-foreground transition-colors hover:text-foreground">
           <Bell className="h-4 w-4" />

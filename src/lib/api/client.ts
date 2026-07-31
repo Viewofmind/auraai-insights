@@ -45,7 +45,9 @@ export interface ApiRequestOptions {
 export async function apiFetch<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
   if (!isApiConfigured()) throw new ApiNotConfiguredError();
 
-  const { method = "GET", body, signal, token } = options;
+  const { method = "GET", body, signal } = options;
+  // Real session token unless this call explicitly overrides it.
+  const token = options.token !== undefined ? options.token : getAuthToken();
 
   let response: Response;
   try {
@@ -57,6 +59,7 @@ export async function apiFetch<T>(path: string, options: ApiRequestOptions = {})
         ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
+
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   } catch {

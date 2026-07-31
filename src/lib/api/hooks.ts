@@ -111,6 +111,7 @@ export function useSeoKeywords(): UseQueryResult<SeoKeyword[]> {
 /** Topic intake: POST /api/v1/content — creates a new content item from a topic. */
 export interface CreateContentInput {
   title: string;
+  channel?: ContentChannel | null;
   target_keyword?: string | null;
   word_count?: number | null;
   owner?: string | null;
@@ -124,6 +125,7 @@ export function useCreateContent() {
         method: "POST",
         body: {
           title: input.title,
+          channel: input.channel ?? null,
           target_keyword: input.target_keyword ?? null,
           word_count: input.word_count ?? null,
           owner: input.owner ?? null,

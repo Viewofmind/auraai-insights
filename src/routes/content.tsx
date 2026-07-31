@@ -7,10 +7,12 @@ import {
   contentStatusMeta,
   contentStatusOrder,
 } from "@/components/content/ContentStatusBadge";
-import { useContentQueue } from "@/lib/api/hooks";
+import { useContentQueue, useCreateContent } from "@/lib/api/hooks";
+import { useAuth } from "@/lib/auth/AuthContext";
 import type { ContentStatus } from "@/lib/api/types";
-import { FileText, Search, Info } from "lucide-react";
+import { FileText, Search, Info, Plus, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/content")({
   head: () => ({

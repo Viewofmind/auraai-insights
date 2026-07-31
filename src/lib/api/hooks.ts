@@ -8,6 +8,7 @@ import { apiFetch } from "./client";
 import { endpoints } from "./config";
 import type {
   AuditLogEntry,
+  ChannelConnection,
   ComplianceFlag,
   ContentItem,
   ContentItemDetail,
@@ -15,8 +16,12 @@ import type {
   GeoCitationCheck,
   GeoReadiness,
   HealthResponse,
+  InfluencerContact,
   IntegrationConnection,
   IntegrationProvider,
+  OutreachPlatform,
+  PublishChannel,
+  PublishResult,
   SeoKeyword,
 } from "./types";
 

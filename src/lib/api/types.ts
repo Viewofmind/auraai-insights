@@ -203,3 +203,27 @@ export interface InfluencerContact {
   created_at: string;
   updated_at: string;
 }
+
+/* ------------------------- Admin API credentials -------------------------- */
+/**
+ * Sensitive third-party API credentials, managed by the admin role only.
+ * The backend NEVER returns a stored secret: only a masked preview and
+ * last-updated metadata come back over the wire.
+ */
+export type CredentialProvider =
+  | "x"
+  | "linkedin"
+  | "perplexity"
+  | "openai"
+  | "anthropic"
+  | "gemini";
+
+export interface AdminCredential {
+  provider: CredentialProvider;
+  /** True once a value has been stored server-side. */
+  configured: boolean;
+  /** Masked preview, e.g. "••••1234". Never a full secret. */
+  masked_value: string | null;
+  last_updated_at: string | null;
+  updated_by: string | null;
+}

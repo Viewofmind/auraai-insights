@@ -23,6 +23,7 @@ import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GeoIndexRouteImport } from './routes/geo.index'
 import { Route as ContentIndexRouteImport } from './routes/content.index'
+import { Route as AnalyticsIndexRouteImport } from './routes/analytics.index'
 import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
 
@@ -96,6 +97,11 @@ const ContentIndexRoute = ContentIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ContentRoute,
 } as any)
+const AnalyticsIndexRoute = AnalyticsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AnalyticsRoute,
+} as any)
 const GeoCitationsRoute = GeoCitationsRouteImport.update({
   id: '/citations',
   path: '/citations',
@@ -110,7 +116,7 @@ const ContentIdRoute = ContentIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRoute
+  '/analytics': typeof AnalyticsRouteWithChildren
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
@@ -122,13 +128,13 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
+  '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRoute
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/credentials': typeof CredentialsRoute
@@ -138,6 +144,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
+  '/analytics': typeof AnalyticsIndexRoute
   '/content': typeof ContentIndexRoute
   '/geo': typeof GeoIndexRoute
 }
@@ -145,7 +152,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRoute
+  '/analytics': typeof AnalyticsRouteWithChildren
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
@@ -157,6 +164,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
   '/geo/citations': typeof GeoCitationsRoute
+  '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
@@ -177,13 +185,13 @@ export interface FileRouteTypes {
     | '/settings'
     | '/content/$id'
     | '/geo/citations'
+    | '/analytics/'
     | '/content/'
     | '/geo/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/agents'
-    | '/analytics'
     | '/audit'
     | '/compliance'
     | '/credentials'
@@ -193,6 +201,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/content/$id'
     | '/geo/citations'
+    | '/analytics'
     | '/content'
     | '/geo'
   id:
@@ -211,6 +220,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/content/$id'
     | '/geo/citations'
+    | '/analytics/'
     | '/content/'
     | '/geo/'
   fileRoutesById: FileRoutesById
@@ -218,7 +228,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgentsRoute: typeof AgentsRoute
-  AnalyticsRoute: typeof AnalyticsRoute
+  AnalyticsRoute: typeof AnalyticsRouteWithChildren
   AuditRoute: typeof AuditRoute
   ComplianceRoute: typeof ComplianceRoute
   ContentRoute: typeof ContentRouteWithChildren
@@ -330,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContentIndexRouteImport
       parentRoute: typeof ContentRoute
     }
+    '/analytics/': {
+      id: '/analytics/'
+      path: '/'
+      fullPath: '/analytics/'
+      preLoaderRoute: typeof AnalyticsIndexRouteImport
+      parentRoute: typeof AnalyticsRoute
+    }
     '/geo/citations': {
       id: '/geo/citations'
       path: '/citations'
@@ -346,6 +363,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AnalyticsRouteChildren {
+  AnalyticsIndexRoute: typeof AnalyticsIndexRoute
+}
+
+const AnalyticsRouteChildren: AnalyticsRouteChildren = {
+  AnalyticsIndexRoute: AnalyticsIndexRoute,
+}
+
+const AnalyticsRouteWithChildren = AnalyticsRoute._addFileChildren(
+  AnalyticsRouteChildren,
+)
 
 interface ContentRouteChildren {
   ContentIdRoute: typeof ContentIdRoute
@@ -375,7 +404,7 @@ const GeoRouteWithChildren = GeoRoute._addFileChildren(GeoRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgentsRoute: AgentsRoute,
-  AnalyticsRoute: AnalyticsRoute,
+  AnalyticsRoute: AnalyticsRouteWithChildren,
   AuditRoute: AuditRoute,
   ComplianceRoute: ComplianceRoute,
   ContentRoute: ContentRouteWithChildren,

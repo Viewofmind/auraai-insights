@@ -58,6 +58,10 @@ function ContentQueuePage() {
         description="Items are tracked against the backend content state machine. Nothing here is distributed automatically — publish_ready and exported are hand-off states only."
       />
 
+      <TopicForm />
+
+
+
       {/* Toolbar */}
       <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-1 rounded-lg border border-border/60 bg-card/40 p-1">

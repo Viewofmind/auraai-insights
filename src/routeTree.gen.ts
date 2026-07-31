@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GeoRouteImport } from './routes/geo'
 import { Route as ContentRouteImport } from './routes/content'
 import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as AuditRouteImport } from './routes/audit'
@@ -34,6 +35,11 @@ const OpportunitiesRoute = OpportunitiesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GeoRoute = GeoRouteImport.update({
+  id: '/geo',
+  path: '/geo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContentRoute = ContentRouteImport.update({
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
+  '/geo': typeof GeoRoute
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof AnalyticsRoute
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
+  '/geo': typeof GeoRoute
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
+  '/geo': typeof GeoRoute
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/compliance'
     | '/content'
+    | '/geo'
     | '/login'
     | '/opportunities'
     | '/settings'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/audit'
     | '/compliance'
+    | '/geo'
     | '/login'
     | '/opportunities'
     | '/settings'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/compliance'
     | '/content'
+    | '/geo'
     | '/login'
     | '/opportunities'
     | '/settings'
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   ComplianceRoute: typeof ComplianceRoute
   ContentRoute: typeof ContentRouteWithChildren
+  GeoRoute: typeof GeoRoute
   LoginRoute: typeof LoginRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
   SettingsRoute: typeof SettingsRoute
@@ -190,6 +203,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/geo': {
+      id: '/geo'
+      path: '/geo'
+      fullPath: '/geo'
+      preLoaderRoute: typeof GeoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/content': {
@@ -271,6 +291,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuditRoute: AuditRoute,
   ComplianceRoute: ComplianceRoute,
   ContentRoute: ContentRouteWithChildren,
+  GeoRoute: GeoRoute,
   LoginRoute: LoginRoute,
   OpportunitiesRoute: OpportunitiesRoute,
   SettingsRoute: SettingsRoute,

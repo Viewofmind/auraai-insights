@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { cn } from "@/lib/utils";
 
 export function Sparkline({
@@ -11,6 +12,9 @@ export function Sparkline({
   className?: string;
   height?: number;
 }) {
+  // Stable across SSR and hydration — a random id here caused a React
+  // hydration mismatch on any screen rendering a sparkline.
+  const reactId = useId();
   if (data.length === 0) return null;
   const w = 100;
   const h = height;
@@ -25,7 +29,7 @@ export function Sparkline({
     })
     .join(" ");
   const area = `0,${h} ${pts} ${w},${h}`;
-  const gradId = `spark-${Math.random().toString(36).slice(2, 8)}`;
+  const gradId = `spark${reactId.replace(/[^a-zA-Z0-9]/g, "")}`;
 
   return (
     <svg
@@ -33,6 +37,9 @@ export function Sparkline({
       preserveAspectRatio="none"
       className={cn("w-full", className)}
       style={{ height }}
+      role="img"
+      aria-hidden="true"
+      focusable="false"
     >
       <defs>
         <linearGradient id={gradId} x1="0" x2="0" y1="0" y2="1">

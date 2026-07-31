@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   ScrollText,
   Settings,
+  KeyRound,
 } from "lucide-react";
 import {
   Sidebar,
@@ -44,6 +45,11 @@ const governanceNav = [
   { label: "Compliance", to: "/compliance", icon: ShieldCheck },
   { label: "Audit Log", to: "/audit", icon: ScrollText },
   { label: "Integrations", to: "/settings", icon: Settings },
+] as const;
+
+/** Admin-only: sensitive credential vault. */
+const adminNav = [
+  { label: "API Credentials", to: "/credentials", icon: KeyRound },
 ] as const;
 
 
@@ -106,7 +112,10 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {governanceNav.map((item) => (
+              {[
+                ...governanceNav,
+                ...(user?.role === "admin" ? adminNav : []),
+              ].map((item) => (
                 <SidebarMenuItem key={item.to}>
                   <SidebarMenuButton
                     asChild

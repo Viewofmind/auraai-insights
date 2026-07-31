@@ -21,6 +21,7 @@ import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GeoIndexRouteImport } from './routes/geo.index'
 import { Route as ContentIndexRouteImport } from './routes/content.index'
+import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
 
 const SettingsRoute = SettingsRouteImport.update({
@@ -83,6 +84,11 @@ const ContentIndexRoute = ContentIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ContentRoute,
 } as any)
+const GeoCitationsRoute = GeoCitationsRouteImport.update({
+  id: '/citations',
+  path: '/citations',
+  getParentRoute: () => GeoRoute,
+} as any)
 const ContentIdRoute = ContentIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/geo/citations': typeof GeoCitationsRoute
   '/content/': typeof ContentIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/geo/citations': typeof GeoCitationsRoute
   '/content': typeof ContentIndexRoute
   '/geo': typeof GeoIndexRoute
 }
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
   '/content/$id': typeof ContentIdRoute
+  '/geo/citations': typeof GeoCitationsRoute
   '/content/': typeof ContentIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/geo/citations'
     | '/content/'
     | '/geo/'
   fileRoutesByTo: FileRoutesByTo
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/geo/citations'
     | '/content'
     | '/geo'
   id:
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/settings'
     | '/content/$id'
+    | '/geo/citations'
     | '/content/'
     | '/geo/'
   fileRoutesById: FileRoutesById
@@ -278,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContentIndexRouteImport
       parentRoute: typeof ContentRoute
     }
+    '/geo/citations': {
+      id: '/geo/citations'
+      path: '/citations'
+      fullPath: '/geo/citations'
+      preLoaderRoute: typeof GeoCitationsRouteImport
+      parentRoute: typeof GeoRoute
+    }
     '/content/$id': {
       id: '/content/$id'
       path: '/$id'
@@ -302,10 +321,12 @@ const ContentRouteWithChildren =
   ContentRoute._addFileChildren(ContentRouteChildren)
 
 interface GeoRouteChildren {
+  GeoCitationsRoute: typeof GeoCitationsRoute
   GeoIndexRoute: typeof GeoIndexRoute
 }
 
 const GeoRouteChildren: GeoRouteChildren = {
+  GeoCitationsRoute: GeoCitationsRoute,
   GeoIndexRoute: GeoIndexRoute,
 }
 

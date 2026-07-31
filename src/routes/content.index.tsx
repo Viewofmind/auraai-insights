@@ -263,6 +263,21 @@ function TopicForm() {
           />
         </div>
         <div>
+          <label htmlFor="topic-channel" className={label}>
+            channel
+          </label>
+          <select
+            id="topic-channel"
+            value={channel}
+            onChange={(e) => setChannel(e.target.value as ContentChannel)}
+            className={cn(field, "mt-1")}
+          >
+            <option value="blog">Blog — long-form article</option>
+            <option value="x">X — short-form post</option>
+            <option value="linkedin">LinkedIn — short-form post</option>
+          </select>
+        </div>
+        <div>
           <label htmlFor="topic-keyword" className={label}>
             target_keyword
           </label>

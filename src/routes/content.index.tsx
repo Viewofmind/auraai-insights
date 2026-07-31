@@ -7,9 +7,10 @@ import {
   contentStatusMeta,
   contentStatusOrder,
 } from "@/components/content/ContentStatusBadge";
+import { ChannelBadge } from "@/components/channels/ChannelBadge";
 import { useContentQueue, useCreateContent } from "@/lib/api/hooks";
 import { useAuth } from "@/lib/auth/AuthContext";
-import type { ContentStatus } from "@/lib/api/types";
+import type { ContentChannel, ContentStatus } from "@/lib/api/types";
 import { FileText, Search, Info, Plus, Loader2, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -162,6 +163,7 @@ function ContentQueuePage() {
                           </span>
                         </div>
                       </div>
+                      <ChannelBadge channel={item.channel} className="shrink-0" />
                       <ContentStatusBadge status={item.status} className="shrink-0" />
                       <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-muted-foreground">
                         {new Date(item.updated_at).toISOString().slice(0, 16).replace("T", " ")}
@@ -205,6 +207,7 @@ function TopicForm() {
   const { user, token } = useAuth();
   const create = useCreateContent();
   const [title, setTitle] = useState("");
+  const [channel, setChannel] = useState<ContentChannel>("blog");
   const [targetKeyword, setTargetKeyword] = useState("");
   const [wordCount, setWordCount] = useState("");
   const [owner, setOwner] = useState("");
@@ -215,6 +218,7 @@ function TopicForm() {
     create.mutate(
       {
         title: title.trim(),
+        channel,
         target_keyword: targetKeyword.trim() || null,
         word_count: wordCount.trim() ? Number(wordCount) : null,
         owner: owner.trim() || user?.email || null,
@@ -257,6 +261,21 @@ function TopicForm() {
             className={cn(field, "mt-1")}
             required
           />
+        </div>
+        <div>
+          <label htmlFor="topic-channel" className={label}>
+            channel
+          </label>
+          <select
+            id="topic-channel"
+            value={channel}
+            onChange={(e) => setChannel(e.target.value as ContentChannel)}
+            className={cn(field, "mt-1")}
+          >
+            <option value="blog">Blog — long-form article</option>
+            <option value="x">X — short-form post</option>
+            <option value="linkedin">LinkedIn — short-form post</option>
+          </select>
         </div>
         <div>
           <label htmlFor="topic-keyword" className={label}>

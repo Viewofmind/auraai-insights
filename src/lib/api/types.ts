@@ -15,10 +15,19 @@ export type ContentStatus =
   | "rejected"
   | "exported";
 
+/**
+ * Distribution channel for a content item.
+ * "blog" is a long-form article; "x" and "linkedin" are short-form external posts.
+ * Backend values, verbatim. A missing/unknown value renders as "unspecified".
+ */
+export type ContentChannel = "blog" | "x" | "linkedin";
+
 export interface ContentItem {
   id: string;
   title: string;
   status: ContentStatus;
+  /** Optional until the backend adds it — never defaulted to a guess. */
+  channel?: ContentChannel | null;
   target_keyword: string | null;
   word_count: number | null;
   owner: string | null;
@@ -34,6 +43,11 @@ export interface ContentItem {
 export interface ContentItemDetail extends ContentItem {
   outline_json?: unknown | null;
   draft_markdown?: string | null;
+  /** Exact text of a short-form external post (X / LinkedIn), when applicable. */
+  post_text?: string | null;
+  /** Set once the backend records an external publish. */
+  published_at?: string | null;
+  published_url?: string | null;
 }
 
 /** Compliance flag categories — backend values, verbatim. */
@@ -139,4 +153,53 @@ export interface GeoCitationCheck {
   verdict: GeoVerdict;
   engines: GeoEngineResult[];
   top_competitor_domains: GeoCompetitorDomain[];
+}
+
+/* --------------------------- External channels ---------------------------- */
+/** Publishing to X / LinkedIn. Real, public, hard-to-undo actions. */
+
+export type PublishChannel = "x" | "linkedin";
+
+export interface ChannelConnection {
+  channel: PublishChannel;
+  connected: boolean;
+  /** Handle or page the post would go out as, e.g. "@investsights". */
+  account: string | null;
+  scopes: string[];
+  last_synced_at: string | null;
+  /**
+   * Backend feature flag (LINKEDIN_POSTING_ENABLED for LinkedIn).
+   * When false/absent the channel is flag-gated off and must not offer Connect.
+   */
+  posting_enabled?: boolean | null;
+  /** Optional backend explanation for a gated channel, shown verbatim. */
+  gated_reason?: string | null;
+}
+
+export interface PublishResult {
+  content_id: string;
+  channel: PublishChannel;
+  status: string;
+  published_at: string | null;
+  external_url: string | null;
+}
+
+/* --------------------------- Influencer outreach -------------------------- */
+
+export type OutreachPlatform = "x" | "linkedin" | "email" | "other";
+
+export type OutreachStatus = "no_draft" | "draft_generated" | "review_pending" | "approved" | "sent";
+
+export interface InfluencerContact {
+  id: string;
+  name: string;
+  platform: OutreachPlatform;
+  /** Handle or email address. */
+  handle: string;
+  notes: string | null;
+  outreach_status: OutreachStatus;
+  draft_message: string | null;
+  sent_at: string | null;
+  created_at: string;
+  updated_at: string;
 }

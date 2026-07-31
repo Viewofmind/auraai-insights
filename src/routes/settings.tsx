@@ -1,13 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { NotConnected } from "@/components/common/QueryState";
-import { useIntegrations, useStartGoogleOAuth } from "@/lib/api/hooks";
+import {
+  useIntegrations,
+  useStartGoogleOAuth,
+  useChannelConnections,
+  useStartChannelOAuth,
+} from "@/lib/api/hooks";
 import { API_BASE_URL, isApiConfigured } from "@/lib/api/config";
 import { isNotConnectedError } from "@/lib/api/client";
-import type { IntegrationProvider } from "@/lib/api/types";
+import type { IntegrationProvider, PublishChannel } from "@/lib/api/types";
+import { channelMeta } from "@/components/channels/ChannelBadge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth, roleLabels, type AppRole } from "@/lib/auth/AuthContext";
-import { BarChart3, Search, Plug, Info, AlertTriangle } from "lucide-react";
+import { BarChart3, Search, Plug, Info, AlertTriangle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({
@@ -175,6 +181,9 @@ function SettingsPage() {
         )}
       </section>
 
+      <ChannelConnections />
+
+
       {/* Role context (stub) */}
       <section className="mt-6 rounded-xl border border-border/60 bg-card/50 p-4 sm:p-5">
         <h2 className="text-sm font-semibold tracking-tight">Role context</h2>
@@ -206,5 +215,116 @@ function SettingsPage() {
         )}
       </section>
     </div>
+  );
+}
+
+/**
+ * X / LinkedIn publishing channels.
+ * A flag-gated channel (LINKEDIN_POSTING_ENABLED off) must never render a
+ * normal Connect button — it states plainly why it is unavailable instead.
+ */
+function ChannelConnections() {
+  const channels = useChannelConnections();
+  const startOAuth = useStartChannelOAuth();
+  const byChannel = new Map((channels.data ?? []).map((c) => [c.channel, c]));
+
+  return (
+    <section className="mt-6 space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <h2 className="text-sm font-semibold tracking-tight">Publishing channels</h2>
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+          GET /api/v1/channels
+        </span>
+      </div>
+
+      {(["x", "linkedin"] as PublishChannel[]).map((ch) => {
+        const conn = byChannel.get(ch);
+        const gated = conn ? conn.posting_enabled === false : ch === "linkedin";
+        const meta = channelMeta[ch];
+        const Icon = meta.icon;
+
+        return (
+          <div
+            key={ch}
+            className="flex flex-col gap-3 rounded-xl border border-border/60 bg-card/50 p-4 sm:flex-row sm:items-center sm:p-5"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-background/60">
+              <Icon className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-medium">{meta.label}</div>
+              <div className="mt-0.5 text-[11.5px] text-muted-foreground">
+                Publishes short-form posts publicly under the connected account.
+              </div>
+              <div className="mt-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">
+                {channels.isPending ? (
+                  <Skeleton className="h-3 w-40" />
+                ) : channels.isError ? (
+                  isNotConnectedError(channels.error)
+                    ? "status unknown — backend not connected"
+                    : "status unavailable"
+                ) : conn?.connected ? (
+                  `connected · ${conn.account ?? "account unknown"}`
+                ) : (
+                  "not connected"
+                )}
+              </div>
+              {gated && (
+                <p className="mt-2 flex items-start gap-2 rounded-lg border border-amber/30 bg-amber/[0.07] px-2.5 py-1.5 text-[11.5px] text-amber">
+                  <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  {conn?.gated_reason ??
+                    (ch === "linkedin"
+                      ? "Pending approval — LinkedIn posting is gated off until LINKEDIN_POSTING_ENABLED is confirmed on by the backend. Connecting is intentionally unavailable, not broken."
+                      : "Posting is disabled by a backend feature flag.")}
+                </p>
+              )}
+            </div>
+
+            <div className="flex shrink-0 items-center gap-2">
+              <span
+                className={cn(
+                  "rounded-md border px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em]",
+                  gated
+                    ? "border-amber/40 bg-amber/10 text-amber"
+                    : conn?.connected
+                      ? "border-emerald/40 bg-emerald/10 text-emerald"
+                      : "border-border/70 bg-muted/40 text-muted-foreground",
+                )}
+              >
+                {gated
+                  ? ch === "linkedin"
+                    ? "Pending approval"
+                    : "Not yet available"
+                  : conn?.connected
+                    ? "Connected"
+                    : "Not connected"}
+              </span>
+              {gated ? (
+                <span className="rounded-md border border-border/60 bg-muted/30 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                  Connect unavailable
+                </span>
+              ) : (
+                <button
+                  onClick={() => startOAuth.mutate(ch)}
+                  disabled={startOAuth.isPending}
+                  className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+                >
+                  {conn?.connected ? "Reconnect" : "Connect"}
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
+
+      {startOAuth.isError && (
+        <p className="flex items-start gap-2 rounded-lg border border-amber/30 bg-amber/[0.07] px-3 py-2 text-[11.5px] text-amber">
+          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          Connect calls{" "}
+          <span className="font-mono">POST /api/v1/channels/&#123;channel&#125;/oauth/start</span>,
+          which is not reachable yet. Nothing was changed.
+        </p>
+      )}
+    </section>
   );
 }

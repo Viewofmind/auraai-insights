@@ -44,5 +44,15 @@ export const endpoints = {
   geoCitations: "/geo/citations",
   geoCitationCheck: (checkId: string) => `/geo/citations/${checkId}`,
   geoCheckContent: (contentId: string) => `/geo/check/${contentId}`,
+
+  /** External channel publishing (X / LinkedIn). */
+  channelConnections: "/channels/connections",
+  channelOAuthStart: (channel: "x" | "linkedin") => `/channels/${channel}/oauth/start`,
+  contentPublish: (id: string, channel: "x" | "linkedin") => `/content/${id}/publish/${channel}`,
+
+  /** Influencer outreach. */
+  influencers: "/influencers",
+  influencerOutreachDraft: (id: string) => `/influencers/${id}/outreach/draft`,
+  influencerOutreachSent: (id: string) => `/influencers/${id}/outreach/sent`,
 } as const;
 

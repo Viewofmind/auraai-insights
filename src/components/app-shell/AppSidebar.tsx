@@ -9,6 +9,7 @@ import {
 
   Activity,
   User,
+  Users,
   ShieldCheck,
   ScrollText,
   Settings,
@@ -33,6 +34,7 @@ const nav = [
   { label: "Agents Hub", to: "/agents", icon: Bot },
   { label: "Content Queue", to: "/content", icon: FileText },
   { label: "Opportunities", to: "/opportunities", icon: Sparkles },
+  { label: "Outreach", to: "/outreach", icon: Users },
   { label: "GEO", to: "/geo", icon: Radar },
   { label: "Analytics", to: "/analytics", icon: BarChart3 },
 ] as const;

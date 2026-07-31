@@ -5,14 +5,18 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { Skeleton } from "@/components/ui/skeleton";
 import { isNotConnectedError } from "@/lib/api/client";
 import {
+  useChannelConnections,
   useContentAction,
   useContentItem,
   useContentTransition,
   useGeoCheckContent,
+  usePublishToChannel,
 } from "@/lib/api/hooks";
 import { ConfirmRunDialog } from "@/components/geo/ConfirmRunDialog";
 import { VerdictBadge, engineLabel } from "@/components/geo/GeoBadges";
-import type { ContentStatus } from "@/lib/api/types";
+import { ChannelBadge } from "@/components/channels/ChannelBadge";
+import { PublishConfirmDialog } from "@/components/channels/PublishConfirmDialog";
+import type { ContentChannel, ContentStatus, PublishChannel } from "@/lib/api/types";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -285,6 +289,17 @@ function ContentDetailPage() {
             </section>
           )}
 
+          {/* External publishing — publish_ready only, never earlier */}
+          {item.data.status === "publish_ready" && (
+            <ExternalPublishSection
+              id={id}
+              channel={item.data.channel ?? null}
+              postText={item.data.post_text ?? item.data.draft_markdown ?? ""}
+            />
+          )}
+
+
+
           {/* Outline */}
           <section className="mt-4 rounded-xl border border-border/60 bg-card/50">
             <header className="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
@@ -327,6 +342,118 @@ function ContentDetailPage() {
     </div>
   );
 }
+
+/**
+ * External publishing to X / LinkedIn.
+ * Reachable only from publish_ready, gated behind PublishConfirmDialog,
+ * and never retried automatically — a failure requires reconfirming.
+ */
+function ExternalPublishSection({
+  id,
+  channel,
+  postText,
+}: {
+  id: string;
+  channel: ContentChannel | null;
+  postText: string;
+}) {
+  const connections = useChannelConnections();
+  const publish = usePublishToChannel(id);
+
+  const targets: PublishChannel[] =
+    channel === "x" || channel === "linkedin" ? [channel] : ["x", "linkedin"];
+  const byChannel = new Map((connections.data ?? []).map((c) => [c.channel, c]));
+
+  return (
+    <section className="mt-4 rounded-xl border border-amber/30 bg-card/50 p-4 sm:p-5">
+      <div className="flex flex-wrap items-center gap-3">
+        <h2 className="text-sm font-semibold tracking-tight">Publish externally</h2>
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-amber">
+          Public · not undoable here
+        </span>
+      </div>
+      <p className="mt-1 text-[11.5px] text-muted-foreground">
+        POST /content/{id}/publish/&#123;channel&#125; · posts publicly under the connected
+        account. The exact text is shown for confirmation first. Manual only — no retries,
+        no polling.
+      </p>
+
+      <div className="mt-4 space-y-3">
+        {targets.map((ch) => {
+          const conn = byChannel.get(ch);
+          const gated = conn ? conn.posting_enabled === false : false;
+          const ready = Boolean(conn?.connected) && !gated && postText.trim().length > 0;
+
+          return (
+            <div key={ch} className="flex flex-wrap items-center gap-3">
+              <ChannelBadge channel={ch} />
+              <span className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">
+                {connections.isPending
+                  ? "checking connection…"
+                  : connections.isError
+                    ? "connection status unknown — backend not connected"
+                    : gated
+                      ? (conn?.gated_reason ?? "posting disabled by backend feature flag")
+                      : conn?.connected
+                        ? `connected · ${conn.account ?? "account unknown"}`
+                        : "not connected"}
+              </span>
+              <div className="ml-auto">
+                <PublishConfirmDialog
+                  channel={ch}
+                  account={conn?.account ?? null}
+                  postText={postText}
+                  disabled={!ready || publish.isPending}
+                  pending={publish.isPending && publish.variables === ch}
+                  onPublish={() => publish.mutate(ch)}
+                />
+              </div>
+            </div>
+          );
+        })}
+
+        {postText.trim().length === 0 && (
+          <p className="text-[11.5px] text-amber">
+            No post text on this item yet — nothing can be published until the backend
+            returns post_text or a draft.
+          </p>
+        )}
+
+        {publish.isError && (
+          <p className="text-[12px] text-rose-400">
+            {isNotConnectedError(publish.error)
+              ? "Not connected — nothing was published."
+              : publish.error instanceof Error
+                ? publish.error.message
+                : "Publish failed."}{" "}
+            Confirm again to retry.
+          </p>
+        )}
+
+        {publish.data && (
+          <p className="text-[12px] text-emerald-400">
+            {publish.data.status}
+            {publish.data.published_at ? ` · ${publish.data.published_at}` : ""}
+            {publish.data.external_url ? (
+              <>
+                {" · "}
+                <a
+                  href={publish.data.external_url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="underline"
+                >
+                  view post
+                </a>
+              </>
+            ) : null}
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
 
 function ActionButton({
   icon: Icon,

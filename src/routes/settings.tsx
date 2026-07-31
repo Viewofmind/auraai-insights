@@ -10,6 +10,7 @@ import {
 import { API_BASE_URL, isApiConfigured } from "@/lib/api/config";
 import { isNotConnectedError } from "@/lib/api/client";
 import type { IntegrationProvider, PublishChannel } from "@/lib/api/types";
+import { ConnectionsSummary } from "@/components/settings/ConnectionsSummary";
 import { channelMeta } from "@/components/channels/ChannelBadge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth, roleLabels, type AppRole } from "@/lib/auth/AuthContext";
@@ -106,6 +107,8 @@ function SettingsPage() {
           hardcoded anywhere in the app.
         </p>
       </section>
+
+      <ConnectionsSummary className="mt-6" />
 
       {/* Google integrations */}
       <section className="mt-6 space-y-3">

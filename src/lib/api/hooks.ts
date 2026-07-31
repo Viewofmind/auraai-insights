@@ -269,3 +269,117 @@ export function useGeoCheckContent(contentId: string) {
     },
   });
 }
+
+/* --------------------------- External channels ---------------------------- */
+
+export const channelQueryKeys = {
+  connections: ["api", "channels", "connections"] as const,
+  influencers: ["api", "influencers"] as const,
+};
+
+export function useChannelConnections(): UseQueryResult<ChannelConnection[]> {
+  return useQuery({
+    ...base,
+    queryKey: channelQueryKeys.connections,
+    queryFn: ({ signal }) =>
+      apiFetch<ChannelConnection[]>(endpoints.channelConnections, { signal }),
+  });
+}
+
+/** Backend-owned OAuth start for X / LinkedIn. */
+export function useStartChannelOAuth() {
+  return useMutation({
+    mutationFn: (channel: PublishChannel) =>
+      apiFetch<{ authorize_url: string }>(endpoints.channelOAuthStart(channel), {
+        method: "POST",
+      }),
+  });
+}
+
+/**
+ * POST /content/{id}/publish/{channel} — publishes publicly under the real account.
+ * Irreversible from this UI. Must only be called from the explicit
+ * PublishConfirmDialog, and only for an item in publish_ready.
+ * No retry wrapper: a failure requires a fresh confirmation.
+ */
+export function usePublishToChannel(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (channel: PublishChannel) =>
+      apiFetch<PublishResult>(endpoints.contentPublish(id, channel), { method: "POST" }),
+    retry: false,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["api", "content"] });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
+
+/* --------------------------- Influencer outreach -------------------------- */
+
+export function useInfluencers(): UseQueryResult<InfluencerContact[]> {
+  return useQuery({
+    ...base,
+    queryKey: channelQueryKeys.influencers,
+    queryFn: ({ signal }) => apiFetch<InfluencerContact[]>(endpoints.influencers, { signal }),
+  });
+}
+
+export interface CreateInfluencerInput {
+  name: string;
+  platform: OutreachPlatform;
+  handle: string;
+  notes?: string | null;
+}
+
+export function useCreateInfluencer() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateInfluencerInput) =>
+      apiFetch<InfluencerContact>(endpoints.influencers, {
+        method: "POST",
+        body: {
+          name: input.name,
+          platform: input.platform,
+          handle: input.handle,
+          notes: input.notes ?? null,
+        },
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: channelQueryKeys.influencers });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
+
+/** POST /influencers/{id}/outreach/draft — AI draft into the normal review queue. */
+export function useGenerateOutreachDraft() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiFetch<InfluencerContact>(endpoints.influencerOutreachDraft(id), { method: "POST" }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: channelQueryKeys.influencers });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
+
+/**
+ * POST /influencers/{id}/outreach/sent — bookkeeping only.
+ * Nothing is transmitted: the human sends the message from their own account.
+ */
+export function useMarkOutreachSent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars: { id: string; message?: string | null }) =>
+      apiFetch<InfluencerContact>(endpoints.influencerOutreachSent(vars.id), {
+        method: "POST",
+        body: { message: vars.message ?? null },
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: channelQueryKeys.influencers });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}

@@ -10,6 +10,7 @@ import type {
   AuditLogEntry,
   ChannelConnection,
   ComplianceFlag,
+  ContentChannel,
   ContentItem,
   ContentItemDetail,
   ContentStatus,

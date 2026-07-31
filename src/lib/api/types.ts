@@ -227,3 +227,82 @@ export interface AdminCredential {
   last_updated_at: string | null;
   updated_by: string | null;
 }
+
+/* ----------------------------- SEO research ------------------------------ */
+/** POST /api/v1/seo/keyword-research — keyword_research agent output. */
+
+export interface SeoKeywordVariation {
+  keyword: string;
+  /** Cluster label the backend grouped this variation under. */
+  cluster?: string | null;
+  intent?: string | null;
+  volume?: number | null;
+  difficulty?: number | null;
+}
+
+export interface SeoCompetitorGap {
+  keyword: string;
+  /** Domain that ranks for this keyword while we don't. */
+  source_domain: string;
+  their_position?: number | null;
+  our_position?: number | null;
+  volume?: number | null;
+  url?: string | null;
+}
+
+export interface SeoKeywordResearch {
+  seed_keyword: string;
+  /** e.g. "informational" | "commercial" — backend-owned, rendered verbatim. */
+  primary_intent?: string | null;
+  intent_breakdown?: { intent: string; share: number }[] | null;
+  variations: SeoKeywordVariation[];
+  competitor_gaps: SeoCompetitorGap[];
+  generated_at?: string | null;
+}
+
+/* ---------------------------- Technical audit ---------------------------- */
+/** GET /api/v1/seo/technical-audit — shares the severity scale with GEO. */
+
+export interface TechnicalAuditFinding {
+  id: string;
+  label: string;
+  severity: GeoSeverity;
+  category?: string | null;
+  detail?: string | null;
+  recommendation?: string | null;
+  /** Pages/URLs the finding applies to, when the backend reports them. */
+  affected_urls?: string[] | null;
+}
+
+export interface TechnicalAudit {
+  url?: string | null;
+  score?: number | null;
+  checked_at?: string | null;
+  findings: TechnicalAuditFinding[];
+}
+
+/* --------------------------- Listening signals ---------------------------- */
+
+/** GET /api/v1/listening/hackernews */
+export interface HackerNewsSignal {
+  id: string;
+  title: string;
+  url?: string | null;
+  hn_url?: string | null;
+  points: number | null;
+  comments: number | null;
+  relevance_score: number | null;
+  /** Suggested content angle from the listening agent. */
+  suggested_angle?: string | null;
+  suggested_keyword?: string | null;
+  detected_at?: string | null;
+}
+
+/** POST /api/v1/listening/reddit/draft — manual paste-in only, no fetching. */
+export interface RedditDraftResult {
+  /** Content item created in the normal draft/compliance pipeline, when applicable. */
+  content_id?: string | null;
+  suggested_angle?: string | null;
+  draft_reply?: string | null;
+  status?: string | null;
+}

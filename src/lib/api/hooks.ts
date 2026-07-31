@@ -26,6 +26,10 @@ import type {
   PublishChannel,
   PublishResult,
   SeoKeyword,
+  SeoKeywordResearch,
+  TechnicalAudit,
+  HackerNewsSignal,
+  RedditDraftResult,
 } from "./types";
 
 /**
@@ -435,6 +439,95 @@ export function useClearCredential() {
     retry: false,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: adminQueryKeys.credentials });
+      qc.invalidateQueries({ queryKey: queryKeys.auditLog });
+    },
+  });
+}
+
+/* ------------------------------ SEO research ------------------------------ */
+
+export const seoQueryKeys = {
+  technicalAudit: (url: string) => ["api", "seo", "technical-audit", url] as const,
+};
+
+export interface KeywordResearchInput {
+  seed_keyword: string;
+  competitor_domains?: string[] | null;
+}
+
+/**
+ * POST /seo/keyword-research — runs the keyword_research agent.
+ * Manual trigger only: no auto-run, no polling.
+ */
+export function useKeywordResearch() {
+  return useMutation({
+    mutationFn: (input: KeywordResearchInput) =>
+      apiFetch<SeoKeywordResearch>(endpoints.seoKeywordResearch, {
+        method: "POST",
+        body: {
+          seed_keyword: input.seed_keyword,
+          competitor_domains: input.competitor_domains ?? null,
+        },
+      }),
+    retry: false,
+  });
+}
+
+/** GET /seo/technical-audit — only runs once a URL is submitted. */
+export function useTechnicalAudit(url: string): UseQueryResult<TechnicalAudit> {
+  return useQuery({
+    ...base,
+    enabled: url.trim().length > 0,
+    refetchOnWindowFocus: false,
+    queryKey: seoQueryKeys.technicalAudit(url),
+    queryFn: ({ signal }) =>
+      apiFetch<TechnicalAudit>(
+        url ? `${endpoints.seoTechnicalAudit}?url=${encodeURIComponent(url)}` : endpoints.seoTechnicalAudit,
+        { signal },
+      ),
+  });
+}
+
+/* --------------------------- Listening signals ---------------------------- */
+
+export const listeningQueryKeys = {
+  hackernews: ["api", "listening", "hackernews"] as const,
+};
+
+/** GET /listening/hackernews — read-only feed, no auto-refresh. */
+export function useHackerNewsSignals(): UseQueryResult<HackerNewsSignal[]> {
+  return useQuery({
+    ...base,
+    refetchOnWindowFocus: false,
+    queryKey: listeningQueryKeys.hackernews,
+    queryFn: ({ signal }) =>
+      apiFetch<HackerNewsSignal[]>(endpoints.listeningHackernews, { signal }),
+  });
+}
+
+export interface RedditDraftInput {
+  thread_url?: string | null;
+  thread_text?: string | null;
+}
+
+/**
+ * POST /listening/reddit/draft — manual paste-in only.
+ * Nothing is fetched from Reddit and nothing is posted back.
+ */
+export function useRedditDraft() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: RedditDraftInput) =>
+      apiFetch<RedditDraftResult>(endpoints.listeningRedditDraft, {
+        method: "POST",
+        body: {
+          thread_url: input.thread_url?.trim() || null,
+          thread_text: input.thread_text?.trim() || null,
+        },
+      }),
+    retry: false,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["api", "content"] });
       qc.invalidateQueries({ queryKey: queryKeys.auditLog });
     },
   });

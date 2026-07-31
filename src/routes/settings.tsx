@@ -175,6 +175,9 @@ function SettingsPage() {
         )}
       </section>
 
+      <ChannelConnections />
+
+
       {/* Role context (stub) */}
       <section className="mt-6 rounded-xl border border-border/60 bg-card/50 p-4 sm:p-5">
         <h2 className="text-sm font-semibold tracking-tight">Role context</h2>

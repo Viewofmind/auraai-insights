@@ -32,8 +32,10 @@ export interface ApiRequestOptions {
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   body?: unknown;
   signal?: AbortSignal;
+  /** Overrides the stored session token for this call only. */
   token?: string | null;
 }
+
 
 /**
  * Single typed entry point for every backend call. No mock fallbacks:

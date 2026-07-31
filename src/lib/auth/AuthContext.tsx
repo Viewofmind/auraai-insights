@@ -7,14 +7,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { getAuthToken, setAuthToken } from "@/lib/api/token";
 
 /**
- * AUTH STUB — UI shell only.
+ * Auth context.
  *
- * Real auth is still being designed on the backend (per-user identity for
- * role checks is an open item). This context deliberately contains no token
- * exchange, no session refresh, and no route enforcement: it only carries a
- * locally-selected role so role-based visibility can be designed now.
+ * Role selection is still a local UI concept (backend per-user identity is an
+ * open item), but the access token here is REAL: it is stored and sent as
+ * `Authorization: Bearer <token>` on every API call by apiFetch.
  */
 export type AppRole = "kruti" | "editor" | "viewer";
 
@@ -25,10 +25,13 @@ export interface StubUser {
 
 interface AuthContextValue {
   user: StubUser | null;
-  /** Local-only sign-in stub. Performs no network call. */
-  signIn: (email: string, role: AppRole) => void;
+  /** Bearer token attached to every backend request, if set. */
+  token: string | null;
+  /** Stores the session locally and installs the bearer token for API calls. */
+  signIn: (email: string, role: AppRole, token?: string | null) => void;
   signOut: () => void;
   setRole: (role: AppRole) => void;
+  setToken: (token: string | null) => void;
   /** UI-concept role check. Real enforcement depends on backend auth. */
   hasRole: (role: AppRole) => boolean;
 }
@@ -39,6 +42,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<StubUser | null>(null);
+  const [token, setTokenState] = useState<string | null>(null);
 
   // Read after mount only — avoids SSR/hydration mismatch.
   useEffect(() => {
@@ -48,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore malformed stub state */
     }
+    setTokenState(getAuthToken());
   }, []);
 
   const persist = useCallback((next: StubUser | null) => {
@@ -56,19 +61,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (next) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       else window.localStorage.removeItem(STORAGE_KEY);
     } catch {
-      /* storage unavailable — stub state stays in memory */
+      /* storage unavailable — state stays in memory */
     }
+  }, []);
+
+  const applyToken = useCallback((next: string | null) => {
+    setAuthToken(next);
+    setTokenState(getAuthToken());
   }, []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
-      signIn: (email, role) => persist({ email, role }),
-      signOut: () => persist(null),
+      token,
+      signIn: (email, role, nextToken) => {
+        persist({ email, role });
+        if (nextToken !== undefined) applyToken(nextToken);
+      },
+      signOut: () => {
+        persist(null);
+        applyToken(null);
+      },
       setRole: (role) => persist(user ? { ...user, role } : null),
+      setToken: applyToken,
       hasRole: (role) => user?.role === role,
     }),
-    [user, persist],
+    [user, token, persist, applyToken],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

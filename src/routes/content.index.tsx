@@ -7,6 +7,7 @@ import {
   contentStatusMeta,
   contentStatusOrder,
 } from "@/components/content/ContentStatusBadge";
+import { ChannelBadge } from "@/components/channels/ChannelBadge";
 import { useContentQueue, useCreateContent } from "@/lib/api/hooks";
 import { useAuth } from "@/lib/auth/AuthContext";
 import type { ContentStatus } from "@/lib/api/types";

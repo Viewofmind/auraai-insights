@@ -1,4 +1,6 @@
 import { API_BASE_URL, apiUrl, isApiConfigured } from "./config";
+import { getAuthToken } from "./token";
+
 
 /** Thrown when VITE_API_BASE_URL is not set — i.e. no backend is wired up. */
 export class ApiNotConfiguredError extends Error {

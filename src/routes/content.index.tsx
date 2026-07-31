@@ -10,7 +10,7 @@ import {
 import { ChannelBadge } from "@/components/channels/ChannelBadge";
 import { useContentQueue, useCreateContent } from "@/lib/api/hooks";
 import { useAuth } from "@/lib/auth/AuthContext";
-import type { ContentStatus } from "@/lib/api/types";
+import type { ContentChannel, ContentStatus } from "@/lib/api/types";
 import { FileText, Search, Info, Plus, Loader2, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 

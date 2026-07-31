@@ -18,6 +18,7 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContentIdRouteImport } from './routes/content.$id'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -64,6 +65,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContentIdRoute = ContentIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ContentRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -71,10 +77,11 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof AnalyticsRoute
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
-  '/content': typeof ContentRoute
+  '/content': typeof ContentRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
+  '/content/$id': typeof ContentIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -82,10 +89,11 @@ export interface FileRoutesByTo {
   '/analytics': typeof AnalyticsRoute
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
-  '/content': typeof ContentRoute
+  '/content': typeof ContentRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
+  '/content/$id': typeof ContentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -94,10 +102,11 @@ export interface FileRoutesById {
   '/analytics': typeof AnalyticsRoute
   '/audit': typeof AuditRoute
   '/compliance': typeof ComplianceRoute
-  '/content': typeof ContentRoute
+  '/content': typeof ContentRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
   '/settings': typeof SettingsRoute
+  '/content/$id': typeof ContentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/opportunities'
     | '/settings'
+    | '/content/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/opportunities'
     | '/settings'
+    | '/content/$id'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/opportunities'
     | '/settings'
+    | '/content/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -141,7 +153,7 @@ export interface RootRouteChildren {
   AnalyticsRoute: typeof AnalyticsRoute
   AuditRoute: typeof AuditRoute
   ComplianceRoute: typeof ComplianceRoute
-  ContentRoute: typeof ContentRoute
+  ContentRoute: typeof ContentRouteWithChildren
   LoginRoute: typeof LoginRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
   SettingsRoute: typeof SettingsRoute
@@ -212,8 +224,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/content/$id': {
+      id: '/content/$id'
+      path: '/$id'
+      fullPath: '/content/$id'
+      preLoaderRoute: typeof ContentIdRouteImport
+      parentRoute: typeof ContentRoute
+    }
   }
 }
+
+interface ContentRouteChildren {
+  ContentIdRoute: typeof ContentIdRoute
+}
+
+const ContentRouteChildren: ContentRouteChildren = {
+  ContentIdRoute: ContentIdRoute,
+}
+
+const ContentRouteWithChildren =
+  ContentRoute._addFileChildren(ContentRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -221,7 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalyticsRoute: AnalyticsRoute,
   AuditRoute: AuditRoute,
   ComplianceRoute: ComplianceRoute,
-  ContentRoute: ContentRoute,
+  ContentRoute: ContentRouteWithChildren,
   LoginRoute: LoginRoute,
   OpportunitiesRoute: OpportunitiesRoute,
   SettingsRoute: SettingsRoute,
@@ -229,13 +259,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

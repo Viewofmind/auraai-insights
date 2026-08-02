@@ -11,7 +11,7 @@ import type { GeoSeverity } from "@/lib/api/types";
 import { AlertTriangle, Gauge, Lock, Search, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/analytics/technical")({
+export const Route = createFileRoute("/_app/analytics/technical")({
   head: () => ({
     meta: [
       { title: "Technical SEO Audit — AuraAI · CMO" },

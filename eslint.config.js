@@ -36,5 +36,38 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  {
+    // Import boundary: the platform-owner console must never reach into the
+    // tenant product's data layer or tenant-specific feature components.
+    files: ["src/routes/_platform.*.{ts,tsx}", "src/routes/_platform/**/*.{ts,tsx}", "src/lib/platform/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@/lib/api",
+                "@/lib/api/*",
+                "**/lib/api",
+                "**/lib/api/*",
+                "@/components/content/*",
+                "@/components/compliance/*",
+                "@/components/email/*",
+                "@/components/geo/*",
+                "**/components/content/*",
+                "**/components/compliance/*",
+                "**/components/email/*",
+                "**/components/geo/*",
+              ],
+              message:
+                "Platform console code must not import the tenant product API client or tenant feature components. Use the platform console's own isolated data layer.",
+            },
+          ],
+        },
+      ],
+    },
+  },
   eslintPluginPrettier,
 );
+

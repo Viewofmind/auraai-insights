@@ -9,217 +9,253 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as OutreachRouteImport } from './routes/outreach'
-import { Route as OpportunitiesRouteImport } from './routes/opportunities'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as GeoRouteImport } from './routes/geo'
-import { Route as EmailRouteImport } from './routes/email'
-import { Route as CredentialsRouteImport } from './routes/credentials'
-import { Route as ContentRouteImport } from './routes/content'
-import { Route as ComplianceRouteImport } from './routes/compliance'
-import { Route as AuditRouteImport } from './routes/audit'
-import { Route as AnalyticsRouteImport } from './routes/analytics'
-import { Route as AgentsRouteImport } from './routes/agents'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as GeoIndexRouteImport } from './routes/geo.index'
-import { Route as EmailIndexRouteImport } from './routes/email.index'
-import { Route as ContentIndexRouteImport } from './routes/content.index'
-import { Route as AnalyticsIndexRouteImport } from './routes/analytics.index'
-import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
-import { Route as EmailSubscribersRouteImport } from './routes/email.subscribers'
-import { Route as EmailIdRouteImport } from './routes/email.$id'
-import { Route as ContentIdRouteImport } from './routes/content.$id'
-import { Route as AnalyticsTechnicalRouteImport } from './routes/analytics.technical'
-import { Route as AnalyticsSeoRouteImport } from './routes/analytics.seo'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as PlatformRouteImport } from './routes/_platform'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as PublicSignupRouteImport } from './routes/_public.signup'
+import { Route as PublicLoginRouteImport } from './routes/_public.login'
+import { Route as PlatformPlatformRouteImport } from './routes/_platform.platform'
+import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppOutreachRouteImport } from './routes/_app.outreach'
+import { Route as AppOpportunitiesRouteImport } from './routes/_app.opportunities'
+import { Route as AppGeoRouteImport } from './routes/_app.geo'
+import { Route as AppEmailRouteImport } from './routes/_app.email'
+import { Route as AppCredentialsRouteImport } from './routes/_app.credentials'
+import { Route as AppContentRouteImport } from './routes/_app.content'
+import { Route as AppComplianceRouteImport } from './routes/_app.compliance'
+import { Route as AppAuditRouteImport } from './routes/_app.audit'
+import { Route as AppAnalyticsRouteImport } from './routes/_app.analytics'
+import { Route as AppAgentsRouteImport } from './routes/_app.agents'
+import { Route as AppGeoIndexRouteImport } from './routes/_app.geo.index'
+import { Route as AppEmailIndexRouteImport } from './routes/_app.email.index'
+import { Route as AppContentIndexRouteImport } from './routes/_app.content.index'
+import { Route as AppAnalyticsIndexRouteImport } from './routes/_app.analytics.index'
+import { Route as AppGeoCitationsRouteImport } from './routes/_app.geo.citations'
+import { Route as AppEmailSubscribersRouteImport } from './routes/_app.email.subscribers'
+import { Route as AppEmailIdRouteImport } from './routes/_app.email.$id'
+import { Route as AppContentIdRouteImport } from './routes/_app.content.$id'
+import { Route as AppAnalyticsTechnicalRouteImport } from './routes/_app.analytics.technical'
+import { Route as AppAnalyticsSeoRouteImport } from './routes/_app.analytics.seo'
 
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OutreachRoute = OutreachRouteImport.update({
-  id: '/outreach',
-  path: '/outreach',
+const PlatformRoute = PlatformRouteImport.update({
+  id: '/_platform',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OpportunitiesRoute = OpportunitiesRouteImport.update({
-  id: '/opportunities',
-  path: '/opportunities',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const PublicSignupRoute = PublicSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
 } as any)
-const GeoRoute = GeoRouteImport.update({
+const PlatformPlatformRoute = PlatformPlatformRouteImport.update({
+  id: '/platform',
+  path: '/platform',
+  getParentRoute: () => PlatformRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOutreachRoute = AppOutreachRouteImport.update({
+  id: '/outreach',
+  path: '/outreach',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOpportunitiesRoute = AppOpportunitiesRouteImport.update({
+  id: '/opportunities',
+  path: '/opportunities',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGeoRoute = AppGeoRouteImport.update({
   id: '/geo',
   path: '/geo',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const EmailRoute = EmailRouteImport.update({
+const AppEmailRoute = AppEmailRouteImport.update({
   id: '/email',
   path: '/email',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const CredentialsRoute = CredentialsRouteImport.update({
+const AppCredentialsRoute = AppCredentialsRouteImport.update({
   id: '/credentials',
   path: '/credentials',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ContentRoute = ContentRouteImport.update({
+const AppContentRoute = AppContentRouteImport.update({
   id: '/content',
   path: '/content',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ComplianceRoute = ComplianceRouteImport.update({
+const AppComplianceRoute = AppComplianceRouteImport.update({
   id: '/compliance',
   path: '/compliance',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const AuditRoute = AuditRouteImport.update({
+const AppAuditRoute = AppAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const AnalyticsRoute = AnalyticsRouteImport.update({
+const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const AgentsRoute = AgentsRouteImport.update({
+const AppAgentsRoute = AppAgentsRouteImport.update({
   id: '/agents',
   path: '/agents',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AppGeoIndexRoute = AppGeoIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppGeoRoute,
 } as any)
-const GeoIndexRoute = GeoIndexRouteImport.update({
+const AppEmailIndexRoute = AppEmailIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => GeoRoute,
+  getParentRoute: () => AppEmailRoute,
 } as any)
-const EmailIndexRoute = EmailIndexRouteImport.update({
+const AppContentIndexRoute = AppContentIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => EmailRoute,
+  getParentRoute: () => AppContentRoute,
 } as any)
-const ContentIndexRoute = ContentIndexRouteImport.update({
+const AppAnalyticsIndexRoute = AppAnalyticsIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => ContentRoute,
+  getParentRoute: () => AppAnalyticsRoute,
 } as any)
-const AnalyticsIndexRoute = AnalyticsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AnalyticsRoute,
-} as any)
-const GeoCitationsRoute = GeoCitationsRouteImport.update({
+const AppGeoCitationsRoute = AppGeoCitationsRouteImport.update({
   id: '/citations',
   path: '/citations',
-  getParentRoute: () => GeoRoute,
+  getParentRoute: () => AppGeoRoute,
 } as any)
-const EmailSubscribersRoute = EmailSubscribersRouteImport.update({
+const AppEmailSubscribersRoute = AppEmailSubscribersRouteImport.update({
   id: '/subscribers',
   path: '/subscribers',
-  getParentRoute: () => EmailRoute,
+  getParentRoute: () => AppEmailRoute,
 } as any)
-const EmailIdRoute = EmailIdRouteImport.update({
+const AppEmailIdRoute = AppEmailIdRouteImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => EmailRoute,
+  getParentRoute: () => AppEmailRoute,
 } as any)
-const ContentIdRoute = ContentIdRouteImport.update({
+const AppContentIdRoute = AppContentIdRouteImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => ContentRoute,
+  getParentRoute: () => AppContentRoute,
 } as any)
-const AnalyticsTechnicalRoute = AnalyticsTechnicalRouteImport.update({
+const AppAnalyticsTechnicalRoute = AppAnalyticsTechnicalRouteImport.update({
   id: '/technical',
   path: '/technical',
-  getParentRoute: () => AnalyticsRoute,
+  getParentRoute: () => AppAnalyticsRoute,
 } as any)
-const AnalyticsSeoRoute = AnalyticsSeoRouteImport.update({
+const AppAnalyticsSeoRoute = AppAnalyticsSeoRouteImport.update({
   id: '/seo',
   path: '/seo',
-  getParentRoute: () => AnalyticsRoute,
+  getParentRoute: () => AppAnalyticsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRouteWithChildren
-  '/audit': typeof AuditRoute
-  '/compliance': typeof ComplianceRoute
-  '/content': typeof ContentRouteWithChildren
-  '/credentials': typeof CredentialsRoute
-  '/email': typeof EmailRouteWithChildren
-  '/geo': typeof GeoRouteWithChildren
-  '/login': typeof LoginRoute
-  '/opportunities': typeof OpportunitiesRoute
-  '/outreach': typeof OutreachRoute
-  '/settings': typeof SettingsRoute
-  '/analytics/seo': typeof AnalyticsSeoRoute
-  '/analytics/technical': typeof AnalyticsTechnicalRoute
-  '/content/$id': typeof ContentIdRoute
-  '/email/$id': typeof EmailIdRoute
-  '/email/subscribers': typeof EmailSubscribersRoute
-  '/geo/citations': typeof GeoCitationsRoute
-  '/analytics/': typeof AnalyticsIndexRoute
-  '/content/': typeof ContentIndexRoute
-  '/email/': typeof EmailIndexRoute
-  '/geo/': typeof GeoIndexRoute
+  '/': typeof AppIndexRoute
+  '/agents': typeof AppAgentsRoute
+  '/analytics': typeof AppAnalyticsRouteWithChildren
+  '/audit': typeof AppAuditRoute
+  '/compliance': typeof AppComplianceRoute
+  '/content': typeof AppContentRouteWithChildren
+  '/credentials': typeof AppCredentialsRoute
+  '/email': typeof AppEmailRouteWithChildren
+  '/geo': typeof AppGeoRouteWithChildren
+  '/opportunities': typeof AppOpportunitiesRoute
+  '/outreach': typeof AppOutreachRoute
+  '/settings': typeof AppSettingsRoute
+  '/platform': typeof PlatformPlatformRoute
+  '/login': typeof PublicLoginRoute
+  '/signup': typeof PublicSignupRoute
+  '/analytics/seo': typeof AppAnalyticsSeoRoute
+  '/analytics/technical': typeof AppAnalyticsTechnicalRoute
+  '/content/$id': typeof AppContentIdRoute
+  '/email/$id': typeof AppEmailIdRoute
+  '/email/subscribers': typeof AppEmailSubscribersRoute
+  '/geo/citations': typeof AppGeoCitationsRoute
+  '/analytics/': typeof AppAnalyticsIndexRoute
+  '/content/': typeof AppContentIndexRoute
+  '/email/': typeof AppEmailIndexRoute
+  '/geo/': typeof AppGeoIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/agents': typeof AgentsRoute
-  '/audit': typeof AuditRoute
-  '/compliance': typeof ComplianceRoute
-  '/credentials': typeof CredentialsRoute
-  '/login': typeof LoginRoute
-  '/opportunities': typeof OpportunitiesRoute
-  '/outreach': typeof OutreachRoute
-  '/settings': typeof SettingsRoute
-  '/analytics/seo': typeof AnalyticsSeoRoute
-  '/analytics/technical': typeof AnalyticsTechnicalRoute
-  '/content/$id': typeof ContentIdRoute
-  '/email/$id': typeof EmailIdRoute
-  '/email/subscribers': typeof EmailSubscribersRoute
-  '/geo/citations': typeof GeoCitationsRoute
-  '/analytics': typeof AnalyticsIndexRoute
-  '/content': typeof ContentIndexRoute
-  '/email': typeof EmailIndexRoute
-  '/geo': typeof GeoIndexRoute
+  '/': typeof AppIndexRoute
+  '/agents': typeof AppAgentsRoute
+  '/audit': typeof AppAuditRoute
+  '/compliance': typeof AppComplianceRoute
+  '/credentials': typeof AppCredentialsRoute
+  '/opportunities': typeof AppOpportunitiesRoute
+  '/outreach': typeof AppOutreachRoute
+  '/settings': typeof AppSettingsRoute
+  '/platform': typeof PlatformPlatformRoute
+  '/login': typeof PublicLoginRoute
+  '/signup': typeof PublicSignupRoute
+  '/analytics/seo': typeof AppAnalyticsSeoRoute
+  '/analytics/technical': typeof AppAnalyticsTechnicalRoute
+  '/content/$id': typeof AppContentIdRoute
+  '/email/$id': typeof AppEmailIdRoute
+  '/email/subscribers': typeof AppEmailSubscribersRoute
+  '/geo/citations': typeof AppGeoCitationsRoute
+  '/analytics': typeof AppAnalyticsIndexRoute
+  '/content': typeof AppContentIndexRoute
+  '/email': typeof AppEmailIndexRoute
+  '/geo': typeof AppGeoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/agents': typeof AgentsRoute
-  '/analytics': typeof AnalyticsRouteWithChildren
-  '/audit': typeof AuditRoute
-  '/compliance': typeof ComplianceRoute
-  '/content': typeof ContentRouteWithChildren
-  '/credentials': typeof CredentialsRoute
-  '/email': typeof EmailRouteWithChildren
-  '/geo': typeof GeoRouteWithChildren
-  '/login': typeof LoginRoute
-  '/opportunities': typeof OpportunitiesRoute
-  '/outreach': typeof OutreachRoute
-  '/settings': typeof SettingsRoute
-  '/analytics/seo': typeof AnalyticsSeoRoute
-  '/analytics/technical': typeof AnalyticsTechnicalRoute
-  '/content/$id': typeof ContentIdRoute
-  '/email/$id': typeof EmailIdRoute
-  '/email/subscribers': typeof EmailSubscribersRoute
-  '/geo/citations': typeof GeoCitationsRoute
-  '/analytics/': typeof AnalyticsIndexRoute
-  '/content/': typeof ContentIndexRoute
-  '/email/': typeof EmailIndexRoute
-  '/geo/': typeof GeoIndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_platform': typeof PlatformRouteWithChildren
+  '/_public': typeof PublicRouteWithChildren
+  '/_app/agents': typeof AppAgentsRoute
+  '/_app/analytics': typeof AppAnalyticsRouteWithChildren
+  '/_app/audit': typeof AppAuditRoute
+  '/_app/compliance': typeof AppComplianceRoute
+  '/_app/content': typeof AppContentRouteWithChildren
+  '/_app/credentials': typeof AppCredentialsRoute
+  '/_app/email': typeof AppEmailRouteWithChildren
+  '/_app/geo': typeof AppGeoRouteWithChildren
+  '/_app/opportunities': typeof AppOpportunitiesRoute
+  '/_app/outreach': typeof AppOutreachRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_platform/platform': typeof PlatformPlatformRoute
+  '/_public/login': typeof PublicLoginRoute
+  '/_public/signup': typeof PublicSignupRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/analytics/seo': typeof AppAnalyticsSeoRoute
+  '/_app/analytics/technical': typeof AppAnalyticsTechnicalRoute
+  '/_app/content/$id': typeof AppContentIdRoute
+  '/_app/email/$id': typeof AppEmailIdRoute
+  '/_app/email/subscribers': typeof AppEmailSubscribersRoute
+  '/_app/geo/citations': typeof AppGeoCitationsRoute
+  '/_app/analytics/': typeof AppAnalyticsIndexRoute
+  '/_app/content/': typeof AppContentIndexRoute
+  '/_app/email/': typeof AppEmailIndexRoute
+  '/_app/geo/': typeof AppGeoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -233,10 +269,12 @@ export interface FileRouteTypes {
     | '/credentials'
     | '/email'
     | '/geo'
-    | '/login'
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/platform'
+    | '/login'
+    | '/signup'
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
@@ -254,10 +292,12 @@ export interface FileRouteTypes {
     | '/audit'
     | '/compliance'
     | '/credentials'
-    | '/login'
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/platform'
+    | '/login'
+    | '/signup'
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
@@ -270,293 +310,364 @@ export interface FileRouteTypes {
     | '/geo'
   id:
     | '__root__'
-    | '/'
-    | '/agents'
-    | '/analytics'
-    | '/audit'
-    | '/compliance'
-    | '/content'
-    | '/credentials'
-    | '/email'
-    | '/geo'
-    | '/login'
-    | '/opportunities'
-    | '/outreach'
-    | '/settings'
-    | '/analytics/seo'
-    | '/analytics/technical'
-    | '/content/$id'
-    | '/email/$id'
-    | '/email/subscribers'
-    | '/geo/citations'
-    | '/analytics/'
-    | '/content/'
-    | '/email/'
-    | '/geo/'
+    | '/_app'
+    | '/_platform'
+    | '/_public'
+    | '/_app/agents'
+    | '/_app/analytics'
+    | '/_app/audit'
+    | '/_app/compliance'
+    | '/_app/content'
+    | '/_app/credentials'
+    | '/_app/email'
+    | '/_app/geo'
+    | '/_app/opportunities'
+    | '/_app/outreach'
+    | '/_app/settings'
+    | '/_platform/platform'
+    | '/_public/login'
+    | '/_public/signup'
+    | '/_app/'
+    | '/_app/analytics/seo'
+    | '/_app/analytics/technical'
+    | '/_app/content/$id'
+    | '/_app/email/$id'
+    | '/_app/email/subscribers'
+    | '/_app/geo/citations'
+    | '/_app/analytics/'
+    | '/_app/content/'
+    | '/_app/email/'
+    | '/_app/geo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AgentsRoute: typeof AgentsRoute
-  AnalyticsRoute: typeof AnalyticsRouteWithChildren
-  AuditRoute: typeof AuditRoute
-  ComplianceRoute: typeof ComplianceRoute
-  ContentRoute: typeof ContentRouteWithChildren
-  CredentialsRoute: typeof CredentialsRoute
-  EmailRoute: typeof EmailRouteWithChildren
-  GeoRoute: typeof GeoRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  OpportunitiesRoute: typeof OpportunitiesRoute
-  OutreachRoute: typeof OutreachRoute
-  SettingsRoute: typeof SettingsRoute
+  AppRoute: typeof AppRouteWithChildren
+  PlatformRoute: typeof PlatformRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/outreach': {
-      id: '/outreach'
-      path: '/outreach'
-      fullPath: '/outreach'
-      preLoaderRoute: typeof OutreachRouteImport
+    '/_platform': {
+      id: '/_platform'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PlatformRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/opportunities': {
-      id: '/opportunities'
-      path: '/opportunities'
-      fullPath: '/opportunities'
-      preLoaderRoute: typeof OpportunitiesRouteImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/geo': {
-      id: '/geo'
-      path: '/geo'
-      fullPath: '/geo'
-      preLoaderRoute: typeof GeoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/email': {
-      id: '/email'
-      path: '/email'
-      fullPath: '/email'
-      preLoaderRoute: typeof EmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/credentials': {
-      id: '/credentials'
-      path: '/credentials'
-      fullPath: '/credentials'
-      preLoaderRoute: typeof CredentialsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/content': {
-      id: '/content'
-      path: '/content'
-      fullPath: '/content'
-      preLoaderRoute: typeof ContentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compliance': {
-      id: '/compliance'
-      path: '/compliance'
-      fullPath: '/compliance'
-      preLoaderRoute: typeof ComplianceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/audit': {
-      id: '/audit'
-      path: '/audit'
-      fullPath: '/audit'
-      preLoaderRoute: typeof AuditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/analytics': {
-      id: '/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof AnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/agents': {
-      id: '/agents'
-      path: '/agents'
-      fullPath: '/agents'
-      preLoaderRoute: typeof AgentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/geo/': {
-      id: '/geo/'
+    '/_public/signup': {
+      id: '/_public/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof PublicSignupRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/login': {
+      id: '/_public/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_platform/platform': {
+      id: '/_platform/platform'
+      path: '/platform'
+      fullPath: '/platform'
+      preLoaderRoute: typeof PlatformPlatformRouteImport
+      parentRoute: typeof PlatformRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/outreach': {
+      id: '/_app/outreach'
+      path: '/outreach'
+      fullPath: '/outreach'
+      preLoaderRoute: typeof AppOutreachRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/opportunities': {
+      id: '/_app/opportunities'
+      path: '/opportunities'
+      fullPath: '/opportunities'
+      preLoaderRoute: typeof AppOpportunitiesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/geo': {
+      id: '/_app/geo'
+      path: '/geo'
+      fullPath: '/geo'
+      preLoaderRoute: typeof AppGeoRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/email': {
+      id: '/_app/email'
+      path: '/email'
+      fullPath: '/email'
+      preLoaderRoute: typeof AppEmailRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/credentials': {
+      id: '/_app/credentials'
+      path: '/credentials'
+      fullPath: '/credentials'
+      preLoaderRoute: typeof AppCredentialsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/content': {
+      id: '/_app/content'
+      path: '/content'
+      fullPath: '/content'
+      preLoaderRoute: typeof AppContentRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/compliance': {
+      id: '/_app/compliance'
+      path: '/compliance'
+      fullPath: '/compliance'
+      preLoaderRoute: typeof AppComplianceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/audit': {
+      id: '/_app/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AppAuditRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/analytics': {
+      id: '/_app/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AppAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/agents': {
+      id: '/_app/agents'
+      path: '/agents'
+      fullPath: '/agents'
+      preLoaderRoute: typeof AppAgentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/geo/': {
+      id: '/_app/geo/'
       path: '/'
       fullPath: '/geo/'
-      preLoaderRoute: typeof GeoIndexRouteImport
-      parentRoute: typeof GeoRoute
+      preLoaderRoute: typeof AppGeoIndexRouteImport
+      parentRoute: typeof AppGeoRoute
     }
-    '/email/': {
-      id: '/email/'
+    '/_app/email/': {
+      id: '/_app/email/'
       path: '/'
       fullPath: '/email/'
-      preLoaderRoute: typeof EmailIndexRouteImport
-      parentRoute: typeof EmailRoute
+      preLoaderRoute: typeof AppEmailIndexRouteImport
+      parentRoute: typeof AppEmailRoute
     }
-    '/content/': {
-      id: '/content/'
+    '/_app/content/': {
+      id: '/_app/content/'
       path: '/'
       fullPath: '/content/'
-      preLoaderRoute: typeof ContentIndexRouteImport
-      parentRoute: typeof ContentRoute
+      preLoaderRoute: typeof AppContentIndexRouteImport
+      parentRoute: typeof AppContentRoute
     }
-    '/analytics/': {
-      id: '/analytics/'
+    '/_app/analytics/': {
+      id: '/_app/analytics/'
       path: '/'
       fullPath: '/analytics/'
-      preLoaderRoute: typeof AnalyticsIndexRouteImport
-      parentRoute: typeof AnalyticsRoute
+      preLoaderRoute: typeof AppAnalyticsIndexRouteImport
+      parentRoute: typeof AppAnalyticsRoute
     }
-    '/geo/citations': {
-      id: '/geo/citations'
+    '/_app/geo/citations': {
+      id: '/_app/geo/citations'
       path: '/citations'
       fullPath: '/geo/citations'
-      preLoaderRoute: typeof GeoCitationsRouteImport
-      parentRoute: typeof GeoRoute
+      preLoaderRoute: typeof AppGeoCitationsRouteImport
+      parentRoute: typeof AppGeoRoute
     }
-    '/email/subscribers': {
-      id: '/email/subscribers'
+    '/_app/email/subscribers': {
+      id: '/_app/email/subscribers'
       path: '/subscribers'
       fullPath: '/email/subscribers'
-      preLoaderRoute: typeof EmailSubscribersRouteImport
-      parentRoute: typeof EmailRoute
+      preLoaderRoute: typeof AppEmailSubscribersRouteImport
+      parentRoute: typeof AppEmailRoute
     }
-    '/email/$id': {
-      id: '/email/$id'
+    '/_app/email/$id': {
+      id: '/_app/email/$id'
       path: '/$id'
       fullPath: '/email/$id'
-      preLoaderRoute: typeof EmailIdRouteImport
-      parentRoute: typeof EmailRoute
+      preLoaderRoute: typeof AppEmailIdRouteImport
+      parentRoute: typeof AppEmailRoute
     }
-    '/content/$id': {
-      id: '/content/$id'
+    '/_app/content/$id': {
+      id: '/_app/content/$id'
       path: '/$id'
       fullPath: '/content/$id'
-      preLoaderRoute: typeof ContentIdRouteImport
-      parentRoute: typeof ContentRoute
+      preLoaderRoute: typeof AppContentIdRouteImport
+      parentRoute: typeof AppContentRoute
     }
-    '/analytics/technical': {
-      id: '/analytics/technical'
+    '/_app/analytics/technical': {
+      id: '/_app/analytics/technical'
       path: '/technical'
       fullPath: '/analytics/technical'
-      preLoaderRoute: typeof AnalyticsTechnicalRouteImport
-      parentRoute: typeof AnalyticsRoute
+      preLoaderRoute: typeof AppAnalyticsTechnicalRouteImport
+      parentRoute: typeof AppAnalyticsRoute
     }
-    '/analytics/seo': {
-      id: '/analytics/seo'
+    '/_app/analytics/seo': {
+      id: '/_app/analytics/seo'
       path: '/seo'
       fullPath: '/analytics/seo'
-      preLoaderRoute: typeof AnalyticsSeoRouteImport
-      parentRoute: typeof AnalyticsRoute
+      preLoaderRoute: typeof AppAnalyticsSeoRouteImport
+      parentRoute: typeof AppAnalyticsRoute
     }
   }
 }
 
-interface AnalyticsRouteChildren {
-  AnalyticsSeoRoute: typeof AnalyticsSeoRoute
-  AnalyticsTechnicalRoute: typeof AnalyticsTechnicalRoute
-  AnalyticsIndexRoute: typeof AnalyticsIndexRoute
+interface AppAnalyticsRouteChildren {
+  AppAnalyticsSeoRoute: typeof AppAnalyticsSeoRoute
+  AppAnalyticsTechnicalRoute: typeof AppAnalyticsTechnicalRoute
+  AppAnalyticsIndexRoute: typeof AppAnalyticsIndexRoute
 }
 
-const AnalyticsRouteChildren: AnalyticsRouteChildren = {
-  AnalyticsSeoRoute: AnalyticsSeoRoute,
-  AnalyticsTechnicalRoute: AnalyticsTechnicalRoute,
-  AnalyticsIndexRoute: AnalyticsIndexRoute,
+const AppAnalyticsRouteChildren: AppAnalyticsRouteChildren = {
+  AppAnalyticsSeoRoute: AppAnalyticsSeoRoute,
+  AppAnalyticsTechnicalRoute: AppAnalyticsTechnicalRoute,
+  AppAnalyticsIndexRoute: AppAnalyticsIndexRoute,
 }
 
-const AnalyticsRouteWithChildren = AnalyticsRoute._addFileChildren(
-  AnalyticsRouteChildren,
+const AppAnalyticsRouteWithChildren = AppAnalyticsRoute._addFileChildren(
+  AppAnalyticsRouteChildren,
 )
 
-interface ContentRouteChildren {
-  ContentIdRoute: typeof ContentIdRoute
-  ContentIndexRoute: typeof ContentIndexRoute
+interface AppContentRouteChildren {
+  AppContentIdRoute: typeof AppContentIdRoute
+  AppContentIndexRoute: typeof AppContentIndexRoute
 }
 
-const ContentRouteChildren: ContentRouteChildren = {
-  ContentIdRoute: ContentIdRoute,
-  ContentIndexRoute: ContentIndexRoute,
+const AppContentRouteChildren: AppContentRouteChildren = {
+  AppContentIdRoute: AppContentIdRoute,
+  AppContentIndexRoute: AppContentIndexRoute,
 }
 
-const ContentRouteWithChildren =
-  ContentRoute._addFileChildren(ContentRouteChildren)
+const AppContentRouteWithChildren = AppContentRoute._addFileChildren(
+  AppContentRouteChildren,
+)
 
-interface EmailRouteChildren {
-  EmailIdRoute: typeof EmailIdRoute
-  EmailSubscribersRoute: typeof EmailSubscribersRoute
-  EmailIndexRoute: typeof EmailIndexRoute
+interface AppEmailRouteChildren {
+  AppEmailIdRoute: typeof AppEmailIdRoute
+  AppEmailSubscribersRoute: typeof AppEmailSubscribersRoute
+  AppEmailIndexRoute: typeof AppEmailIndexRoute
 }
 
-const EmailRouteChildren: EmailRouteChildren = {
-  EmailIdRoute: EmailIdRoute,
-  EmailSubscribersRoute: EmailSubscribersRoute,
-  EmailIndexRoute: EmailIndexRoute,
+const AppEmailRouteChildren: AppEmailRouteChildren = {
+  AppEmailIdRoute: AppEmailIdRoute,
+  AppEmailSubscribersRoute: AppEmailSubscribersRoute,
+  AppEmailIndexRoute: AppEmailIndexRoute,
 }
 
-const EmailRouteWithChildren = EmailRoute._addFileChildren(EmailRouteChildren)
+const AppEmailRouteWithChildren = AppEmailRoute._addFileChildren(
+  AppEmailRouteChildren,
+)
 
-interface GeoRouteChildren {
-  GeoCitationsRoute: typeof GeoCitationsRoute
-  GeoIndexRoute: typeof GeoIndexRoute
+interface AppGeoRouteChildren {
+  AppGeoCitationsRoute: typeof AppGeoCitationsRoute
+  AppGeoIndexRoute: typeof AppGeoIndexRoute
 }
 
-const GeoRouteChildren: GeoRouteChildren = {
-  GeoCitationsRoute: GeoCitationsRoute,
-  GeoIndexRoute: GeoIndexRoute,
+const AppGeoRouteChildren: AppGeoRouteChildren = {
+  AppGeoCitationsRoute: AppGeoCitationsRoute,
+  AppGeoIndexRoute: AppGeoIndexRoute,
 }
 
-const GeoRouteWithChildren = GeoRoute._addFileChildren(GeoRouteChildren)
+const AppGeoRouteWithChildren =
+  AppGeoRoute._addFileChildren(AppGeoRouteChildren)
+
+interface AppRouteChildren {
+  AppAgentsRoute: typeof AppAgentsRoute
+  AppAnalyticsRoute: typeof AppAnalyticsRouteWithChildren
+  AppAuditRoute: typeof AppAuditRoute
+  AppComplianceRoute: typeof AppComplianceRoute
+  AppContentRoute: typeof AppContentRouteWithChildren
+  AppCredentialsRoute: typeof AppCredentialsRoute
+  AppEmailRoute: typeof AppEmailRouteWithChildren
+  AppGeoRoute: typeof AppGeoRouteWithChildren
+  AppOpportunitiesRoute: typeof AppOpportunitiesRoute
+  AppOutreachRoute: typeof AppOutreachRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAgentsRoute: AppAgentsRoute,
+  AppAnalyticsRoute: AppAnalyticsRouteWithChildren,
+  AppAuditRoute: AppAuditRoute,
+  AppComplianceRoute: AppComplianceRoute,
+  AppContentRoute: AppContentRouteWithChildren,
+  AppCredentialsRoute: AppCredentialsRoute,
+  AppEmailRoute: AppEmailRouteWithChildren,
+  AppGeoRoute: AppGeoRouteWithChildren,
+  AppOpportunitiesRoute: AppOpportunitiesRoute,
+  AppOutreachRoute: AppOutreachRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface PlatformRouteChildren {
+  PlatformPlatformRoute: typeof PlatformPlatformRoute
+}
+
+const PlatformRouteChildren: PlatformRouteChildren = {
+  PlatformPlatformRoute: PlatformPlatformRoute,
+}
+
+const PlatformRouteWithChildren = PlatformRoute._addFileChildren(
+  PlatformRouteChildren,
+)
+
+interface PublicRouteChildren {
+  PublicLoginRoute: typeof PublicLoginRoute
+  PublicSignupRoute: typeof PublicSignupRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicLoginRoute: PublicLoginRoute,
+  PublicSignupRoute: PublicSignupRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AgentsRoute: AgentsRoute,
-  AnalyticsRoute: AnalyticsRouteWithChildren,
-  AuditRoute: AuditRoute,
-  ComplianceRoute: ComplianceRoute,
-  ContentRoute: ContentRouteWithChildren,
-  CredentialsRoute: CredentialsRoute,
-  EmailRoute: EmailRouteWithChildren,
-  GeoRoute: GeoRouteWithChildren,
-  LoginRoute: LoginRoute,
-  OpportunitiesRoute: OpportunitiesRoute,
-  OutreachRoute: OutreachRoute,
-  SettingsRoute: SettingsRoute,
+  AppRoute: AppRouteWithChildren,
+  PlatformRoute: PlatformRouteWithChildren,
+  PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

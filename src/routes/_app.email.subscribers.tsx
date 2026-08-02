@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/app-shell/PageHeader";
 import { QueryState } from "@/components/common/QueryState";
 import { useEmailSubscribers } from "@/lib/api/hooks";
 
-export const Route = createFileRoute("/email/subscribers")({
+export const Route = createFileRoute("/_app/email/subscribers")({
   head: () => ({
     meta: [
       { title: "Subscribers & Consent — AuraAI · CMO" },

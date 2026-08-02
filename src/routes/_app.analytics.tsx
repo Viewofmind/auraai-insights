@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/analytics")({
+export const Route = createFileRoute("/_app/analytics")({
   component: AnalyticsLayout,
 });
 

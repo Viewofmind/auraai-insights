@@ -8,7 +8,7 @@ import { useEmailCampaigns } from "@/lib/api/hooks";
 import type { EmailCampaign } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/email/")({
+export const Route = createFileRoute("/_app/email/")({
   head: () => ({
     meta: [
       { title: "Email Campaigns — AuraAI · CMO" },

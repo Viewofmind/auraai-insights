@@ -11,10 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-shell/AppSidebar";
-import { TopBar } from "@/components/app-shell/TopBar";
 import { AuthProvider } from "@/lib/auth/AuthContext";
+
 
 
 function NotFoundComponent() {
@@ -139,19 +137,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <SidebarProvider>
-          <div className="flex min-h-screen w-full bg-background">
-            <AppSidebar />
-            <SidebarInset className="flex min-w-0 flex-1 flex-col">
-              <TopBar />
-              <main className="flex-1">
-                <Outlet />
-              </main>
-            </SidebarInset>
-          </div>
-        </SidebarProvider>
+        <Outlet />
       </AuthProvider>
     </QueryClientProvider>
   );
+
 
 }

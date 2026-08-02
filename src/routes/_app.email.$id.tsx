@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { isNotConnectedError } from "@/lib/api/client";
 import { useEmailCampaign } from "@/lib/api/hooks";
 
-export const Route = createFileRoute("/email/$id")({
+export const Route = createFileRoute("/_app/email/$id")({
   head: () => ({
     meta: [
       { title: "Campaign Draft — AuraAI · CMO" },

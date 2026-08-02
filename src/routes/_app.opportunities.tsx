@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/opportunities")({
+export const Route = createFileRoute("/_app/opportunities")({
   head: () => ({
     meta: [
       { title: "Opportunities — AuraAI · CMO" },

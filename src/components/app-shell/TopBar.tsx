@@ -1,10 +1,23 @@
 import { Bell, Search, Command, User } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { useAuth, roleLabel } from "@/lib/auth/AuthContext";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { ConnectionBadge } from "@/components/app-shell/ConnectionBadge";
 
 
 export function TopBar() {
+  const { user, status } = useAuth();
+  const label = user
+    ? `${user.email} · ${roleLabel(user.role)}`
+    : status === "loading"
+      ? "Resolving identity…"
+      : status === "not-connected"
+        ? "Identity unavailable — backend not reachable"
+        : status === "error"
+          ? "Identity rejected by /auth/me"
+          : "Not signed in";
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border/60 bg-background/80 px-4 backdrop-blur-xl">
       <SidebarTrigger className="-ml-1" />
@@ -37,12 +50,19 @@ export function TopBar() {
           <Bell className="h-4 w-4" aria-hidden="true" />
         </button>
 
-        <div
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/60 text-muted-foreground"
-          title="Signed-in user"
+        <Link
+          to="/login"
+          aria-label={label}
+          title={label}
+          className="flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-1 py-1 text-muted-foreground transition-colors hover:text-foreground sm:pr-3"
         >
-          <User className="h-4 w-4" aria-hidden="true" />
-        </div>
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/50">
+            <User className="h-3.5 w-3.5" aria-hidden="true" />
+          </span>
+          <span className="hidden min-w-0 max-w-[180px] truncate font-mono text-[10px] uppercase tracking-[0.12em] sm:block">
+            {user ? user.email : label}
+          </span>
+        </Link>
       </div>
     </header>
   );

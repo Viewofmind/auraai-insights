@@ -376,3 +376,17 @@ export interface EmailSubscriber {
   unsubscribed_at?: string | null;
 }
 
+
+/**
+ * GET /api/v1/auth/me — server-asserted identity. Role and tenant are facts
+ * from the backend, never chosen in the UI.
+ */
+export interface CurrentUser {
+  user_id: string;
+  email: string;
+  /** Server-assigned role. Unknown values are rendered verbatim. */
+  role: string;
+  tenant_id: string;
+  /** Optional; the endpoint may not provide it yet. */
+  tenant_name?: string | null;
+}

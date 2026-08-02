@@ -67,7 +67,7 @@ function CredentialsPage() {
             title="Admin access required"
             description={
               user
-                ? `You are signed in as ${user.email}, which is not the admin role. Switch role context on Integrations or sign in as admin to manage credentials.`
+                ? `You are signed in as ${user.email} (${user.role}), which is not the admin role. Roles are assigned by the backend — sign in with an admin account to manage credentials.`
                 : "Sign in with the admin role to view and manage API credentials."
             }
             action={

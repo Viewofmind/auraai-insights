@@ -20,6 +20,9 @@ export const apiUrl = (path: string): string =>
 export const endpoints = {
   health: "/health",
 
+  /** Server-asserted identity for the bearer token. */
+  authMe: "/auth/me",
+
   content: "/content",
   contentItem: (id: string) => `/content/${id}`,
   contentTransition: (id: string) => `/content/${id}/transition`,

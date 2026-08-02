@@ -45,8 +45,8 @@ function CompliancePage() {
   const queue = useComplianceQueue();
   const decision = useComplianceDecision();
 
-  // Role-based visibility as a UI concept only. Real enforcement depends on
-  // backend auth, which is still pending.
+  // Visibility follows the server-asserted role from /auth/me. The backend
+  // remains the authority on enforcement.
   if (!hasRole("kruti")) {
     return (
       <div className="mx-auto max-w-[900px] p-4 sm:p-6 lg:p-8">
@@ -58,8 +58,8 @@ function CompliancePage() {
         <div className="mt-6">
           <EmptyState
             icon={Lock}
-            title="Not visible in your role context"
-            description={`Signed in as ${user ? `${user.email} (${user.role})` : "no one"}. Switch the role context to kruti to preview this screen. Visibility here is a UI concept — real enforcement lands with backend auth.`}
+            title="Not available for your role"
+            description={`Signed in as ${user ? `${user.email} (${user.role})` : "no one"}. This queue is scoped to the kruti compliance role, assigned by the backend — it cannot be switched from the UI.`}
           />
         </div>
       </div>

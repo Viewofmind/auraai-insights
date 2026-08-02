@@ -1,4 +1,6 @@
 import {
+
+
   useMutation,
   useQuery,
   useQueryClient,
@@ -15,6 +17,10 @@ import type {
   ContentItem,
   ContentItemDetail,
   ContentStatus,
+  EmailCampaign,
+  EmailCampaignDetail,
+  EmailSubscriber,
+
   CredentialProvider,
   GeoCitationCheck,
   GeoReadiness,
@@ -532,3 +538,46 @@ export function useRedditDraft() {
     },
   });
 }
+
+/* ---------------------------- Email marketing ----------------------------- */
+/**
+ * Read-only scaffolding. The backend contract is still being written, so these
+ * hooks stay deliberately tolerant: unknown/missing fields render as unknown
+ * rather than being defaulted to a guess, and there is NO send mutation.
+ */
+
+export const emailQueryKeys = {
+  campaigns: ["api", "email", "campaigns"] as const,
+  campaign: (id: string) => ["api", "email", "campaigns", id] as const,
+  subscribers: ["api", "email", "subscribers"] as const,
+};
+
+export function useEmailCampaigns(): UseQueryResult<EmailCampaign[]> {
+  return useQuery({
+    ...base,
+    refetchOnWindowFocus: false,
+    queryKey: emailQueryKeys.campaigns,
+    queryFn: ({ signal }) => apiFetch<EmailCampaign[]>(endpoints.emailCampaigns, { signal }),
+  });
+}
+
+export function useEmailCampaign(id: string): UseQueryResult<EmailCampaignDetail> {
+  return useQuery({
+    ...base,
+    enabled: id.trim().length > 0,
+    refetchOnWindowFocus: false,
+    queryKey: emailQueryKeys.campaign(id),
+    queryFn: ({ signal }) =>
+      apiFetch<EmailCampaignDetail>(endpoints.emailCampaign(id), { signal }),
+  });
+}
+
+export function useEmailSubscribers(): UseQueryResult<EmailSubscriber[]> {
+  return useQuery({
+    ...base,
+    refetchOnWindowFocus: false,
+    queryKey: emailQueryKeys.subscribers,
+    queryFn: ({ signal }) => apiFetch<EmailSubscriber[]>(endpoints.emailSubscribers, { signal }),
+  });
+}
+

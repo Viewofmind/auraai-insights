@@ -14,6 +14,7 @@ import { Route as OutreachRouteImport } from './routes/outreach'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GeoRouteImport } from './routes/geo'
+import { Route as EmailRouteImport } from './routes/email'
 import { Route as CredentialsRouteImport } from './routes/credentials'
 import { Route as ContentRouteImport } from './routes/content'
 import { Route as ComplianceRouteImport } from './routes/compliance'
@@ -22,9 +23,12 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AgentsRouteImport } from './routes/agents'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GeoIndexRouteImport } from './routes/geo.index'
+import { Route as EmailIndexRouteImport } from './routes/email.index'
 import { Route as ContentIndexRouteImport } from './routes/content.index'
 import { Route as AnalyticsIndexRouteImport } from './routes/analytics.index'
 import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
+import { Route as EmailSubscribersRouteImport } from './routes/email.subscribers'
+import { Route as EmailIdRouteImport } from './routes/email.$id'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
 import { Route as AnalyticsTechnicalRouteImport } from './routes/analytics.technical'
 import { Route as AnalyticsSeoRouteImport } from './routes/analytics.seo'
@@ -52,6 +56,11 @@ const LoginRoute = LoginRouteImport.update({
 const GeoRoute = GeoRouteImport.update({
   id: '/geo',
   path: '/geo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailRoute = EmailRouteImport.update({
+  id: '/email',
+  path: '/email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CredentialsRoute = CredentialsRouteImport.update({
@@ -94,6 +103,11 @@ const GeoIndexRoute = GeoIndexRouteImport.update({
   path: '/',
   getParentRoute: () => GeoRoute,
 } as any)
+const EmailIndexRoute = EmailIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EmailRoute,
+} as any)
 const ContentIndexRoute = ContentIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -108,6 +122,16 @@ const GeoCitationsRoute = GeoCitationsRouteImport.update({
   id: '/citations',
   path: '/citations',
   getParentRoute: () => GeoRoute,
+} as any)
+const EmailSubscribersRoute = EmailSubscribersRouteImport.update({
+  id: '/subscribers',
+  path: '/subscribers',
+  getParentRoute: () => EmailRoute,
+} as any)
+const EmailIdRoute = EmailIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => EmailRoute,
 } as any)
 const ContentIdRoute = ContentIdRouteImport.update({
   id: '/$id',
@@ -133,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
   '/credentials': typeof CredentialsRoute
+  '/email': typeof EmailRouteWithChildren
   '/geo': typeof GeoRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
@@ -141,9 +166,12 @@ export interface FileRoutesByFullPath {
   '/analytics/seo': typeof AnalyticsSeoRoute
   '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
+  '/email/$id': typeof EmailIdRoute
+  '/email/subscribers': typeof EmailSubscribersRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
+  '/email/': typeof EmailIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
 export interface FileRoutesByTo {
@@ -159,9 +187,12 @@ export interface FileRoutesByTo {
   '/analytics/seo': typeof AnalyticsSeoRoute
   '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
+  '/email/$id': typeof EmailIdRoute
+  '/email/subscribers': typeof EmailSubscribersRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics': typeof AnalyticsIndexRoute
   '/content': typeof ContentIndexRoute
+  '/email': typeof EmailIndexRoute
   '/geo': typeof GeoIndexRoute
 }
 export interface FileRoutesById {
@@ -173,6 +204,7 @@ export interface FileRoutesById {
   '/compliance': typeof ComplianceRoute
   '/content': typeof ContentRouteWithChildren
   '/credentials': typeof CredentialsRoute
+  '/email': typeof EmailRouteWithChildren
   '/geo': typeof GeoRouteWithChildren
   '/login': typeof LoginRoute
   '/opportunities': typeof OpportunitiesRoute
@@ -181,9 +213,12 @@ export interface FileRoutesById {
   '/analytics/seo': typeof AnalyticsSeoRoute
   '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
+  '/email/$id': typeof EmailIdRoute
+  '/email/subscribers': typeof EmailSubscribersRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
+  '/email/': typeof EmailIndexRoute
   '/geo/': typeof GeoIndexRoute
 }
 export interface FileRouteTypes {
@@ -196,6 +231,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/content'
     | '/credentials'
+    | '/email'
     | '/geo'
     | '/login'
     | '/opportunities'
@@ -204,9 +240,12 @@ export interface FileRouteTypes {
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
+    | '/email/$id'
+    | '/email/subscribers'
     | '/geo/citations'
     | '/analytics/'
     | '/content/'
+    | '/email/'
     | '/geo/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -222,9 +261,12 @@ export interface FileRouteTypes {
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
+    | '/email/$id'
+    | '/email/subscribers'
     | '/geo/citations'
     | '/analytics'
     | '/content'
+    | '/email'
     | '/geo'
   id:
     | '__root__'
@@ -235,6 +277,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/content'
     | '/credentials'
+    | '/email'
     | '/geo'
     | '/login'
     | '/opportunities'
@@ -243,9 +286,12 @@ export interface FileRouteTypes {
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
+    | '/email/$id'
+    | '/email/subscribers'
     | '/geo/citations'
     | '/analytics/'
     | '/content/'
+    | '/email/'
     | '/geo/'
   fileRoutesById: FileRoutesById
 }
@@ -257,6 +303,7 @@ export interface RootRouteChildren {
   ComplianceRoute: typeof ComplianceRoute
   ContentRoute: typeof ContentRouteWithChildren
   CredentialsRoute: typeof CredentialsRoute
+  EmailRoute: typeof EmailRouteWithChildren
   GeoRoute: typeof GeoRouteWithChildren
   LoginRoute: typeof LoginRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
@@ -299,6 +346,13 @@ declare module '@tanstack/react-router' {
       path: '/geo'
       fullPath: '/geo'
       preLoaderRoute: typeof GeoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email': {
+      id: '/email'
+      path: '/email'
+      fullPath: '/email'
+      preLoaderRoute: typeof EmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/credentials': {
@@ -357,6 +411,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GeoIndexRouteImport
       parentRoute: typeof GeoRoute
     }
+    '/email/': {
+      id: '/email/'
+      path: '/'
+      fullPath: '/email/'
+      preLoaderRoute: typeof EmailIndexRouteImport
+      parentRoute: typeof EmailRoute
+    }
     '/content/': {
       id: '/content/'
       path: '/'
@@ -377,6 +438,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/geo/citations'
       preLoaderRoute: typeof GeoCitationsRouteImport
       parentRoute: typeof GeoRoute
+    }
+    '/email/subscribers': {
+      id: '/email/subscribers'
+      path: '/subscribers'
+      fullPath: '/email/subscribers'
+      preLoaderRoute: typeof EmailSubscribersRouteImport
+      parentRoute: typeof EmailRoute
+    }
+    '/email/$id': {
+      id: '/email/$id'
+      path: '/$id'
+      fullPath: '/email/$id'
+      preLoaderRoute: typeof EmailIdRouteImport
+      parentRoute: typeof EmailRoute
     }
     '/content/$id': {
       id: '/content/$id'
@@ -431,6 +506,20 @@ const ContentRouteChildren: ContentRouteChildren = {
 const ContentRouteWithChildren =
   ContentRoute._addFileChildren(ContentRouteChildren)
 
+interface EmailRouteChildren {
+  EmailIdRoute: typeof EmailIdRoute
+  EmailSubscribersRoute: typeof EmailSubscribersRoute
+  EmailIndexRoute: typeof EmailIndexRoute
+}
+
+const EmailRouteChildren: EmailRouteChildren = {
+  EmailIdRoute: EmailIdRoute,
+  EmailSubscribersRoute: EmailSubscribersRoute,
+  EmailIndexRoute: EmailIndexRoute,
+}
+
+const EmailRouteWithChildren = EmailRoute._addFileChildren(EmailRouteChildren)
+
 interface GeoRouteChildren {
   GeoCitationsRoute: typeof GeoCitationsRoute
   GeoIndexRoute: typeof GeoIndexRoute
@@ -451,6 +540,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComplianceRoute: ComplianceRoute,
   ContentRoute: ContentRouteWithChildren,
   CredentialsRoute: CredentialsRoute,
+  EmailRoute: EmailRouteWithChildren,
   GeoRoute: GeoRouteWithChildren,
   LoginRoute: LoginRoute,
   OpportunitiesRoute: OpportunitiesRoute,
@@ -460,13 +550,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

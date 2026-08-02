@@ -306,3 +306,73 @@ export interface RedditDraftResult {
   draft_reply?: string | null;
   status?: string | null;
 }
+
+/* --------------------------- Email marketing ----------------------------- */
+/**
+ * Scaffolding only. No send pipeline exists yet on either side, so nothing
+ * here describes a send action. Every field is optional except the identity
+ * fields, because the backend contract is still being written in parallel.
+ */
+
+/**
+ * Content risk tier for an email campaign.
+ *  A — clear to review/queue
+ *  B — requires a compliance sign-off before it may ever be queued
+ *  C — blocked pre-RA (Research Analyst registration); permanently locked
+ */
+export type ContentTier = "A" | "B" | "C";
+
+/** Campaign lifecycle. No value here means "sent" — sending is not enabled. */
+export type EmailCampaignStatus =
+  | "draft"
+  | "compliance_review_pending"
+  | "compliance_signoff_required"
+  | "approved"
+  | "blocked"
+  | (string & {});
+
+export interface EmailCampaign {
+  id: string;
+  name: string;
+  subject?: string | null;
+  status?: EmailCampaignStatus | null;
+  content_tier?: ContentTier | null;
+  /** Compliance classifier categories, reusing the content-queue vocabulary. */
+  compliance_categories?: ComplianceCategory[] | null;
+  /** Why a tier C / blocked campaign is locked, shown verbatim when present. */
+  blocked_reason?: string | null;
+  segment?: string | null;
+  recipient_count?: number | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface EmailCampaignComplianceFinding {
+  category: ComplianceCategory | string;
+  excerpt?: string | null;
+  severity?: GeoSeverity | string | null;
+}
+
+export interface EmailCampaignDetail extends EmailCampaign {
+  preview_text?: string | null;
+  body_markdown?: string | null;
+  body_html?: string | null;
+  /** Classifier output for the campaign body. */
+  compliance_findings?: EmailCampaignComplianceFinding[] | null;
+  compliance_verdict?: string | null;
+  /** Mandatory disclaimer text; never editable in the composer. */
+  disclaimer_text?: string | null;
+}
+
+/** Consent model. Double opt-in is the only supported model. */
+export interface EmailSubscriber {
+  id: string;
+  email: string;
+  status?: string | null;
+  double_opt_in?: boolean | null;
+  consent_source?: string | null;
+  subscribed_at?: string | null;
+  confirmed_at?: string | null;
+  unsubscribed_at?: string | null;
+}
+

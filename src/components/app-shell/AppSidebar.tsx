@@ -30,7 +30,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth, roleLabels } from "@/lib/auth/AuthContext";
+import { useAuth, roleLabel } from "@/lib/auth/AuthContext";
 
 const nav = [
   { label: "Dashboard", to: "/", icon: LayoutDashboard },
@@ -60,7 +60,7 @@ const adminNav = [
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const { user } = useAuth();
+  const { user, status, tenantLabel } = useAuth();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   return (
@@ -76,7 +76,7 @@ export function AppSidebar() {
                 AuraAI
               </span>
               <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.18em] text-muted-foreground">
-                CMO · InvestSights
+                {tenantLabel ?? (status === "loading" ? "Resolving tenant…" : "No tenant")}
               </span>
             </div>
           )}
@@ -148,9 +148,23 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div className="flex min-w-0 flex-col leading-tight">
-              <span className="truncate text-xs font-medium">{user ? user.email : "User"}</span>
+              <span className="truncate text-xs font-medium">
+                {user
+                  ? user.email
+                  : status === "loading"
+                    ? "Loading identity…"
+                    : "Not signed in"}
+              </span>
               <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
-                {user ? roleLabels[user.role] : "Not signed in"}
+                {user
+                  ? roleLabel(user.role)
+                  : status === "not-connected"
+                    ? "Identity unavailable"
+                    : status === "error"
+                      ? "Identity rejected"
+                      : status === "loading"
+                        ? "Verifying…"
+                        : "Sign in"}
               </span>
             </div>
           )}

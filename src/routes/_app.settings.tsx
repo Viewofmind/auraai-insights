@@ -13,7 +13,7 @@ import type { IntegrationProvider, PublishChannel } from "@/lib/api/types";
 import { ConnectionsSummary } from "@/components/settings/ConnectionsSummary";
 import { channelMeta } from "@/components/channels/ChannelBadge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuth, roleLabels, type AppRole } from "@/lib/auth/AuthContext";
+import { useAuth, roleLabel } from "@/lib/auth/AuthContext";
 import { BarChart3, Search, Plug, Info, AlertTriangle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -55,7 +55,7 @@ const providerMeta: Record<
 function SettingsPage() {
   const integrations = useIntegrations();
   const startOAuth = useStartGoogleOAuth();
-  const { user, setRole } = useAuth();
+  const { user, status, tenantLabel } = useAuth();
 
   const byProvider = new Map((integrations.data ?? []).map((c) => [c.provider, c]));
 
@@ -187,33 +187,41 @@ function SettingsPage() {
       <ChannelConnections />
 
 
-      {/* Role context (stub) */}
+      {/* Identity — server-asserted, read only */}
       <section className="mt-6 rounded-xl border border-border/60 bg-card/50 p-4 sm:p-5">
-        <h2 className="text-sm font-semibold tracking-tight">Role context</h2>
+        <h2 className="text-sm font-semibold tracking-tight">Identity</h2>
         <p className="mt-1 text-[11.5px] text-muted-foreground">
-          Local UI-only role switch so role-scoped screens can be reviewed. Real role
-          checks require per-user identity from the backend, which is still pending.
+          Read from <span className="font-mono">GET /auth/me</span>. Role and tenant are
+          asserted by the backend and cannot be changed from the UI.
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-1 rounded-lg border border-border/60 bg-card/40 p-1">
-          {(Object.keys(roleLabels) as AppRole[]).map((r) => (
-            <button
-              key={r}
-              onClick={() => setRole(r)}
-              disabled={!user}
-              className={cn(
-                "rounded px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors disabled:opacity-40",
-                user?.role === r
-                  ? "bg-primary/15 text-primary"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {roleLabels[r]}
-            </button>
-          ))}
-        </div>
-        {!user && (
-          <p className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">
-            Sign in on /login first (stub, no backend call)
+        {user ? (
+          <dl className="mt-3 grid gap-2 font-mono text-[11.5px] sm:grid-cols-2">
+            <div>
+              <dt className="uppercase tracking-[0.12em] text-muted-foreground">Email</dt>
+              <dd className="text-foreground">{user.email}</dd>
+            </div>
+            <div>
+              <dt className="uppercase tracking-[0.12em] text-muted-foreground">Role</dt>
+              <dd className="text-foreground">{roleLabel(user.role)}</dd>
+            </div>
+            <div>
+              <dt className="uppercase tracking-[0.12em] text-muted-foreground">User ID</dt>
+              <dd className="break-all text-foreground">{user.user_id}</dd>
+            </div>
+            <div>
+              <dt className="uppercase tracking-[0.12em] text-muted-foreground">Tenant</dt>
+              <dd className="break-all text-foreground">{tenantLabel}</dd>
+            </div>
+          </dl>
+        ) : (
+          <p className="mt-3 font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">
+            {status === "loading"
+              ? "Resolving identity…"
+              : status === "not-connected"
+                ? "Backend not reachable — identity unavailable"
+                : status === "error"
+                  ? "Token rejected by /auth/me"
+                  : "Not signed in — add a token on /login"}
           </p>
         )}
       </section>

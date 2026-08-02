@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-r
 import { Construction } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/email")({
+export const Route = createFileRoute("/_app/email")({
   component: EmailLayout,
 });
 

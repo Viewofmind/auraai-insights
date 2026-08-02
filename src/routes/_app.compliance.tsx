@@ -9,7 +9,7 @@ import { useAuth } from "@/lib/auth/AuthContext";
 import { Check, X, ShieldAlert, Lock, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/compliance")({
+export const Route = createFileRoute("/_app/compliance")({
   head: () => ({
     meta: [
       { title: "Compliance Review — AuraAI · CMO" },

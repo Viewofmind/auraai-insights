@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_app/")({
   head: () => ({
     meta: [
       { title: "Dashboard — AuraAI · CMO" },

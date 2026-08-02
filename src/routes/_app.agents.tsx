@@ -7,7 +7,7 @@ import { agents, phase2Agents, type AgentStatus } from "@/lib/mock/agents";
 import { Search, Bot, Plus, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/agents")({
+export const Route = createFileRoute("/_app/agents")({
   head: () => ({
     meta: [
       { title: "Agents Hub — AuraAI · CMO" },

@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/geo/citations")({
+export const Route = createFileRoute("/_app/geo/citations")({
   head: () => ({
     meta: [
       { title: "GEO Citation Check — AuraAI · CMO" },

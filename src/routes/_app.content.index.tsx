@@ -15,7 +15,7 @@ import { FileText, Search, Info, Plus, Loader2, ChevronRight } from "lucide-reac
 import { cn } from "@/lib/utils";
 
 
-export const Route = createFileRoute("/content/")({
+export const Route = createFileRoute("/_app/content/")({
   head: () => ({
     meta: [
       { title: "Content Queue — AuraAI · CMO" },

@@ -16,7 +16,7 @@ import { useAuth } from "@/lib/auth/AuthContext";
 import { AlertTriangle, KeyRound, Loader2, Lock, ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/credentials")({
+export const Route = createFileRoute("/_app/credentials")({
   head: () => ({
     meta: [
       { title: "API Credentials — AuraAI · CMO" },

@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/outreach")({
+export const Route = createFileRoute("/_app/outreach")({
   head: () => ({
     meta: [
       { title: "Influencer Outreach — AuraAI · CMO" },

@@ -10,7 +10,7 @@ import type { GeoSeverity } from "@/lib/api/types";
 import { AlertTriangle, PlugZap, Radar, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/geo/")({
+export const Route = createFileRoute("/_app/geo/")({
   head: () => ({
     meta: [
       { title: "GEO Readiness — AuraAI · CMO" },

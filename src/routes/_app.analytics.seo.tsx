@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/analytics/seo")({
+export const Route = createFileRoute("/_app/analytics/seo")({
   head: () => ({
     meta: [
       { title: "SEO Keyword Research — AuraAI · CMO" },

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/geo")({
+export const Route = createFileRoute("/_app/geo")({
   component: GeoLayout,
 });
 

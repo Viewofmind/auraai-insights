@@ -5,7 +5,7 @@ import { QueryState } from "@/components/common/QueryState";
 import { useAuditLog } from "@/lib/api/hooks";
 import { ScrollText, Search } from "lucide-react";
 
-export const Route = createFileRoute("/audit")({
+export const Route = createFileRoute("/_app/audit")({
   head: () => ({
     meta: [
       { title: "Audit Log — AuraAI · CMO" },

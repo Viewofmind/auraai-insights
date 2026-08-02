@@ -17,7 +17,7 @@ import { useAuth, roleLabels, type AppRole } from "@/lib/auth/AuthContext";
 import { BarChart3, Search, Plug, Info, AlertTriangle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/_app/settings")({
   head: () => ({
     meta: [
       { title: "Integrations & Settings — AuraAI · CMO" },

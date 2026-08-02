@@ -4,7 +4,7 @@ import { useAuth, roleLabels, type AppRole } from "@/lib/auth/AuthContext";
 import { Activity, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/_public/login")({
   head: () => ({
     meta: [
       { title: "Sign in — AuraAI · CMO" },

@@ -13,6 +13,7 @@ import { Route as PublicRouteImport } from './routes/_public'
 import { Route as PlatformRouteImport } from './routes/_platform'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as PublicSignupRouteImport } from './routes/_public.signup'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as PlatformPlatformRouteImport } from './routes/_platform.platform'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
@@ -53,6 +54,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const PublicSignupRoute = PublicSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => PublicRoute,
 } as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/login',
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRoute
   '/platform': typeof PlatformPlatformRoute
   '/login': typeof PublicLoginRoute
+  '/signup': typeof PublicSignupRoute
   '/analytics/seo': typeof AppAnalyticsSeoRoute
   '/analytics/technical': typeof AppAnalyticsTechnicalRoute
   '/content/$id': typeof AppContentIdRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AppSettingsRoute
   '/platform': typeof PlatformPlatformRoute
   '/login': typeof PublicLoginRoute
+  '/signup': typeof PublicSignupRoute
   '/analytics/seo': typeof AppAnalyticsSeoRoute
   '/analytics/technical': typeof AppAnalyticsTechnicalRoute
   '/content/$id': typeof AppContentIdRoute
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRoute
   '/_platform/platform': typeof PlatformPlatformRoute
   '/_public/login': typeof PublicLoginRoute
+  '/_public/signup': typeof PublicSignupRoute
   '/_app/': typeof AppIndexRoute
   '/_app/analytics/seo': typeof AppAnalyticsSeoRoute
   '/_app/analytics/technical': typeof AppAnalyticsTechnicalRoute
@@ -265,6 +274,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/platform'
     | '/login'
+    | '/signup'
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/platform'
     | '/login'
+    | '/signup'
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_platform/platform'
     | '/_public/login'
+    | '/_public/signup'
     | '/_app/'
     | '/_app/analytics/seo'
     | '/_app/analytics/technical'
@@ -363,6 +375,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_public/signup': {
+      id: '/_public/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof PublicSignupRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_public/login': {
       id: '/_public/login'
@@ -633,10 +652,12 @@ const PlatformRouteWithChildren = PlatformRoute._addFileChildren(
 
 interface PublicRouteChildren {
   PublicLoginRoute: typeof PublicLoginRoute
+  PublicSignupRoute: typeof PublicSignupRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicLoginRoute: PublicLoginRoute,
+  PublicSignupRoute: PublicSignupRoute,
 }
 
 const PublicRouteWithChildren =

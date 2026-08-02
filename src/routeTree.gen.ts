@@ -10,9 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
+import { Route as PlatformRouteImport } from './routes/_platform'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
+import { Route as PlatformPlatformRouteImport } from './routes/_platform.platform'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppOutreachRouteImport } from './routes/_app.outreach'
 import { Route as AppOpportunitiesRouteImport } from './routes/_app.opportunities'
@@ -39,6 +41,10 @@ const PublicRoute = PublicRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatformRoute = PlatformRouteImport.update({
+  id: '/_platform',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -52,6 +58,11 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => PublicRoute,
+} as any)
+const PlatformPlatformRoute = PlatformPlatformRouteImport.update({
+  id: '/platform',
+  path: '/platform',
+  getParentRoute: () => PlatformRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -172,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/opportunities': typeof AppOpportunitiesRoute
   '/outreach': typeof AppOutreachRoute
   '/settings': typeof AppSettingsRoute
+  '/platform': typeof PlatformPlatformRoute
   '/login': typeof PublicLoginRoute
   '/analytics/seo': typeof AppAnalyticsSeoRoute
   '/analytics/technical': typeof AppAnalyticsTechnicalRoute
@@ -193,6 +205,7 @@ export interface FileRoutesByTo {
   '/opportunities': typeof AppOpportunitiesRoute
   '/outreach': typeof AppOutreachRoute
   '/settings': typeof AppSettingsRoute
+  '/platform': typeof PlatformPlatformRoute
   '/login': typeof PublicLoginRoute
   '/analytics/seo': typeof AppAnalyticsSeoRoute
   '/analytics/technical': typeof AppAnalyticsTechnicalRoute
@@ -208,6 +221,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/_platform': typeof PlatformRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/_app/agents': typeof AppAgentsRoute
   '/_app/analytics': typeof AppAnalyticsRouteWithChildren
@@ -220,6 +234,7 @@ export interface FileRoutesById {
   '/_app/opportunities': typeof AppOpportunitiesRoute
   '/_app/outreach': typeof AppOutreachRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/_platform/platform': typeof PlatformPlatformRoute
   '/_public/login': typeof PublicLoginRoute
   '/_app/': typeof AppIndexRoute
   '/_app/analytics/seo': typeof AppAnalyticsSeoRoute
@@ -248,6 +263,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/platform'
     | '/login'
     | '/analytics/seo'
     | '/analytics/technical'
@@ -269,6 +285,7 @@ export interface FileRouteTypes {
     | '/opportunities'
     | '/outreach'
     | '/settings'
+    | '/platform'
     | '/login'
     | '/analytics/seo'
     | '/analytics/technical'
@@ -283,6 +300,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_app'
+    | '/_platform'
     | '/_public'
     | '/_app/agents'
     | '/_app/analytics'
@@ -295,6 +313,7 @@ export interface FileRouteTypes {
     | '/_app/opportunities'
     | '/_app/outreach'
     | '/_app/settings'
+    | '/_platform/platform'
     | '/_public/login'
     | '/_app/'
     | '/_app/analytics/seo'
@@ -311,6 +330,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
+  PlatformRoute: typeof PlatformRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
 }
 
@@ -321,6 +341,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_platform': {
+      id: '/_platform'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PlatformRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
@@ -343,6 +370,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/login'
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
+    }
+    '/_platform/platform': {
+      id: '/_platform/platform'
+      path: '/platform'
+      fullPath: '/platform'
+      preLoaderRoute: typeof PlatformPlatformRouteImport
+      parentRoute: typeof PlatformRoute
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -585,6 +619,18 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface PlatformRouteChildren {
+  PlatformPlatformRoute: typeof PlatformPlatformRoute
+}
+
+const PlatformRouteChildren: PlatformRouteChildren = {
+  PlatformPlatformRoute: PlatformPlatformRoute,
+}
+
+const PlatformRouteWithChildren = PlatformRoute._addFileChildren(
+  PlatformRouteChildren,
+)
+
 interface PublicRouteChildren {
   PublicLoginRoute: typeof PublicLoginRoute
 }
@@ -598,6 +644,7 @@ const PublicRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
+  PlatformRoute: PlatformRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport

@@ -39,7 +39,7 @@ export default tseslint.config(
   {
     // Import boundary: the platform-owner console must never reach into the
     // tenant product's data layer or tenant-specific feature components.
-    files: ["src/routes/_platform/**/*.{ts,tsx}", "src/lib/platform/**/*.{ts,tsx}"],
+    files: ["src/routes/_platform.*.{ts,tsx}", "src/routes/_platform/**/*.{ts,tsx}", "src/lib/platform/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
         "error",

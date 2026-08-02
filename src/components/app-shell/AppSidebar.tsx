@@ -3,6 +3,8 @@ import {
   LayoutDashboard,
   Bot,
   FileText,
+  Mail,
+
   Sparkles,
   BarChart3,
   Radar,

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
@@ -34,6 +35,10 @@ import { Route as AppContentIdRouteImport } from './routes/_app.content.$id'
 import { Route as AppAnalyticsTechnicalRouteImport } from './routes/_app.analytics.technical'
 import { Route as AppAnalyticsSeoRouteImport } from './routes/_app.analytics.seo'
 
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -44,9 +49,9 @@ const AppIndexRoute = AppIndexRouteImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
-  id: '/_public/login',
+  id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -180,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/geo/': typeof AppGeoIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof AppIndexRoute
   '/agents': typeof AppAgentsRoute
   '/audit': typeof AppAuditRoute
   '/compliance': typeof AppComplianceRoute
@@ -188,7 +194,6 @@ export interface FileRoutesByTo {
   '/outreach': typeof AppOutreachRoute
   '/settings': typeof AppSettingsRoute
   '/login': typeof PublicLoginRoute
-  '/': typeof AppIndexRoute
   '/analytics/seo': typeof AppAnalyticsSeoRoute
   '/analytics/technical': typeof AppAnalyticsTechnicalRoute
   '/content/$id': typeof AppContentIdRoute
@@ -203,6 +208,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/_public': typeof PublicRouteWithChildren
   '/_app/agents': typeof AppAgentsRoute
   '/_app/analytics': typeof AppAnalyticsRouteWithChildren
   '/_app/audit': typeof AppAuditRoute
@@ -255,6 +261,7 @@ export interface FileRouteTypes {
     | '/geo/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/agents'
     | '/audit'
     | '/compliance'
@@ -263,7 +270,6 @@ export interface FileRouteTypes {
     | '/outreach'
     | '/settings'
     | '/login'
-    | '/'
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
@@ -277,6 +283,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_app'
+    | '/_public'
     | '/_app/agents'
     | '/_app/analytics'
     | '/_app/audit'
@@ -304,11 +311,18 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
-  PublicLoginRoute: typeof PublicLoginRoute
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -328,7 +342,7 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof PublicLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -571,9 +585,20 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface PublicRouteChildren {
+  PublicLoginRoute: typeof PublicLoginRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicLoginRoute: PublicLoginRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
-  PublicLoginRoute: PublicLoginRoute,
+  PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

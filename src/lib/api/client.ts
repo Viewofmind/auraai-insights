@@ -1,5 +1,5 @@
 import { API_BASE_URL, apiUrl, isApiConfigured } from "./config";
-import { getAuthToken } from "./token";
+import { getAuthToken, getTenantId } from "./token";
 
 
 /** Thrown when VITE_API_BASE_URL is not set — i.e. no backend is wired up. */
@@ -34,6 +34,8 @@ export interface ApiRequestOptions {
   signal?: AbortSignal;
   /** Overrides the stored session token for this call only. */
   token?: string | null;
+  /** Overrides the resolved tenant scope for this call only. */
+  tenantId?: string | null;
 }
 
 
@@ -48,6 +50,9 @@ export async function apiFetch<T>(path: string, options: ApiRequestOptions = {})
   const { method = "GET", body, signal } = options;
   // Real session token unless this call explicitly overrides it.
   const token = options.token !== undefined ? options.token : getAuthToken();
+  // Tenant scope. Client-side scoping is a convenience header only — the
+  // backend remains the authority on tenant isolation.
+  const tenantId = options.tenantId !== undefined ? options.tenantId : getTenantId();
 
   let response: Response;
   try {
@@ -58,6 +63,7 @@ export async function apiFetch<T>(path: string, options: ApiRequestOptions = {})
         Accept: "application/json",
         ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(tenantId ? { "X-Tenant-Id": tenantId } : {}),
       },
 
       body: body !== undefined ? JSON.stringify(body) : undefined,

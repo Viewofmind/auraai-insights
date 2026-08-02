@@ -17,6 +17,10 @@ import type {
   ContentItem,
   ContentItemDetail,
   ContentStatus,
+  EmailCampaign,
+  EmailCampaignDetail,
+  EmailSubscriber,
+
   CredentialProvider,
   GeoCitationCheck,
   GeoReadiness,

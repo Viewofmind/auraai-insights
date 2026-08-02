@@ -86,15 +86,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const applyToken = useCallback(
     (next: string | null) => {
       setAuthToken(next);
-      setTenantState(null);
+      setTenantId(null);
       setTokenState(getAuthToken());
       // Identity and every tenant-scoped read belong to the previous session.
       queryClient.removeQueries({ queryKey: authQueryKey });
     },
     [queryClient],
   );
-
-  const setTenantState = (next: string | null) => setTenantId(next);
 
   const signOut = useCallback(() => {
     setAuthToken(null);

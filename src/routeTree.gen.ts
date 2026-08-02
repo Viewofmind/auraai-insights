@@ -27,6 +27,7 @@ import { Route as EmailIndexRouteImport } from './routes/email.index'
 import { Route as ContentIndexRouteImport } from './routes/content.index'
 import { Route as AnalyticsIndexRouteImport } from './routes/analytics.index'
 import { Route as GeoCitationsRouteImport } from './routes/geo.citations'
+import { Route as EmailSubscribersRouteImport } from './routes/email.subscribers'
 import { Route as EmailIdRouteImport } from './routes/email.$id'
 import { Route as ContentIdRouteImport } from './routes/content.$id'
 import { Route as AnalyticsTechnicalRouteImport } from './routes/analytics.technical'
@@ -122,6 +123,11 @@ const GeoCitationsRoute = GeoCitationsRouteImport.update({
   path: '/citations',
   getParentRoute: () => GeoRoute,
 } as any)
+const EmailSubscribersRoute = EmailSubscribersRouteImport.update({
+  id: '/subscribers',
+  path: '/subscribers',
+  getParentRoute: () => EmailRoute,
+} as any)
 const EmailIdRoute = EmailIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/email/$id': typeof EmailIdRoute
+  '/email/subscribers': typeof EmailSubscribersRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/email/$id': typeof EmailIdRoute
+  '/email/subscribers': typeof EmailSubscribersRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics': typeof AnalyticsIndexRoute
   '/content': typeof ContentIndexRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/analytics/technical': typeof AnalyticsTechnicalRoute
   '/content/$id': typeof ContentIdRoute
   '/email/$id': typeof EmailIdRoute
+  '/email/subscribers': typeof EmailSubscribersRoute
   '/geo/citations': typeof GeoCitationsRoute
   '/analytics/': typeof AnalyticsIndexRoute
   '/content/': typeof ContentIndexRoute
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/analytics/technical'
     | '/content/$id'
     | '/email/$id'
+    | '/email/subscribers'
     | '/geo/citations'
     | '/analytics/'
     | '/content/'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/analytics/technical'
     | '/content/$id'
     | '/email/$id'
+    | '/email/subscribers'
     | '/geo/citations'
     | '/analytics'
     | '/content'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/analytics/technical'
     | '/content/$id'
     | '/email/$id'
+    | '/email/subscribers'
     | '/geo/citations'
     | '/analytics/'
     | '/content/'
@@ -427,6 +439,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GeoCitationsRouteImport
       parentRoute: typeof GeoRoute
     }
+    '/email/subscribers': {
+      id: '/email/subscribers'
+      path: '/subscribers'
+      fullPath: '/email/subscribers'
+      preLoaderRoute: typeof EmailSubscribersRouteImport
+      parentRoute: typeof EmailRoute
+    }
     '/email/$id': {
       id: '/email/$id'
       path: '/$id'
@@ -489,11 +508,13 @@ const ContentRouteWithChildren =
 
 interface EmailRouteChildren {
   EmailIdRoute: typeof EmailIdRoute
+  EmailSubscribersRoute: typeof EmailSubscribersRoute
   EmailIndexRoute: typeof EmailIndexRoute
 }
 
 const EmailRouteChildren: EmailRouteChildren = {
   EmailIdRoute: EmailIdRoute,
+  EmailSubscribersRoute: EmailSubscribersRoute,
   EmailIndexRoute: EmailIndexRoute,
 }
 

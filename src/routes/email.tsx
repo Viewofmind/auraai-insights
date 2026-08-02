@@ -12,7 +12,7 @@ const tabs = [
 ] as const;
 
 function EmailLayout() {
-  const pathname = useRouterState((s) => s.location.pathname);
+  const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   return (
     <div className="mx-auto max-w-[1400px] p-4 sm:p-6 lg:p-8">

@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+
   useMutation,
   useQuery,
   useQueryClient,

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
@@ -33,10 +34,14 @@ import { Route as AppContentIdRouteImport } from './routes/_app.content.$id'
 import { Route as AppAnalyticsTechnicalRouteImport } from './routes/_app.analytics.technical'
 import { Route as AppAnalyticsSeoRouteImport } from './routes/_app.analytics.seo'
 
-const AppIndexRoute = AppIndexRouteImport.update({
-  id: '/_app/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
 } as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/_public/login',
@@ -44,59 +49,59 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/_app/settings',
+  id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppOutreachRoute = AppOutreachRouteImport.update({
-  id: '/_app/outreach',
+  id: '/outreach',
   path: '/outreach',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppOpportunitiesRoute = AppOpportunitiesRouteImport.update({
-  id: '/_app/opportunities',
+  id: '/opportunities',
   path: '/opportunities',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppGeoRoute = AppGeoRouteImport.update({
-  id: '/_app/geo',
+  id: '/geo',
   path: '/geo',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppEmailRoute = AppEmailRouteImport.update({
-  id: '/_app/email',
+  id: '/email',
   path: '/email',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppCredentialsRoute = AppCredentialsRouteImport.update({
-  id: '/_app/credentials',
+  id: '/credentials',
   path: '/credentials',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppContentRoute = AppContentRouteImport.update({
-  id: '/_app/content',
+  id: '/content',
   path: '/content',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppComplianceRoute = AppComplianceRouteImport.update({
-  id: '/_app/compliance',
+  id: '/compliance',
   path: '/compliance',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppAuditRoute = AppAuditRouteImport.update({
-  id: '/_app/audit',
+  id: '/audit',
   path: '/audit',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
-  id: '/_app/analytics',
+  id: '/analytics',
   path: '/analytics',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppAgentsRoute = AppAgentsRouteImport.update({
-  id: '/_app/agents',
+  id: '/agents',
   path: '/agents',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const AppGeoIndexRoute = AppGeoIndexRouteImport.update({
   id: '/',
@@ -150,6 +155,7 @@ const AppAnalyticsSeoRoute = AppAnalyticsSeoRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AppIndexRoute
   '/agents': typeof AppAgentsRoute
   '/analytics': typeof AppAnalyticsRouteWithChildren
   '/audit': typeof AppAuditRoute
@@ -162,7 +168,6 @@ export interface FileRoutesByFullPath {
   '/outreach': typeof AppOutreachRoute
   '/settings': typeof AppSettingsRoute
   '/login': typeof PublicLoginRoute
-  '/': typeof AppIndexRoute
   '/analytics/seo': typeof AppAnalyticsSeoRoute
   '/analytics/technical': typeof AppAnalyticsTechnicalRoute
   '/content/$id': typeof AppContentIdRoute
@@ -197,6 +202,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_app': typeof AppRouteWithChildren
   '/_app/agents': typeof AppAgentsRoute
   '/_app/analytics': typeof AppAnalyticsRouteWithChildren
   '/_app/audit': typeof AppAuditRoute
@@ -224,6 +230,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/agents'
     | '/analytics'
     | '/audit'
@@ -236,7 +243,6 @@ export interface FileRouteTypes {
     | '/outreach'
     | '/settings'
     | '/login'
-    | '/'
     | '/analytics/seo'
     | '/analytics/technical'
     | '/content/$id'
@@ -270,6 +276,7 @@ export interface FileRouteTypes {
     | '/geo'
   id:
     | '__root__'
+    | '/_app'
     | '/_app/agents'
     | '/_app/analytics'
     | '/_app/audit'
@@ -296,29 +303,25 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AppAgentsRoute: typeof AppAgentsRoute
-  AppAnalyticsRoute: typeof AppAnalyticsRouteWithChildren
-  AppAuditRoute: typeof AppAuditRoute
-  AppComplianceRoute: typeof AppComplianceRoute
-  AppContentRoute: typeof AppContentRouteWithChildren
-  AppCredentialsRoute: typeof AppCredentialsRoute
-  AppEmailRoute: typeof AppEmailRouteWithChildren
-  AppGeoRoute: typeof AppGeoRouteWithChildren
-  AppOpportunitiesRoute: typeof AppOpportunitiesRoute
-  AppOutreachRoute: typeof AppOutreachRoute
-  AppSettingsRoute: typeof AppSettingsRoute
+  AppRoute: typeof AppRouteWithChildren
   PublicLoginRoute: typeof PublicLoginRoute
-  AppIndexRoute: typeof AppIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/': {
       id: '/_app/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_public/login': {
       id: '/_public/login'
@@ -332,77 +335,77 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/outreach': {
       id: '/_app/outreach'
       path: '/outreach'
       fullPath: '/outreach'
       preLoaderRoute: typeof AppOutreachRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/opportunities': {
       id: '/_app/opportunities'
       path: '/opportunities'
       fullPath: '/opportunities'
       preLoaderRoute: typeof AppOpportunitiesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/geo': {
       id: '/_app/geo'
       path: '/geo'
       fullPath: '/geo'
       preLoaderRoute: typeof AppGeoRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/email': {
       id: '/_app/email'
       path: '/email'
       fullPath: '/email'
       preLoaderRoute: typeof AppEmailRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/credentials': {
       id: '/_app/credentials'
       path: '/credentials'
       fullPath: '/credentials'
       preLoaderRoute: typeof AppCredentialsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/content': {
       id: '/_app/content'
       path: '/content'
       fullPath: '/content'
       preLoaderRoute: typeof AppContentRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/compliance': {
       id: '/_app/compliance'
       path: '/compliance'
       fullPath: '/compliance'
       preLoaderRoute: typeof AppComplianceRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/audit': {
       id: '/_app/audit'
       path: '/audit'
       fullPath: '/audit'
       preLoaderRoute: typeof AppAuditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/analytics': {
       id: '/_app/analytics'
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof AppAnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/agents': {
       id: '/_app/agents'
       path: '/agents'
       fullPath: '/agents'
       preLoaderRoute: typeof AppAgentsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/geo/': {
       id: '/_app/geo/'
@@ -536,7 +539,22 @@ const AppGeoRouteChildren: AppGeoRouteChildren = {
 const AppGeoRouteWithChildren =
   AppGeoRoute._addFileChildren(AppGeoRouteChildren)
 
-const rootRouteChildren: RootRouteChildren = {
+interface AppRouteChildren {
+  AppAgentsRoute: typeof AppAgentsRoute
+  AppAnalyticsRoute: typeof AppAnalyticsRouteWithChildren
+  AppAuditRoute: typeof AppAuditRoute
+  AppComplianceRoute: typeof AppComplianceRoute
+  AppContentRoute: typeof AppContentRouteWithChildren
+  AppCredentialsRoute: typeof AppCredentialsRoute
+  AppEmailRoute: typeof AppEmailRouteWithChildren
+  AppGeoRoute: typeof AppGeoRouteWithChildren
+  AppOpportunitiesRoute: typeof AppOpportunitiesRoute
+  AppOutreachRoute: typeof AppOutreachRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
   AppAgentsRoute: AppAgentsRoute,
   AppAnalyticsRoute: AppAnalyticsRouteWithChildren,
   AppAuditRoute: AppAuditRoute,
@@ -548,8 +566,14 @@ const rootRouteChildren: RootRouteChildren = {
   AppOpportunitiesRoute: AppOpportunitiesRoute,
   AppOutreachRoute: AppOutreachRoute,
   AppSettingsRoute: AppSettingsRoute,
-  PublicLoginRoute: PublicLoginRoute,
   AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  AppRoute: AppRouteWithChildren,
+  PublicLoginRoute: PublicLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

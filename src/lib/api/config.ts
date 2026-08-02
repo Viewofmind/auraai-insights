@@ -67,5 +67,15 @@ export const endpoints = {
   /** Admin-only API credential vault. Values are write-only. */
   adminCredentials: "/admin/credentials",
   adminCredential: (provider: string) => `/admin/credentials/${provider}`,
+
+  /**
+   * Email marketing — scaffolding only. Backend shapes are still in flux, so
+   * these paths are read-only/no-send today. There is deliberately NO send
+   * endpoint here.
+   */
+  emailCampaigns: "/email/campaigns",
+  emailCampaign: (id: string) => `/email/campaigns/${id}`,
+  emailSubscribers: "/email/subscribers",
 } as const;
+
 

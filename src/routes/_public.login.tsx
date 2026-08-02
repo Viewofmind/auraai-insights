@@ -43,13 +43,16 @@ function LoginPage() {
         </div>
 
         <h1 className="mt-6 text-lg font-semibold tracking-tight">Sign in</h1>
-        <p className="mt-1 flex items-start gap-2 text-[11.5px] text-muted-foreground">
+        <div className="mt-1 flex items-start gap-2 text-[11.5px] text-muted-foreground">
           <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-          Paste your backend access token. It is sent as
-          <span className="font-mono"> Authorization: Bearer &lt;token&gt;</span>, and your
-          identity, role and tenant are then read from{" "}
-          <span className="font-mono">GET /auth/me</span> — never chosen here.
-        </p>
+          <p>
+            Paste your backend access token. It is sent as{" "}
+            <span className="font-mono">Authorization: Bearer &lt;token&gt;</span>, and your
+            identity, role and tenant are then read from{" "}
+            <span className="font-mono">GET /auth/me</span> — never chosen here.
+          </p>
+        </div>
+
 
         <div className="mt-6 space-y-3">
           <div>
